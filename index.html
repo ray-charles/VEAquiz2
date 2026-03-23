@@ -550,8 +550,9 @@ const PAYWALL_URLS = {
     vip:      'https://voz-essencia-academy-cbf28a.circle.so/checkout/seance-prive-avec-mamselle'
   },
   es: {
-    standard: 'YOUR_ES_STANDARD_PAYWALL_URL_HERE',
-    vip:      'YOUR_ES_VIP_PAYWALL_URL_HERE'
+    course:      'https://voz-essencia-academy-cbf28a.circle.so/checkout/tu-voz-autentica-en-7-diastm',
+    membership:  'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm',
+    vip:         'https://voz-essencia-academy-cbf28a.circle.so/checkout/coaching-vocal-privado'
   }
 };
 const FORMSPREE_ENDPOINT      = 'https://formspree.io/f/xdawrzrj';
@@ -1457,24 +1458,27 @@ function renderResult() {
 
   // Q7-based CTA routing
   var q7ans = (answers.length > 7 && answers[7] !== null && answers[7] !== undefined) ? answers[7] : null;
-  var isConfigB   = (q7ans === 1 || q7ans === 2);
-  var isWorkshop  = (q7ans === 2);
 
-  // CTA subtitle (CONFIG B only)
+  // Determine route key
+  // FR: 0→membership  1,2→vip
+  // ES: 0→course      1→vip      2→membership
+  var routeKey;
+  if (lang === 'fr') {
+    routeKey = (q7ans === 1 || q7ans === 2) ? 'vip' : 'standard';
+  } else {
+    if (q7ans === 1)      routeKey = 'vip';
+    else if (q7ans === 2) routeKey = 'membership';
+    else                  routeKey = 'course';
+  }
+  var isVip = (routeKey === 'vip');
+
+  // CTA subtitle (VIP only)
   var ctaSubEl = document.getElementById('cta-subtitle');
   if (ctaSubEl) {
-    if (isConfigB) {
-      var subText = lang === 'fr'
-        ? "Tu as choisi l'accompagnement individuel. La Séance Signature est faite pour toi : 55 minutes avec Mamselle, diagnostic complet, protocole personnalisé."
-        : "Elegiste el acompañamiento individual. La Sesión Signature es para ti: 55 minutos con Mamselle, diagnóstico completo, protocolo personalizado.";
-      if (isWorkshop) {
-        subText += '<br><span style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-style:italic;color:#A89E97;">'
-          + (lang === 'fr'
-            ? 'Format intensif disponible en option lors de ta réservation.'
-            : 'Formato intensivo disponible como opción al reservar.')
-          + '</span>';
-      }
-      ctaSubEl.innerHTML = subText;
+    if (isVip) {
+      ctaSubEl.innerHTML = lang === 'fr'
+        ? "Tu as choisi l'accompagnement individuel. La Séance Privée est faite pour toi : 55 minutes avec Mamselle, diagnostic complet, protocole personnalisé."
+        : "Elegiste el acompañamiento individual. El Coaching Vocal Privado es para ti: 55 minutos con Mamselle, diagnóstico completo, protocolo personalizado.";
       ctaSubEl.style.display = 'block';
     } else {
       ctaSubEl.innerHTML = '';
@@ -1494,54 +1498,46 @@ function renderResult() {
       vocal_block:  resultKey,
       profile_type: pKey,
       vocal_score:  score,
-      routing:      isConfigB ? 'VIP' : 'Standard',
+      routing:      routeKey,
       language:     lang
     });
   }
 
+  // CTA config per route
+  var ctaConfig = {
+    fr: {
+      standard:   { text: 'Rejoindre Voix Essence Académie™',           bg: '#1B4B3A', name: 'Voix Essence Académie™',        id: 'voix-essence-academie',    value: 37,  url: PAYWALL_URLS.fr.standard },
+      vip:        { text: 'Réserver ma Séance Privée — $147',           bg: '#7B5EA7', name: 'Séance Privée avec Mamselle',   id: 'seance-privee-147',        value: 147, url: PAYWALL_URLS.fr.vip }
+    },
+    es: {
+      course:     { text: 'Acceder a Tu Voz Auténtica en 7 Días',       bg: '#1B4B3A', name: 'Tu Voz Auténtica en 7 Días',    id: 'tu-voz-autentica-7-dias',  value: 47,  url: PAYWALL_URLS.es.course },
+      membership: { text: 'Unirme a Voz Esencia Academy',               bg: '#1B4B3A', name: 'Voz Esencia Academy',           id: 'voz-esencia-academy',      value: 37,  url: PAYWALL_URLS.es.membership },
+      vip:        { text: 'Reservar mi Coaching Vocal Privado — $147',  bg: '#7B5EA7', name: 'Coaching Vocal Privado',        id: 'coaching-vocal-privado-147', value: 147, url: PAYWALL_URLS.es.vip }
+    }
+  };
+  var cfg = ctaConfig[lang][routeKey] || ctaConfig[lang][lang === 'fr' ? 'standard' : 'course'];
+
   // CTA button
   const ctaBtn = document.getElementById('btn-cta');
-  if (isConfigB) {
-    ctaBtn.textContent = lang === 'fr' ? 'Réserver ma Séance Signature — $147' : 'Reservar mi Sesión Signature — $147';
-    ctaBtn.style.background = '#7B5EA7';
-    ctaBtn.className = 'btn-cta';
-    ctaBtn.onclick = function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'InitiateCheckout', {
-          content_name: lang === 'fr' ? 'Séance Privée avec Mamselle' : 'La Sesión Signature',
-          content_ids:  ['seance-privee-mamselle-147'],
-          value: 147, currency: 'USD', num_items: 1
-        });
-        fbq('trackCustom', 'Quiz_CTAClick', {
-          offer:       lang === 'fr' ? 'Seance_Privee_147' : 'Sesion_Signature_147',
-          routing:     'VIP',
-          vocal_block: calculateResult(),
-          language:    lang
-        });
-      }
-      window.open(PAYWALL_URLS[lang].vip, '_blank');
-    };
-  } else {
-    ctaBtn.textContent = lang === 'fr' ? 'Rejoindre Voix Essence Académie™' : 'Descubrir Tu Voz Liberada — $47';
-    ctaBtn.style.background = '#1B4B3A';
-    ctaBtn.className = 'btn-cta';
-    ctaBtn.onclick = function() {
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'InitiateCheckout', {
-          content_name: lang === 'fr' ? 'Voix Essence Académie™' : 'Tu Voz Liberada',
-          content_ids:  [lang === 'fr' ? 'voix-essence-academie-membership' : 'tu-voz-liberada-47'],
-          value: 37, currency: 'USD', num_items: 1
-        });
-        fbq('trackCustom', 'Quiz_CTAClick', {
-          offer:       lang === 'fr' ? 'VoixEssenceAcademie_Membership' : 'TuVozLiberada_47',
-          routing:     'Standard',
-          vocal_block: calculateResult(),
-          language:    lang
-        });
-      }
-      window.open(PAYWALL_URLS[lang].standard, '_blank');
-    };
-  }
+  ctaBtn.textContent    = cfg.text;
+  ctaBtn.style.background = cfg.bg;
+  ctaBtn.className      = 'btn-cta';
+  ctaBtn.onclick = function() {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'InitiateCheckout', {
+        content_name: cfg.name,
+        content_ids:  [cfg.id],
+        value: cfg.value, currency: 'USD', num_items: 1
+      });
+      fbq('trackCustom', 'Quiz_CTAClick', {
+        offer:       cfg.id,
+        routing:     routeKey,
+        vocal_block: calculateResult(),
+        language:    lang
+      });
+    }
+    window.open(cfg.url, '_blank');
+  };
 
   // Guarantee note
   document.getElementById('guarantee-note').textContent = isConfigB
