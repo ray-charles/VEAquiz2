@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VEA Quiz — 4 Résultats</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #2C2825;
+      font-family: 'DM Sans', sans-serif;
+      padding: 16px;
+      min-height: 100vh;
+    }
+    .grid {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      min-width: max-content;
+    }
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 420px;
+      flex-shrink: 0;
+    }
+    .label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #A89E97;
+    }
+    iframe {
+      width: 420px;
+      height: 90vh;
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="col">
+      <div class="label">Blocage Mandibulaire</div>
+      <iframe src="index.html#r=mandibulaire&p=pro" title="Mandibulaire"></iframe>
+    </div>
+    <div class="col">
+      <div class="label">Blocage du Souffle</div>
+      <iframe src="index.html#r=souffle&p=pro" title="Souffle"></iframe>
+    </div>
+    <div class="col">
+      <div class="label">Blocage du Système Nerveux</div>
+      <iframe src="index.html#r=nerveux&p=pro" title="Nerveux"></iframe>
+    </div>
+    <div class="col">
+      <div class="label">Blocage d'Identité Vocale</div>
+      <iframe src="index.html#r=identite&p=pro" title="Identité"></iframe>
+    </div>
+  </div>
+</body>
+</html>

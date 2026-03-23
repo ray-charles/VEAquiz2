@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <!-- Elfsight -->
+  <script src="https://elfsightcdn.com/platform.js" async></script>
+
   <!-- Meta Pixel -->
   <script>
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -411,7 +414,13 @@
 
   <!-- TOP SECTION -->
   <div class="top-section">
-    <div class="eyebrow">Voice Essence Academy</div>
+    <!-- Bilingual logo — switches with language toggle -->
+    <div id="logo-fr" style="margin-bottom:16px;">
+      <img src="logo-fr.png" alt="Voix Essence™ Academy" style="height:48px;width:auto;">
+    </div>
+    <div id="logo-es" style="margin-bottom:16px;display:none;">
+      <img src="logo-es.png" alt="Voz Esencia™ Academy" style="height:48px;width:auto;">
+    </div>
     <h1 class="main-headline" id="main-headline"></h1>
     <p class="subheadline" id="subheadline"></p>
     <p id="credibility-line" style="
@@ -428,6 +437,11 @@
       <span class="cred-fr">Créé par Mamselle Ruiz Coach — 25 ans d'expérience · plus de 1 000 voix accompagnées · méthode biomécanique personnalisée</span>
       <span class="cred-es" style="display:none;">Creado por Mamselle Ruiz Coach — 25 años de experiencia · más de 1 000 voces acompañadas · método biomecánico personalizado</span>
     </p>
+  </div>
+
+  <!-- Elfsight Google Reviews — hidden on result page -->
+  <div id="elfsight-top" style="margin-bottom:24px;">
+    <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
   </div>
 
   <!-- QUIZ CARD -->
@@ -516,6 +530,10 @@
           </a>
         </div>
       </div>
+      <!-- Elfsight Google Reviews — bottom of result page -->
+      <div id="elfsight-result" style="margin-top:28px;padding-top:24px;border-top:0.5px solid #D8CDB5;">
+        <div class="elfsight-app-445dc5e6-2c0e-4727-bb45-c0ea727e6cc4" data-elfsight-app-lazy></div>
+      </div>
     </div>
 
   </div><!-- /quiz-card -->
@@ -558,10 +576,10 @@ const QUESTIONS = [
     }
   },
   {
-    id: 1, type: 'multi', maxSelect: 2,
+    id: 1, type: 'multi', maxSelect: null,
     fr: {
       text: "Comment ta voix te limite-t-elle concrètement ?",
-      hint: "Sélectionne jusqu'à 2 réponses.",
+      hint: "Sélectionne tout ce qui s'applique.",
       options: [
         "Elle se fatigue ou se voile rapidement",
         "Elle manque de puissance ou de projection",
@@ -572,7 +590,7 @@ const QUESTIONS = [
     },
     es: {
       text: "¿Cómo te limita tu voz concretamente?",
-      hint: "Selecciona hasta 2 respuestas.",
+      hint: "Selecciona todo lo que aplique.",
       options: [
         "Se cansa o se oscurece rápidamente",
         "Le falta potencia o proyección",
@@ -1184,6 +1202,10 @@ function render() {
   frClasses.forEach(cls => document.querySelectorAll('.' + cls).forEach(el => el.style.display = lang === 'fr' ? 'inline' : 'none'));
   esClasses.forEach(cls => document.querySelectorAll('.' + cls).forEach(el => el.style.display = lang === 'es' ? 'inline' : 'none'));
 
+  // Bilingual logos
+  document.getElementById('logo-fr').style.display = lang === 'fr' ? 'block' : 'none';
+  document.getElementById('logo-es').style.display = lang === 'es' ? 'block' : 'none';
+
   document.getElementById('main-headline').innerHTML = lang === 'fr'
     ? 'Quel est ton<br><em>blocage vocal ?</em>'
     : '¿Cuál es tu<br><em>bloqueo vocal?</em>';
@@ -1191,6 +1213,12 @@ function render() {
   document.getElementById('subheadline').textContent = lang === 'fr'
     ? 'Réponds à 9 questions. Découvre ton blocage principal et reçois un exercice ciblé — gratuitement.'
     : 'Responde 9 preguntas. Descubre tu bloqueo principal y recibe un ejercicio específico — gratis.';
+
+  // Credibility line — only on lead form; Elfsight top widget — hidden on result page
+  var onLead   = !showResult && currentQ === -1;
+  var onResult = showResult;
+  document.getElementById('credibility-line').style.display = onLead   ? 'block' : 'none';
+  document.getElementById('elfsight-top').style.display     = onResult ? 'none'  : 'block';
 
   if (showResult) {
     document.getElementById('lead-screen').style.display   = 'none';
@@ -1774,6 +1802,26 @@ function animateResultScreen(score) {
     }, s.delay);
   });
 }
+
+// ================================================================
+// PREVIEW MODE — ?r=mandibulaire|souffle|nerveux|identite&p=pro|stu
+// ================================================================
+(function() {
+  var hash = window.location.hash.replace('#','');
+  var params = new URLSearchParams(hash);
+  var r = params.get('r');
+  var p = params.get('p') || 'pro';
+  if (!r || !RESULT_KEYS.includes(r)) return;
+  profile = p;
+  var presets = {
+    mandibulaire: [0, [0], [3], [0], [0], [1], [0], null, ''],
+    souffle:      [0, [1], [0], [2], [3], [0], [0], null, ''],
+    nerveux:      [0, [3], [1], [],  [1], [3], [0], null, ''],
+    identite:     [0, [4], [2], [3], [2], [2], [0], null, '']
+  };
+  answers    = presets[r];
+  showResult = true;
+})();
 
 // Init
 render();
