@@ -461,6 +461,7 @@
         <button class="btn-cta standard" id="btn-cta"></button>
         <div class="guarantee-note"     id="guarantee-note"></div>
       </div>
+      <div id="pricing-section-container"></div>
       <button class="btn-restart" id="btn-restart" onclick="handleRestart()"></button>
     </div>
 
@@ -845,6 +846,86 @@ var Q4_COST = {
 };
 
 // ================================================================
+// PRICING DATA
+// ================================================================
+var PRICING = {
+  fr: {
+    section_label: "Les parcours disponibles",
+    section_sub: "Trois façons d'avancer — selon là où tu en es.",
+    anchor_note: "* Prix en USD. Le Bilan Vocal Essentiel (diagnostic personnalisé) est inclus au mois 1 du Cercle Vocal.",
+    items: [
+      {
+        name: "Le Protocole de Libération Vocale",
+        type: "Cours autonome",
+        price: "$47",
+        price_sub: "paiement unique",
+        desc: "Un système de 7 jours calibré sur ton blocage spécifique. Auto-rythmé, accessible immédiatement.",
+        tag: null,
+        highlight: false,
+        latam_note: false
+      },
+      {
+        name: "Le Cercle Vocal",
+        type: "Membership mensuel",
+        price: "$37",
+        price_sub: "par mois · sans engagement",
+        desc: "Accès à la méthode complète, contenu mensuel, et diagnostic vocal personnalisé inclus au mois 1.*",
+        tag: "Diagnostic inclus au mois 1",
+        highlight: true,
+        latam_note: false
+      },
+      {
+        name: "La Séance Signature",
+        type: "Coaching individuel",
+        price: "$147",
+        price_sub: "session unique",
+        desc: "60 minutes avec Mamselle. Diagnostic complet, protocole personnalisé, résultat actionnable immédiatement.",
+        tag: "Places limitées",
+        highlight: false,
+        latam_note: false
+      }
+    ]
+  },
+  es: {
+    section_label: "Los caminos disponibles",
+    section_sub: "Tres formas de avanzar — según donde estés.",
+    anchor_note: "* Precios en USD. El Diagnóstico Vocal Esencial (diagnóstico personalizado) está incluido en el mes 1 del Círculo Vocal.",
+    items: [
+      {
+        name: "Tu Voz Liberada",
+        type: "Curso autónomo",
+        price: "$47",
+        price_sub: "pago único",
+        desc: "Un sistema de 7 días calibrado para tu bloqueo específico. A tu ritmo, acceso inmediato.",
+        tag: null,
+        highlight: false,
+        latam_note: false
+      },
+      {
+        name: "El Círculo Vocal",
+        type: "Membresía mensual",
+        price: "$37",
+        price_sub: "por mes · sin compromiso",
+        desc: "Acceso al método completo, contenido mensual, y diagnóstico vocal personalizado incluido en el mes 1.*",
+        tag: "Diagnóstico incluido en el mes 1",
+        highlight: true,
+        latam_note: false
+      },
+      {
+        name: "La Sesión Signature",
+        type: "Coaching individual",
+        price: "$147",
+        price_sub: "sesión única",
+        desc: "60 minutos con Mamselle. Diagnóstico completo, protocolo personalizado, resultado accionable de inmediato.",
+        tag: "Plazas limitadas",
+        highlight: false,
+        latam_note: true
+      }
+    ]
+  }
+};
+
+// ================================================================
 // VOCAL HEALTH SCORE
 // ================================================================
 function calcVocalScore(ans) {
@@ -1165,6 +1246,10 @@ function renderResult() {
   };
 
   document.getElementById('guarantee-note').textContent  = d.ctaSub;
+
+  // Pricing anchor section
+  document.getElementById('pricing-section-container').innerHTML = renderPricingSection(lang);
+
   document.getElementById('btn-restart').textContent     =
     lang === 'fr' ? 'Recommencer' : 'Volver a empezar';
 }
@@ -1190,6 +1275,64 @@ function handleLangToggle(newLang) {
   leadData      = { name: '', email: '', phone: '' };
   leadSubmitted = false;
   render();
+}
+
+// ================================================================
+// PRICING SECTION
+// ================================================================
+function renderPricingSection(l) {
+  var p = PRICING[l];
+  var cardsHTML = '';
+
+  p.items.forEach(function(item) {
+    var latamNote = item.latam_note
+      ? '<div style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;color:#A89E97;font-style:italic;margin-top:5px;">Tarifa LATAM disponible — escríbenos antes de reservar.</div>'
+      : '';
+
+    if (item.highlight) {
+      cardsHTML +=
+        '<div>'
+        + '<div style="display:inline-block;background:#1B4B3A;color:white;font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px 20px 0 0;margin-bottom:-1px;margin-left:12px;">' + item.tag + '</div>'
+        + '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-radius:10px;border:1.5px solid #1B4B3A;background:#E1F5EE;">'
+        + '<div style="flex-shrink:0;width:64px;text-align:center;padding-top:2px;">'
+        + '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:22px;font-weight:400;color:#2C2825;line-height:1;">' + item.price + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:300;color:#A89E97;line-height:1.3;margin-top:3px;">' + item.price_sub + '</div>'
+        + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#2D7A5E;margin-bottom:2px;">' + item.type + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#1B4B3A;margin-bottom:4px;">' + item.name + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;color:#7A706A;line-height:1.5;">' + item.desc + '</div>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    } else {
+      var tagPill = item.tag
+        ? ' <span style="display:inline-block;background:#EDE8F8;color:#7B5EA7;font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;">' + item.tag + '</span>'
+        : '';
+      cardsHTML +=
+        '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-radius:10px;border:0.5px solid #D8CDB5;background:#FAF8F4;">'
+        + '<div style="flex-shrink:0;width:64px;text-align:center;padding-top:2px;">'
+        + '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:22px;font-weight:400;color:#2C2825;line-height:1;">' + item.price + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:300;color:#A89E97;line-height:1.3;margin-top:3px;">' + item.price_sub + '</div>'
+        + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#A89E97;margin-bottom:2px;">' + item.type + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2C2825;margin-bottom:4px;">' + item.name + tagPill + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;color:#7A706A;line-height:1.5;">' + item.desc + '</div>'
+        + latamNote
+        + '</div>'
+        + '</div>';
+    }
+  });
+
+  return '<div style="margin-top:28px;padding-top:24px;border-top:0.5px solid #D8CDB5;">'
+    + '<div style="text-align:center;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#A89E97;margin-bottom:6px;">' + p.section_label + '</div>'
+    + '<div style="text-align:center;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#7A706A;margin-bottom:20px;line-height:1.5;">' + p.section_sub + '</div>'
+    + '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">'
+    + cardsHTML
+    + '</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;color:#A89E97;font-style:italic;text-align:center;line-height:1.5;margin-bottom:4px;">' + p.anchor_note + '</div>'
+    + '</div>';
 }
 
 // ================================================================
