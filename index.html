@@ -423,20 +423,6 @@
     </div>
     <h1 class="main-headline" id="main-headline"></h1>
     <p class="subheadline" id="subheadline"></p>
-    <p id="credibility-line" style="
-      text-align: center;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 300;
-      font-style: italic;
-      color: #7A706A;
-      margin: 0 auto 28px;
-      max-width: 440px;
-      line-height: 1.6;
-    ">
-      <span class="cred-fr">Créé par Mamselle Ruiz Coach — 25 ans d'expérience · plus de 1 000 voix accompagnées · méthode biomécanique personnalisée</span>
-      <span class="cred-es" style="display:none;">Creado por Mamselle Ruiz Coach — 25 años de experiencia · más de 1 000 voces acompañadas · método biomecánico personalizado</span>
-    </p>
   </div>
 
   <!-- Elfsight Google Reviews — hidden on result page -->
@@ -473,6 +459,21 @@
         <button type="submit" class="btn-next" id="btn-lead-submit" style="width:100%;margin-top:8px;padding:13px;"></button>
       </form>
       <p class="lead-privacy" id="lead-privacy"></p>
+      <p id="credibility-line" style="
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 11px;
+        font-weight: 300;
+        font-style: italic;
+        color: #A89E97;
+        margin: 16px 0 0;
+        line-height: 1.6;
+        border-top: 0.5px solid #EDE5D6;
+        padding-top: 14px;
+      ">
+        <span class="cred-fr">Créé par Mamselle Ruiz Coach — 25 ans d'expérience · plus de 1 000 voix accompagnées · méthode biomécanique personnalisée</span>
+        <span class="cred-es" style="display:none;">Creado por Mamselle Ruiz Coach — 25 años de experiencia · más de 1 000 voces acompañadas · método biomecánico personalizado</span>
+      </p>
     </div>
 
     <!-- QUIZ SCREEN -->
@@ -1214,11 +1215,9 @@ function render() {
     ? 'Réponds à 9 questions. Découvre ton blocage principal et reçois un exercice ciblé — gratuitement.'
     : 'Responde 9 preguntas. Descubre tu bloqueo principal y recibe un ejercicio específico — gratis.';
 
-  // Credibility line — only on lead form; Elfsight top widget — hidden on result page
-  var onLead   = !showResult && currentQ === -1;
+  // Elfsight top widget — hidden on result page
   var onResult = showResult;
-  document.getElementById('credibility-line').style.display = onLead   ? 'block' : 'none';
-  document.getElementById('elfsight-top').style.display     = onResult ? 'none'  : 'block';
+  document.getElementById('elfsight-top').style.display = onResult ? 'none' : 'block';
 
   if (showResult) {
     document.getElementById('lead-screen').style.display   = 'none';
