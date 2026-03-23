@@ -1213,11 +1213,10 @@ function render() {
     ? 'Réponds à 9 questions. Découvre ton blocage principal et reçois un exercice ciblé — gratuitement.'
     : 'Responde 9 preguntas. Descubre tu bloqueo principal y recibe un ejercicio específico — gratis.';
 
-  // Elfsight top widget + headline — hidden on result page
+  // Elfsight top widget — hidden on result page
   var onResult = showResult;
-  document.getElementById('elfsight-top').style.display    = onResult ? 'none'  : 'block';
-  document.getElementById('main-headline').style.display   = onResult ? 'none'  : 'block';
-  document.getElementById('subheadline').style.display     = onResult ? 'none'  : 'block';
+  document.getElementById('elfsight-top').style.display  = onResult ? 'none' : 'block';
+  document.getElementById('subheadline').style.display   = onResult ? 'none' : 'block';
 
   // Elfsight bottom result widgets — toggle by language
   var rFr = document.getElementById('elfsight-result-fr');
