@@ -50,9 +50,9 @@
     .page-wrapper {
       max-width: 600px;
       margin: 0 auto;
-      padding: 40px 24px 0;
+      padding: 40px 24px 48px;
     }
-    @media (max-width: 480px) { .page-wrapper { padding: 24px 16px 0; } }
+    @media (max-width: 480px) { .page-wrapper { padding: 24px 16px 48px; } }
 
     /* ── TOP SECTION ── */
     .top-section { text-align: center; margin-bottom: 32px; }
@@ -328,6 +328,10 @@
     }
     .btn-restart:hover { color: var(--dark); }
 
+    .btn-next, .btn-back, .btn-cta, .lang-btn, .btn-restart, .option-card {
+      touch-action: manipulation;
+    }
+
     /* ── LEAD SCREEN ── */
     .lead-headline {
       font-family: 'Cormorant Garamond', serif;
@@ -364,7 +368,7 @@
     .field-input {
       width: 100%;
       font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 300;
       color: var(--dark);
       background: #FAF8F4;
@@ -416,17 +420,17 @@
   <div class="top-section">
     <!-- Bilingual logo — switches with language toggle -->
     <div id="logo-fr" style="margin-bottom:16px;">
-      <img src="Logo-fr.png" alt="Voix Essence™ Academy" style="height:48px;width:auto;">
+      <img src="Logo-fr.png" alt="Voix Essence™ Academy" width="auto" height="48" style="height:48px;width:auto;">
     </div>
     <div id="logo-es" style="margin-bottom:16px;display:none;">
-      <img src="Logo-es.png" alt="Voz Esencia™ Academy" style="height:48px;width:auto;">
+      <img src="Logo-es.png" alt="Voz Esencia™ Academy" width="auto" height="48" style="height:48px;width:auto;">
     </div>
     <h1 class="main-headline" id="main-headline"></h1>
     <p class="subheadline" id="subheadline"></p>
   </div>
 
   <!-- Elfsight Google Reviews — hidden on result page -->
-  <div id="elfsight-top" style="margin-bottom:24px;">
+  <div id="elfsight-top" style="margin-bottom:24px;min-height:100px;">
     <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
   </div>
 
@@ -513,7 +517,7 @@
         <div id="elfsight-result-es" class="elfsight-app-445dc5e6-2c0e-4727-bb45-c0ea727e6cc4" data-elfsight-app-lazy style="display:none;"></div>
       </div>
       <button class="btn-restart" id="btn-restart" onclick="handleRestart()"></button>
-      <div style="margin-top:28px;padding-top:20px;border-top:0.5px solid #D8CDB5;text-align:center;">
+      <div id="social-footer" style="margin-top:28px;padding-top:20px;border-top:0.5px solid #D8CDB5;text-align:center;">
         <div style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.04em;text-transform:uppercase;color:#A89E97;margin-bottom:14px;">
           <span class="social-label-fr">Retrouve Mamselle sur</span>
           <span class="social-label-es" style="display:none;">Encuentra a Mamselle en</span>
@@ -537,7 +541,7 @@
 
   </div><!-- /quiz-card -->
 
-  <div class="footer">© 2026 Voice Essence Academy · Mamselle Ruiz Coach</div>
+  <div class="footer" id="site-footer"></div>
 </div><!-- /page-wrapper -->
 
 <script>
@@ -776,7 +780,6 @@ const QUESTIONS = [
 // SCORING MAPS
 // 0=mandibulaire  1=souffle  2=nerveux  3=identite
 // ================================================================
-const SINGLE_SCORE = {};
 const MULTI_SCORE = {
   1: [0, 1, 0, 2, 3],
   2: [1, 2, 3, 0],
@@ -1001,40 +1004,6 @@ var Q4_COST = {
 };
 
 // ================================================================
-// Q6 OBSTACLE ACKNOWLEDGMENT LOOKUP
-// ================================================================
-var Q6_OBSTACLE = {
-  fr: {
-    pro: [
-      "Tu n'as pas encore trouvé une méthode calibrée pour ta voix spécifiquement — c'est exactement ce que Le Protocole commence par faire.",
-      "Ton temps est précieux. C'est pourquoi Le Protocole est conçu pour 15 minutes par jour — pas une heure.",
-      "Le doute est normal après des tentatives sans résultat. C'est pourquoi la garantie de 7 jours existe : tu vérifies, tu ne paries pas.",
-      "Ne pas savoir par où commencer, c'est souvent le signe que tu as essayé des choses sans diagnostic préalable. C'est le point de départ ici."
-    ],
-    stu: [
-      "Tu n'as pas encore trouvé une méthode faite pour ta voix — c'est exactement ce que Le Protocole commence par adresser.",
-      "Tu as déjà beaucoup à gérer. 15 minutes par jour, c'est tout ce que Le Protocole demande.",
-      "Le doute est la réponse normale à des exercices qui n'ont pas marché. La garantie de 7 jours est là pour ça.",
-      "Ne pas savoir par où commencer, c'est souvent le signe qu'on a travaillé sans diagnostic. C'est ce qu'on fait ici en premier."
-    ]
-  },
-  es: {
-    pro: [
-      "Aún no has encontrado un método calibrado para tu voz específicamente — eso es exactamente lo que el Protocolo empieza por hacer.",
-      "Tu tiempo es valioso. Por eso el Protocolo está diseñado para 15 minutos al día — no una hora.",
-      "La duda es normal después de intentos sin resultado. Por eso existe la garantía de 7 días: verificas, no apuestas.",
-      "No saber por dónde empezar suele ser la señal de que se han probado cosas sin diagnóstico previo. Ese es el punto de partida aquí."
-    ],
-    stu: [
-      "Aún no has encontrado un método hecho para tu voz — eso es exactamente lo que el Protocolo empieza por abordar.",
-      "Ya tienes mucho que manejar. 15 minutos al día es todo lo que el Protocolo pide.",
-      "La duda es la respuesta normal a ejercicios que no han funcionado. La garantía de 7 días existe para eso.",
-      "No saber por dónde empezar suele ser la señal de que se ha trabajado sin diagnóstico. Eso es lo que hacemos aquí primero."
-    ]
-  }
-};
-
-// ================================================================
 // PRICING DATA
 // ================================================================
 var PRICING = {
@@ -1170,7 +1139,6 @@ let currentQ      = -1;   // -1 = lead screen, 0–5 = quiz questions
 let answers       = [null, [], [], [], [], [], [], null, '']; // Q0,Q7 single; Q1-Q6 multi; Q8 textarea
 let profile       = null;   // 'pro' | 'stu'
 let showResult    = false;
-let courseOnly    = false;
 let leadData      = { name: '', email: '', phone: '' };
 let leadSubmitted = false;
 let pixelFired    = false;
@@ -1200,6 +1168,7 @@ function calculateResult() {
 // RENDER
 // ================================================================
 function render() {
+  document.documentElement.lang = lang;
   document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
   document.getElementById('btn-es').classList.toggle('active', lang === 'es');
 
@@ -1220,6 +1189,11 @@ function render() {
   document.getElementById('subheadline').textContent = lang === 'fr'
     ? 'Réponds à 9 questions. Découvre ton blocage principal et reçois un exercice ciblé — gratuitement.'
     : 'Responde 9 preguntas. Descubre tu bloqueo principal y recibe un ejercicio específico — gratis.';
+
+  var footerEl = document.getElementById('site-footer');
+  if (footerEl) footerEl.textContent = lang === 'fr'
+    ? '© 2026 Voix Essence Academy · Mamselle Ruiz Coach'
+    : '© 2026 Voz Esencia Academy · Mamselle Ruiz Coach';
 
   // Elfsight top widget — hidden on result page
   var onResult = showResult;
@@ -1394,12 +1368,6 @@ function renderResult() {
   // Score arc
   const score = calcVocalScore(answers);
 
-  // Submit lead + full quiz data once per completion
-  if (!leadSubmitted && leadData.email) {
-    leadSubmitted = true;
-    submitLead(resultKey, score);
-  }
-
   document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
 
   // Badges
@@ -1472,6 +1440,12 @@ function renderResult() {
   }
   var isVip = (routeKey === 'vip');
 
+  // Submit lead + full quiz data once per completion
+  if (!leadSubmitted && leadData.email) {
+    leadSubmitted = true;
+    submitLead(resultKey, score, routeKey);
+  }
+
   // CTA subtitle (VIP only)
   var ctaSubEl = document.getElementById('cta-subtitle');
   if (ctaSubEl) {
@@ -1540,7 +1514,7 @@ function renderResult() {
   };
 
   // Guarantee note
-  document.getElementById('guarantee-note').textContent = isConfigB
+  document.getElementById('guarantee-note').textContent = isVip
     ? (lang === 'fr' ? 'Places limitées. Réservation confirmée sous 24h.' : 'Plazas limitadas. Reserva confirmada en 24h.')
     : (lang === 'fr' ? 'Garantie 7 jours : aucune différence ressentie = remboursement intégral.' : 'Garantía 7 días: sin diferencia = reembolso completo.');
 
@@ -1559,7 +1533,6 @@ function handleRestart() {
   answers       = [null, [], [], [], [], [], [], null, ''];
   profile       = null;
   showResult    = false;
-  courseOnly    = false;
   leadSubmitted = false;
   pixelFired    = false;
   render();
@@ -1572,7 +1545,6 @@ function handleLangToggle(newLang) {
   answers       = [null, [], [], [], [], [], [], null, ''];
   profile       = null;
   showResult    = false;
-  courseOnly    = false;
   leadData      = { name: '', email: '', phone: '' };
   leadSubmitted = false;
   pixelFired    = false;
@@ -1693,7 +1665,7 @@ function handleLeadSubmit(e) {
   render();
 }
 
-function submitLead(resultKey, score) {
+function submitLead(resultKey, score, routeKey) {
   if (!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT === 'YOUR_FORMSPREE_ENDPOINT_HERE') return;
   try {
     var q = QUESTIONS, l = lang;
@@ -1707,7 +1679,7 @@ function submitLead(resultKey, score) {
                         : (l === 'fr' ? 'Apprenant'     : 'Estudiante'),
       vocal_block:    resultKey,
       vocal_score:    score,
-      routing:        courseOnly ? 'parcours-cours' : 'parcours-standard',
+      routing:        routeKey || 'standard',
       q0_usage:       answers[0] !== null ? q[0][l].options[answers[0]] : '—',
       q1_symptoms:    answers[1].length ? answers[1].map(function(i){ return q[1][l].options[i]; }).join(' | ') : '—',
       q2_context:     answers[2].length ? answers[2].map(function(i){ return q[2][l].options[i]; }).join(' | ') : '—',
@@ -1764,7 +1736,9 @@ function animateResultScreen(score) {
     { id: 'exercise-box',              delay: 700 },
     { sel: '.open-loop-box',           delay: 840 },
     { id: 'pricing-section-container', delay: 1160 },
-    { id: 'btn-restart',               delay: 1340 }
+    { id: 'btn-restart',               delay: 1340 },
+    { id: 'elfsight-result',           delay: 1460 },
+    { id: 'social-footer',             delay: 1560 }
   ];
 
   sections.forEach(function(s) {
