@@ -76,6 +76,14 @@
       margin-bottom: 14px;
     }
     .main-headline em { font-style: italic; color: var(--green-deep); }
+    /* Results page: restore original headline size */
+    .main-headline.result-mode {
+      font-size: clamp(28px, 6vw, 36px);
+      text-transform: none;
+      font-weight: 300;
+      letter-spacing: normal;
+      line-height: 1.2;
+    }
 
     .subheadline {
       font-weight: 300;
@@ -424,6 +432,9 @@
     <p class="subheadline" id="subheadline"></p>
   </div>
 
+  <!-- Result subtitle — shown above quiz card on results page only -->
+  <div id="result-above-card" style="display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;color:#7A706A;line-height:1.65;max-width:440px;margin:0 auto 24px;"></div>
+
   <!-- Elfsight Google Reviews — hidden on result page -->
   <div id="elfsight-top" style="margin-bottom:24px;min-height:100px;">
     <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
@@ -507,13 +518,11 @@
         <span class="badge-pill badge-result" id="result-badge-label"></span>
       </div>
       <div class="result-title" id="result-title"></div>
-      <div id="result-thankyou" style="display:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;font-style:normal;color:#7A706A;line-height:1.6;margin-bottom:20px;text-align:center;"></div>
       <div class="result-body"  id="result-body"></div>
       <div class="exercise-label" id="exercise-label"></div>
       <div class="exercise-box"   id="exercise-box"></div>
-      <div id="sales-copy-block" style="margin:20px 0;padding:16px 18px;border-radius:12px;background:linear-gradient(135deg,#F0F7F4 0%,#EDE5D6 100%);border:0.5px solid #C4E0D5;"></div>
       <div class="open-loop-box">
-        <div id="cta-subtitle" style="display:none;font-family:'DM Sans',sans-serif;font-size:13px;font-style:italic;color:#7A706A;margin-bottom:10px;line-height:1.6;"></div>
+        <div id="sales-copy-block" style="margin-bottom:18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.75;"></div>
         <button class="btn-cta standard" id="btn-cta"></button>
         <div class="guarantee-note"     id="guarantee-note"></div>
       </div>
@@ -1205,16 +1214,31 @@ function render() {
   document.getElementById('logo-outside-fr').style.display = (lang === 'fr') ? 'block' : 'none';
   document.getElementById('logo-outside-es').style.display = (lang === 'es') ? 'block' : 'none';
 
-  document.getElementById('main-headline').innerHTML = showResult
+  var hlEl = document.getElementById('main-headline');
+  hlEl.innerHTML = showResult
     ? (lang === 'fr'
         ? 'Quel est ton<br><em>blocage vocal ?</em>'
         : '¿Cuál es tu<br><em>bloqueo vocal?</em>')
     : (lang === 'fr'
         ? 'Frustré de perdre<br><em>contrôle de ta voix ?</em>'
         : '¿Frustrado/a de perder<br><em>el control de tu voz?</em>');
+  // Results page: revert to original headline size; landing page: large uppercase
+  if (showResult) { hlEl.classList.add('result-mode'); } else { hlEl.classList.remove('result-mode'); }
+  // Hide headline during quiz questions (shown on lead and result only)
+  hlEl.style.display = (currentQ >= 0 && !showResult) ? 'none' : 'block';
 
-// Hide headline during quiz questions (shown on lead and result only)
-document.getElementById('main-headline').style.display = (currentQ >= 0 && !showResult) ? 'none' : 'block';
+  // Result subtitle above quiz card
+  var aboveCard = document.getElementById('result-above-card');
+  if (aboveCard) {
+    if (showResult) {
+      aboveCard.textContent = lang === 'fr'
+        ? 'Merci d\'avoir pris le temps de faire ce quiz. Il nous permet jour après jour d\'offrir un meilleur service à tous nos clients.'
+        : 'Gracias por tomarte el tiempo de hacer este quiz. Nos permite día a día ofrecer un mejor servicio a todos nuestros clientes.';
+      aboveCard.style.display = 'block';
+    } else {
+      aboveCard.style.display = 'none';
+    }
+  }
 
   document.getElementById('subheadline').textContent = lang === 'fr'
     ? 'Découvre ton blocage principal et reçois un exercice ciblé en répondant aux 9 prochaines questions.'
@@ -1416,15 +1440,6 @@ function renderResult() {
   // Title
   document.getElementById('result-title').textContent = d.title;
 
-  // Thank you text below result title
-  var thankEl = document.getElementById('result-thankyou');
-  if (thankEl) {
-    thankEl.textContent = lang === 'fr'
-      ? 'Merci d\'avoir pris le temps de faire ce quiz. Il nous permet jour après jour d\'offrir un meilleur service à tous nos clients.'
-      : 'Gracias por tomarte el tiempo de hacer este quiz. Nos permite día a día ofrecer un mejor servicio a todos nuestros clientes.';
-    thankEl.style.display = 'block';
-  }
-
   // Three-insight result body
   var q2idx  = Array.isArray(answers[3]) ? answers[3][0] : answers[3];
   var q2text = (q2idx !== null && q2idx !== undefined) ? Q2_TRIGGER[lang][q2idx] : '';
@@ -1472,16 +1487,6 @@ function renderResult() {
     lang === 'fr' ? 'Ton exercice ciblé' : 'Tu ejercicio específico';
   document.getElementById('exercise-box').innerHTML = d.exercise;
 
-  // Sales copy bridge — after exercise, before CTA
-  var salesCopyEl = document.getElementById('sales-copy-block');
-  if (salesCopyEl) {
-    var salesFr = 'Cet exercice t\'offre un premier aperçu de ce qui est possible — mais le blocage a des racines plus profondes qu\'un seul exercice ne peut atteindre. Ce que tu viens de vivre n\'est qu\'un avant-goût du travail précis qu\'il est possible de faire sur ton mécanisme vocal spécifique. Le Protocole de Libération Vocale va là où ce quiz s\'arrête : diagnostic complet, plan structuré, résultat mesurable.';
-    var salesEs = 'Este ejercicio te da un primer vistazo de lo que es posible — pero el bloqueo tiene raíces más profundas de lo que un solo ejercicio puede alcanzar. Lo que acabas de experimentar es solo el comienzo del trabajo preciso que se puede hacer sobre tu mecanismo vocal específico. Tu Voz Auténtica en 7 Días va donde este quiz termina: diagnóstico completo, plan estructurado, resultado medible.';
-    salesCopyEl.innerHTML = '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;color:#2C2825;line-height:1.75;margin:0;">'
-      + (lang === 'fr' ? salesFr : salesEs)
-      + '</p>';
-  }
-
   // Q7-based CTA routing
   var q7ans = (answers.length > 8 && answers[8] !== null && answers[8] !== undefined) ? answers[8] : null;
 
@@ -1504,18 +1509,45 @@ function renderResult() {
     submitLead(resultKey, score, routeKey);
   }
 
-  // CTA subtitle (VIP only)
-  var ctaSubEl = document.getElementById('cta-subtitle');
-  if (ctaSubEl) {
-    if (isVip) {
-      ctaSubEl.innerHTML = lang === 'fr'
-        ? "Tu as choisi l'accompagnement individuel. La Séance Privée est faite pour toi : 55 minutes avec Mamselle, diagnostic complet, protocole personnalisé."
-        : "Elegiste el acompañamiento individual. El Coaching Vocal Privado es para ti: 55 minutos con Mamselle, diagnóstico completo, protocolo personalizado.";
-      ctaSubEl.style.display = 'block';
-    } else {
-      ctaSubEl.innerHTML = '';
-      ctaSubEl.style.display = 'none';
+  // Cialdini-style sales copy — route-specific, inside CTA box
+  var CIALDINI = {
+    fr: {
+      standard: [
+        'Plus de 1 000 voix accompagnées dans l\'Académie — des personnes qui avaient exactement le même blocage que toi et qui cherchaient une méthode qui fonctionne vraiment.',
+        'L\'Académie est construite autour de ton type de blocage spécifique, pas une approche générique. Ce que tu as découvert dans ce quiz devient ton point de départ.',
+        'L\'essai de 15 jours est sans risque : si tu ne ressens aucune différence dans ta voix, tu annules. Mais ceux qui commencent ne repartent pas.'
+      ],
+      vip: [
+        'Mamselle travaille avec un nombre limité de clients à la fois — pour garantir qu\'elle arrive à ta séance avec une attention complète, rien que pour toi.',
+        '55 minutes. Un diagnostic précis de ton blocage spécifique. Un plan d\'action personnalisé que tu peux mettre en œuvre dès le lendemain.',
+        'Les places disponibles ce mois-ci sont comptées. Une fois la séance réservée, tu reçois une confirmation dans les 24 heures.'
+      ]
+    },
+    es: {
+      membership: [
+        'Más de 1 000 voces acompañadas en la Academia — personas que tenían exactamente el mismo bloqueo que tú y que buscaban un método que realmente funcionara.',
+        'La Academia está construida alrededor de tu tipo de bloqueo específico, no un enfoque genérico. Lo que descubriste en este quiz se convierte en tu punto de partida.',
+        'El mes de prueba es sin riesgo: si no sientes ninguna diferencia en tu voz, cancelas. Pero quienes empiezan no se van.'
+      ],
+      vip: [
+        'Mamselle trabaja con un número limitado de clientes a la vez — para garantizar que llega a tu sesión con atención completa, solo para ti.',
+        '55 minutos. Un diagnóstico preciso de tu bloqueo específico. Un plan de acción personalizado que puedes implementar al día siguiente.',
+        'Las plazas disponibles este mes son limitadas. Una vez reservada la sesión, recibes confirmación en menos de 24 horas.'
+      ],
+      course: [
+        'Más de 1 000 personas completaron este programa y lo describen como «lo primero que realmente funcionó» para su voz.',
+        '7 días. Un objetivo preciso cada día, calibrado para TU bloqueo específico — no para todos. La mecánica, el porqué, el método.',
+        'Acceso inmediato tras el pago. Garantía de resultado: si no sientes diferencia al final de los 7 días, te devolvemos el dinero.'
+      ]
     }
+  };
+
+  var copyLines = (CIALDINI[lang] && CIALDINI[lang][routeKey]) ? CIALDINI[lang][routeKey] : [];
+  var salesCopyEl = document.getElementById('sales-copy-block');
+  if (salesCopyEl && copyLines.length) {
+    salesCopyEl.innerHTML = copyLines.map(function(line, i) {
+      return '<p style="margin:' + (i === 0 ? '0' : '10px') + ' 0 0;font-size:13px;font-weight:' + (i === 0 ? '400' : '300') + ';color:' + (i === 0 ? '#2C2825' : '#7A706A') + ';line-height:1.75;">' + line + '</p>';
+    }).join('');
   }
 
   // Meta Pixel: result viewed — fire once per quiz completion
