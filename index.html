@@ -502,7 +502,6 @@
       <div class="exercise-label" id="exercise-label"></div>
       <div class="exercise-box"   id="exercise-box"></div>
       <div class="open-loop-box">
-        <div class="open-loop-body" id="open-loop-body"></div>
         <div id="cta-subtitle" style="display:none;font-family:'DM Sans',sans-serif;font-size:13px;font-style:italic;color:#7A706A;margin-bottom:10px;line-height:1.6;"></div>
         <button class="btn-cta standard" id="btn-cta"></button>
         <div class="guarantee-note"     id="guarantee-note"></div>
@@ -1449,9 +1448,6 @@ function renderResult() {
   document.getElementById('exercise-label').textContent =
     lang === 'fr' ? 'Ton exercice ciblé' : 'Tu ejercicio específico';
   document.getElementById('exercise-box').innerHTML = d.exercise;
-
-  // Open loop — always use standardOpenLoop
-  document.getElementById('open-loop-body').innerHTML = d.standardOpenLoop;
 
   // Q7-based CTA routing
   var q7ans = (answers.length > 7 && answers[7] !== null && answers[7] !== undefined) ? answers[7] : null;
