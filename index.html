@@ -1012,7 +1012,7 @@ var PRICING = {
         url: 'PAYWALL_ES_VIP'
       },
       {
-        name: "Voz Esencia Academy",
+        name: "Voz Esencia Academy™",
         type: "Membresía mensual",
         price: "$37",
         price_sub: "por mes · sin compromiso",
@@ -1166,8 +1166,8 @@ function render() {
 
   var footerEl = document.getElementById('site-footer');
   if (footerEl) footerEl.textContent = lang === 'fr'
-    ? '© 2026 Voix Essence Academy · Mamselle Ruiz Coach'
-    : '© 2026 Voz Esencia Academy · Mamselle Ruiz Coach';
+    ? '© 2026 Voix Essence™ Academy · Mamselle Ruiz Coach'
+    : '© 2026 Voz Esencia™ Academy · Mamselle Ruiz Coach';
 
   // Elfsight top widget — shown on lead page only
   document.getElementById('elfsight-top').style.display = (!showResult && currentQ === -1) ? 'block' : 'none';
@@ -1497,11 +1497,11 @@ function renderResult() {
   var ctaConfig = {
     fr: {
       standard:   { text: 'Rejoindre Voix Essence Académie™',           bg: '#1B4B3A', name: 'Voix Essence Académie™',        id: 'voix-essence-academie',    value: 37,  url: PAYWALL_URLS.fr.standard },
-      vip:        { text: 'Réserver ma Séance Privée — $147',           bg: '#7B5EA7', name: 'Séance Privée avec Mamselle',   id: 'seance-privee-147',        value: 147, url: PAYWALL_URLS.fr.vip }
+      vip:        { text: 'Réserver ma Séance Privée — $200',           bg: '#7B5EA7', name: 'Séance Privée avec Mamselle',   id: 'seance-privee-200',        value: 200, url: PAYWALL_URLS.fr.vip }
     },
     es: {
       course:     { text: 'Acceder a Tu Voz Auténtica en 7 Días',       bg: '#1B4B3A', name: 'Tu Voz Auténtica en 7 Días',    id: 'tu-voz-autentica-7-dias',  value: 47,  url: PAYWALL_URLS.es.course },
-      membership: { text: 'Unirme a Voz Esencia Academy',               bg: '#1B4B3A', name: 'Voz Esencia Academy',           id: 'voz-esencia-academy',      value: 37,  url: PAYWALL_URLS.es.membership },
+      membership: { text: 'Unirme a Voz Esencia Academy™',              bg: '#1B4B3A', name: 'Voz Esencia Academy™',          id: 'voz-esencia-academy',      value: 37,  url: PAYWALL_URLS.es.membership },
       vip:        { text: 'Reservar mi Coaching Vocal Privado — $147',  bg: '#7B5EA7', name: 'Coaching Vocal Privado',        id: 'coaching-vocal-privado-147', value: 147, url: PAYWALL_URLS.es.vip }
     }
   };
@@ -1532,7 +1532,7 @@ function renderResult() {
   // Guarantee note
   document.getElementById('guarantee-note').textContent = isVip
     ? (lang === 'fr' ? 'Places limitées. Réservation confirmée sous 24h.' : 'Plazas limitadas. Reserva confirmada en 24h.')
-    : (lang === 'fr' ? 'Garantie 7 jours : aucune différence ressentie = remboursement intégral.' : 'Garantía 7 días: sin diferencia = reembolso completo.');
+    : (lang === 'fr' ? 'Garantie 15 jours : aucune différence ressentie = remboursement intégral.' : 'Garantía 15 días: sin diferencia = reembolso completo.');
 
   // Pricing anchor section
   document.getElementById('pricing-section-container').innerHTML = renderPricingSection(lang);
