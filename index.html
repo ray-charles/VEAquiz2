@@ -1421,10 +1421,12 @@ function renderResult() {
   var q7ans = (answers.length > 8 && answers[8] !== null && answers[8] !== undefined) ? answers[8] : null;
 
   // Determine route key
-  // FR: 0,2→membership  1→vip
+  // FR: 0,2→standard(membership)  1→vip
   // ES: 0→membership   1→vip    2→course (intensive)
   var routeKey;
-  if (lang === 'fr') {
+  if (window._previewRoute) {
+    routeKey = window._previewRoute;
+  } else if (lang === 'fr') {
     routeKey = (q7ans === 1) ? 'vip' : 'standard';
   } else {
     if (q7ans === 1)      routeKey = 'vip';
@@ -1792,14 +1794,17 @@ function animateResultScreen(score) {
 }
 
 // ================================================================
-// PREVIEW MODE — ?r=mandibulaire|respiration|nerveux|identite&p=pro|stu
+// PREVIEW MODE — ?r=mandibulaire|respiration|nerveux|identite&p=pro|stu&lang=fr|es&cta=standard|vip|membership|course
 // ================================================================
 (function() {
   var hash = window.location.hash.replace('#','');
   var params = new URLSearchParams(hash);
   var r = params.get('r');
-  var p = params.get('p') || 'pro';
+  var l = params.get('lang');
+  var cta = params.get('cta');
   if (!r || !RESULT_KEYS.includes(r)) return;
+  if (l === 'es' || l === 'fr') lang = l;
+  if (cta) window._previewRoute = cta;
   var presets = {
     mandibulaire: [0, [0], [0], [3], [0], [0], [1], [0], null, ''],
     respiration:  [0, [0], [1], [0], [2], [3], [0], [0], null, ''],
