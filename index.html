@@ -163,6 +163,65 @@
       margin-top: 6px;
     }
 
+    /* ── SCALE (Q0) ── */
+    @keyframes scalePulse {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.13); }
+      65%  { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+    .scale-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0 8px;
+    }
+    .scale-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      max-width: 68px;
+    }
+    .scale-btn {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-width: 48px;
+      min-height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid #1B4B3A;
+      background: #fff;
+      color: #1B4B3A;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+    }
+    .scale-btn:hover {
+      transform: scale(1.05);
+    }
+    .scale-btn.selected {
+      background: #1B4B3A;
+      color: #fff;
+      border-color: #1B4B3A;
+      animation: scalePulse 0.42s ease forwards;
+    }
+    .scale-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      color: #7A706A;
+      text-align: center;
+      line-height: 1.3;
+      min-height: 2.6em;
+    }
+
     /* ── OPTIONS ── */
     .options-list {
       display: flex;
@@ -589,20 +648,16 @@ const FORMSPREE_ENDPOINT      = 'https://formspree.io/f/xdawrzrj';
 // ================================================================
 const QUESTIONS = [
   {
-    id: 0, type: 'single',
+    id: 0, type: 'scale',
     fr: {
-      text: "Si nous trouvons la solution exacte à ton problème actuel, voudrais-tu l'obtenir ?",
-      options: [
-        "Oui",
-        "Non"
-      ]
+      text: "Tu en as assez de ne pas te reconnaître dans ta propre voix ?",
+      hint: "À quel point es-tu prêt(e) à libérer ta voix une fois pour toutes ?",
+      scaleLabels: { 1: "Je m'y suis résigné(e)", 5: "Je suis prêt(e) à tout changer" }
     },
     es: {
-      text: "Si encontramos la solución exacta a tu problema actual, ¿te gustaría obtenerla?",
-      options: [
-        "Sí",
-        "No"
-      ]
+      text: "¿Ya estás harto/a de no reconocerte en tu propia voz?",
+      hint: "¿Qué tan dispuesto/a estás a liberar tu voz de una vez por todas?",
+      scaleLabels: { 1: "Me he resignado", 5: "Estoy listo/a para cambiarlo todo" }
     }
   },
   {
@@ -1160,10 +1215,12 @@ function render() {
   }
 
   document.getElementById('subheadline').innerHTML = lang === 'fr'
-    ? '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Découvre ton blocage principal et maîtrise ta voix</span>'
+    ? '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Ta vraie voix est encore là.</span>'
+      + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Découvre ton blocage et reprends contrôle.</span>'
       + '<span style="display:block;margin-top:6px;">+ reçois un exercice ciblé</span>'
       + '<span style="display:block;">en répondant aux 9 prochaines questions</span>'
-    : '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Descubre tu bloqueo principal y domina tu voz</span>'
+    : '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Tu verdadera voz sigue ahí.</span>'
+      + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Descubre tu bloqueo y retoma el control.</span>'
       + '<span style="display:block;margin-top:6px;">+ recibe un ejercicio específico</span>'
       + '<span style="display:block;">respondiendo las 9 siguientes preguntas</span>';
 
@@ -1271,6 +1328,29 @@ function renderOptions(q) {
   const qData     = q[lang];
   container.innerHTML = '';
 
+  // Handle scale type (Q0 — 1–5 commitment)
+  if (q.type === 'scale') {
+    const row = document.createElement('div');
+    row.className = 'scale-row';
+    const labels = qData.scaleLabels || {};
+    for (let v = 1; v <= 5; v++) {
+      const item = document.createElement('div');
+      item.className = 'scale-item';
+      const btn = document.createElement('button');
+      btn.className = 'scale-btn' + (answers[q.id] === v ? ' selected' : '');
+      btn.textContent = String(v);
+      btn.addEventListener('click', () => handleOptionClick(q.id, v, q));
+      const lbl = document.createElement('span');
+      lbl.className = 'scale-label';
+      lbl.textContent = labels[v] || '';
+      item.appendChild(btn);
+      item.appendChild(lbl);
+      row.appendChild(item);
+    }
+    container.appendChild(row);
+    return;
+  }
+
   // Handle textarea type (Q8 — optional open field)
   if (q.type === 'textarea') {
     const ta = document.createElement('textarea');
@@ -1317,6 +1397,13 @@ function renderOptions(q) {
 }
 
 function handleOptionClick(qId, idx, q) {
+  if (q.type === 'scale') {
+    answers[qId] = idx;
+    renderOptions(q);
+    document.getElementById('btn-next').disabled = false;
+    setTimeout(handleNext, 600);
+    return;
+  }
   if (q.type === 'single') {
     answers[qId] = idx;
   } else {
