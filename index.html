@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quel est ton blocage vocal ? — Voice Essence Academy</title>
+  <meta name="description" content="Découvrez votre blocage vocal principal et recevez un exercice ciblé. Quiz gratuit créé par Mamselle Ruiz Coach — 25 ans d'expérience · plus de 1 000 voix accompagnées.">
+  <meta property="og:title" content="Quel est ton blocage vocal ? — Voice Essence Academy">
+  <meta property="og:description" content="Quiz vocal gratuit — découvre ton blocage et reçois un exercice ciblé. Créé par Mamselle Ruiz Coach.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://quiz.veacademy.studio">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Quel est ton blocage vocal ? — Voice Essence Academy">
+  <meta name="twitter:description" content="Quiz vocal gratuit — découvre ton blocage et reçois un exercice ciblé.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -22,7 +30,7 @@
   fbq('track','PageView');
   fbq('trackCustom','Quiz_PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
+  <noscript><img height="1" width="1" style="display:none" alt=""
     src="https://www.facebook.com/tr?id=1888097325094612&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
 
@@ -645,8 +653,8 @@
   </div><!-- /quiz-card -->
 
   <!-- Logo outside quiz card — shown during quiz questions and on result page (below social footer) -->
-  <div id="logo-outside-fr" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-fr.png" alt="Voix Essence™ Academy" height="48" style="height:48px;width:auto;"></div>
-  <div id="logo-outside-es" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-es.png" alt="Voz Esencia™ Academy" height="48" style="height:48px;width:auto;"></div>
+  <div id="logo-outside-fr" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-fr.png" alt="Voix Essence™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
+  <div id="logo-outside-es" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-es.png" alt="Voz Esencia™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
 
   <div class="footer" id="site-footer"></div>
 </div><!-- /page-wrapper -->
@@ -1274,11 +1282,11 @@ function render() {
     ? '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Il est temps que ta voix ressemble à qui tu es.</span>'
       + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Découvre ton blocage et reprends contrôle.</span>'
       + '<span style="display:block;margin-top:6px;">+ reçois un exercice ciblé</span>'
-      + '<span style="display:block;">en répondant aux 9 prochaines questions</span>'
+      + '<span style="display:block;">en répondant aux 10 prochaines questions</span>'
     : '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Tu verdadera voz sigue ahí.</span>'
       + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Descubre tu bloqueo y retoma el control.</span>'
       + '<span style="display:block;margin-top:6px;">+ recibe un ejercicio específico</span>'
-      + '<span style="display:block;">respondiendo las 9 siguientes preguntas</span>';
+      + '<span style="display:block;">respondiendo las 10 siguientes preguntas</span>';
 
   var footerEl = document.getElementById('site-footer');
   if (footerEl) footerEl.textContent = lang === 'fr'
@@ -1534,7 +1542,7 @@ function renderResult() {
   var bodyHTML =
     '<div style="margin-bottom:14px;">'
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#1B4B3A;margin-bottom:5px;">'
-    + '<span class="ins1-fr"' + dFr + '>' + (lang === 'fr' ? 'Ce qui se passe' : 'Ce qui se passe') + '</span>'
+    + '<span class="ins1-fr"' + dFr + '>Ce qui se passe</span>'
     + '<span class="ins1-es"' + dEs + '>Lo que ocurre</span>'
     + '</div>'
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#7A706A;line-height:1.7;">' + d.body + '</div>'
@@ -1592,14 +1600,16 @@ function renderResult() {
         'Ou tu essaies 15 jours. Gratuitement.',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">CE QUE TU DÉBLOQUES DÈS AUJOURD\'HUI</strong>',
         '• Bibliothèque d\'exercices complète (675$)<br>• Masterclasses de groupe mensuels (150$/mois)<br>• Suivi et Support 24/7 (15$/mois)<br>• Actualités pour être à la une de la science de la voix et du bien-être (25$/mois)<br>• Coachs disponibles en tout temps pour des questions techniques (15$/mois)',
+        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valeur totale de 880$ — aujourd\'hui : <strong style="font-weight:bold;color:#1B4B3A;">0$</strong></span>',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">15 JOURS GRATUITS. ACCÈS COMPLET À 100%</strong>',
         'Annulation en un clic. Sans condition. Sans jugement.',
         'Tu ne devrais prendre aucune décision si tu n\'as pas accès à toute l\'information. C\'est pourquoi la seule manière de savoir si l\'Académie t\'aide vraiment, c\'est de l\'essayer.'
       ],
       vip: [
-        'Mamselle travaille avec un nombre limité de clients à la fois — pour garantir qu\'elle arrive à ta séance avec une attention complète, rien que pour toi.',
-        '55 minutes. Un diagnostic précis de ton blocage spécifique. Un plan d\'action personnalisé que tu peux mettre en œuvre dès le lendemain.',
-        'Les places disponibles ce mois-ci sont comptées. Une fois la séance réservée, tu reçois une confirmation dans les 24 heures.'
+        'Mamselle travaille avec un nombre limité de clients à la fois — parce qu\'une voix, ça ne se transforme pas à la chaîne.',
+        '55 minutes. Un plan d\'action personnalisé, taillé pour <strong>TON instrument</strong>, que tu peux mettre en œuvre dès le lendemain.',
+        'Une séance avec quelqu\'un qui accompagne des voix depuis plus de 25 ans — et qui arrive à la tienne avec une attention complète, rien que pour toi.',
+        'Les places ce mois-ci sont limitées. Confirmation dans les 24 heures suivant ta réservation.'
       ]
     },
     es: {
@@ -1608,6 +1618,7 @@ function renderResult() {
         'Ahora tienes dos opciones.',
         'Cierras esta página. Vuelves a los ejercicios de YouTube.<br>En 6 meses estás exactamente en el mismo lugar —<br>misma fatiga, misma frustración, misma voz que no te representa.',
         'O pruebas 15 días. Gratuitamente.',
+        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valor total de 880$ — hoy : <strong style="font-weight:bold;color:#1B4B3A;">0$ durante 15 días.</strong></span>',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">LO QUE DESBLOQUEAS DESDE HOY</strong>',
         '• Biblioteca de ejercicios completa (675$)<br>• Masterclasses de grupo mensuales (150$/mes)<br>• Seguimiento y soporte 24/7 (15$/mes)<br>• Actualidades para estar al día en la ciencia de la voz y el bienestar (25$/mes)<br>• Coaches disponibles en todo momento para preguntas técnicas (15$/mes)',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">15 DÍAS GRATIS. ACCESO COMPLETO AL 100%</strong>',
@@ -1615,14 +1626,13 @@ function renderResult() {
         'No deberías tomar ninguna decisión sin tener acceso a toda la información. Por eso la única manera de saber si la Academia realmente te ayuda, es probarla.'
       ],
       vip: [
-        'Mamselle trabaja con un número limitado de clientes a la vez — para garantizar que llega a tu sesión con atención completa, solo para ti.',
-        '55 minutos. Un diagnóstico preciso de tu bloqueo específico. Un plan de acción personalizado que puedes implementar al día siguiente.',
-        'Las plazas disponibles este mes son limitadas. Una vez reservada la sesión, recibes confirmación en menos de 24 horas.'
+        'Mamselle trabaja con un número limitado de clientes a la vez — porque una voz no se transforma en serie.',
+        '55 minutos. Un plan de acción personalizado, hecho para <strong>TU instrumento</strong>, que puedes aplicar desde el día siguiente.',
+        'Una sesión con alguien que acompaña voces desde hace más de 25 años — y que llega a la tuya con una atención completa, solo para ti.',
+        'Las plazas de este mes son limitadas. Confirmación en las 24 horas siguientes a tu reserva.'
       ],
       course: [
-        'Lo que obtienes :',
-        '✓ Un diagnóstico preciso de tu bloqueo vocal específico<br>✓ Ejercicios dirigidos — no genéricos — diseñados para TU mecánica<br>✓ Una voz sin fatiga que aguanta todo el día<br>✓ Hablar o cantar sin tensión, sin miedo, sin retenerte<br>✓ Entender por fin por qué nada más ha funcionado<br>✓ Una voz que te pertenece y te representa de verdad',
-        'Acceso inmediato tras el pago. Garantía de resultado: si no sientes diferencia en 7 días, te devolvemos el dinero. Queremos tu éxito.'
+        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#1B4B3A;">«Una nueva visión del entrenamiento vocal»</span><span style="font-family:\'DM Sans\',sans-serif;font-weight:300;font-size:0.88rem;color:#7A706A;"> — así es como la mayoría de las personas describen este programa después de haberlo completado.</span><br><br><span style="font-family:\'DM Sans\',sans-serif;font-weight:300;font-size:0.92rem;color:#2C2825;line-height:1.75;display:block;">Tu cuerpo es un instrumento preciso. Nadie te enseñó a usarlo — por eso tu voz se bloquea, se cansa, o no te representa. Este programa de 7 días te da la mecánica exacta, día a día, para que tu voz fluya sin esfuerzo y sin tensión — auténticamente tuya.</span><br><span style="display:block;font-family:\'DM Sans\',sans-serif;font-weight:500;font-size:13px;color:#1B4B3A;margin-bottom:4px;">✓ Acceso inmediato tras el pago.</span><span style="display:block;font-family:\'DM Sans\',sans-serif;font-weight:500;font-size:13px;color:#1B4B3A;margin-bottom:4px;">✓ Garantía de resultado: ninguna diferencia en 7 días — te devolvemos el dinero.</span><span style="display:block;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-weight:bold;font-size:1.3rem;color:#C4845A;margin-top:16px;">Tu Día 1 te espera.</span>'
       ]
     }
   };
@@ -1691,7 +1701,7 @@ function renderResult() {
   // Guarantee note
   document.getElementById('guarantee-note').textContent = isVip
     ? (lang === 'fr' ? 'Places limitées. Réservation confirmée sous 24h.' : 'Plazas limitadas. Reserva confirmada en 24h.')
-    : (lang === 'fr' ? 'Aucune différence en 15 jours — tu repars sans avoir donné un sous.' : 'Ninguna diferencia en 15 días — te vas sin haber dado un centavo.');
+    : (lang === 'fr' ? 'Aucune différence en 15 jours — tu repars sans avoir donné un sous.' : 'Ninguna diferencia en 7 días — te vas sin haber dado un centavo.');
 
   // Pricing anchor section
   document.getElementById('pricing-section-container').innerHTML = renderPricingSection(lang);
@@ -1715,7 +1725,6 @@ function handleRestart() {
   answers       = [null, [], [], [], [], [], [], [], null, ''];
   profile       = null;
   showResult    = false;
-  leadSubmitted = false;
   pixelFired    = false;
   sessionStorage.removeItem('veaQuizState');
   render();
@@ -1871,24 +1880,24 @@ function submitLead(resultKey, score, routeKey) {
       vocal_block:    resultKey,
       vocal_score:    score,
       routing:        routeKey || 'standard',
-      q0_qualified:   answers[0] === 0 ? 'Oui' : (answers[0] === 1 ? 'Non' : '—'),
-      q1_usage:       answers[1].length ? answers[1].map(function(i){ return q[1][l].options[i]; }).join(' | ') : '—',
-      q1_symptoms:    answers[2].length ? answers[2].map(function(i){ return q[2][l].options[i]; }).join(' | ') : '—',
-      q2_context:     answers[3].length ? answers[3].map(function(i){ return q[3][l].options[i]; }).join(' | ') : '—',
-      q3_tried:       answers[4].length ? answers[4].map(function(i){ return q[4][l].options[i]; }).join(' | ') : '—',
-      q4_frustration: answers[5].length ? answers[5].map(function(i){ return q[5][l].options[i]; }).join(' | ') : '—',
-      q5_goal:        answers[6].length ? answers[6].map(function(i){ return q[6][l].options[i]; }).join(' | ') : '—',
-      q6_obstacle:    answers[7].length
-                        ? answers[7].map(function(i){ return (q[7][l].optionsByProfile[profile || 'stu'] || [])[i] || '—'; }).join(' | ')
-                        : '—',
-      q7_solution:    answers[8] !== null && answers[8] !== undefined ? q[8][l].options[answers[8]] : '—',
-      q8_freetext:    answers[9] || '—'
+      q0_qualified:   (answers[0] >= 4) ? 'Oui' : 'Non',
+      q1_usage:        answers[1].length ? answers[1].map(function(i){ return q[1][l].options[i]; }).join(' | ') : '—',
+      q2_symptoms:     answers[2].length ? answers[2].map(function(i){ return q[2][l].options[i]; }).join(' | ') : '—',
+      q3_context:      answers[3].length ? answers[3].map(function(i){ return q[3][l].options[i]; }).join(' | ') : '—',
+      q4_tried:        answers[4].length ? answers[4].map(function(i){ return q[4][l].options[i]; }).join(' | ') : '—',
+      q5_frustration:  answers[5].length ? answers[5].map(function(i){ return q[5][l].options[i]; }).join(' | ') : '—',
+      q6_goal:         answers[6].length ? answers[6].map(function(i){ return q[6][l].options[i]; }).join(' | ') : '—',
+      q7_obstacle:     answers[7].length
+                         ? answers[7].map(function(i){ return (q[7][l].optionsByProfile[profile || 'stu'] || [])[i] || '—'; }).join(' | ')
+                         : '—',
+      q8_solution:     answers[8] !== null && answers[8] !== undefined ? q[8][l].options[answers[8]] : '—',
+      q9_freetext:     answers[9] || '—'
     };
     fetch(FORMSPREE_ENDPOINT, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body:    JSON.stringify(data)
-    }).catch(function() {});
+    }).catch(function(err) { console.warn('Formspree submission failed:', err); });
   } catch(err) {}
 }
 
