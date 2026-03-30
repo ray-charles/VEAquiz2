@@ -1084,10 +1084,12 @@ function renderScoreArc(score) {
     + ' font-size="9" font-weight="400" fill="#A89E97">/100</text>'
     + '</svg>'
     + '<span style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;'
-    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;" '
+    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;'
+    + (lang === 'fr' ? '' : 'display:none;') + '" '
     + 'class="score-label-fr score-label">Santé vocale actuelle</span>'
     + '<span style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;'
-    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;display:none;" '
+    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;'
+    + (lang === 'es' ? '' : 'display:none;') + '" '
     + 'class="score-label-es score-label">Salud vocal actual</span>'
     + '</div>';
 }
