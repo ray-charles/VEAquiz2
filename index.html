@@ -1834,11 +1834,12 @@ function animateResultScreen(score) {
       else if (numEl) numEl.textContent = score;
     }
     requestAnimationFrame(step);
+    var containerEl = document.getElementById('score-arc-container');
+    if (containerEl) { containerEl.style.opacity = '1'; containerEl.style.transform = 'none'; }
   }
 
   // Staggered fade-up for each result section
   var sections = [
-    { id: 'score-arc-container',       delay: 0   },
     { sel: '.result-badges',           delay: 220 },
     { id: 'result-title',              delay: 380 },
     { id: 'result-body',               delay: 520 },
