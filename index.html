@@ -1559,11 +1559,11 @@ function renderResult() {
         'Tu viens de comprendre pourquoi rien n\'a fonctionné jusqu\'ici.<br>Pas un manque de talent. Pas un manque d\'endurance.<br>Un pattern compensatoire que personne n\'avait jamais identifié.',
         'Maintenant tu as deux choix.',
         'Tu fermes cette page. Tu retournes aux exercices YouTube.<br>Dans 6 mois tu es exactement au même endroit —<br>même fatigue, même frustration, même voix qui ne te représente pas.',
-        'Ou tu essaies 15 jours. Gratuitement.',
+        'Ou tu essaies 7 jours. Gratuitement.',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">CE QUE TU DÉBLOQUES DÈS AUJOURD\'HUI</strong>',
         '• Bibliothèque d\'exercices complète (675$)<br>• Masterclasses de groupe mensuels (150$/mois)<br>• Suivi et Support 24/7 (15$/mois)<br>• Actualités pour être à la une de la science de la voix et du bien-être (25$/mois)<br>• Coachs disponibles en tout temps pour des questions techniques (15$/mois)',
         '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valeur totale de <strong style="font-weight:bold;color:#C4845A;">880$</strong> — aujourd\'hui : <strong style="font-weight:bold;color:#1B4B3A;">0$</strong></span>',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">15 JOURS GRATUITS. 49$/mois après, ACCÈS COMPLET À 100%</strong>',
+        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">7 JOURS GRATUITS. 49$/mois après, ACCÈS COMPLET À 100%</strong>',
         'Annulation en un clic. Sans condition. Sans jugement.',
         'Tu ne devrais prendre aucune décision si tu n\'as pas accès à toute l\'information. C\'est pourquoi la seule manière de savoir si l\'Académie t\'aide vraiment, c\'est de l\'essayer.'
       ],
@@ -1579,11 +1579,11 @@ function renderResult() {
         'Acabas de entender por qué nada ha funcionado hasta ahora.<br>No es falta de talento. No es falta de resistencia.<br>Es un patrón compensatorio que nadie había identificado jamás.',
         'Ahora tienes dos opciones.',
         'Cierras esta página. Vuelves a los ejercicios de YouTube.<br>En 6 meses estás exactamente en el mismo lugar misma fatiga, misma frustración, misma voz que no te representa.',
-        'O pruebas 15 días. Gratuitamente.',
+        'O pruebas 7 días. Gratuitamente.',
         '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">LO QUE DESBLOQUEAS DESDE HOY</strong>',
         '• Biblioteca de ejercicios completa (675$)<br>• Masterclasses de grupo mensuales (150$/mes)<br>• Seguimiento y soporte 24/7 (15$/mes)<br>• Actualidades para estar al día en la ciencia de la voz y el bienestar (25$/mes)<br>• Coaches disponibles en todo momento para preguntas técnicas (15$/mes)',
-        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valor total de <strong style="font-weight:bold;color:#C4845A;">880$</strong> — hoy : <strong style="font-weight:bold;color:#1B4B3A;">0$ durante 15 días.</strong></span>',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">15 DÍAS GRATIS. 37$/mes después, ACCESO COMPLETO AL 100%</strong>',
+        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valor total de <strong style="font-weight:bold;color:#C4845A;">880$</strong> — hoy : <strong style="font-weight:bold;color:#1B4B3A;">0$ durante 7 días.</strong></span>',
+        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">7 DÍAS GRATIS. 37$/mes después, ACCESO COMPLETO AL 100%</strong>',
         'Cancelación en un clic. Sin condición. Sin juicio.',
         'No deberías tomar ninguna decisión sin tener acceso a toda la información. Por eso la única manera de saber si la Academia realmente te ayuda, es probarla.'
       ],
@@ -1663,7 +1663,7 @@ function renderResult() {
   // Guarantee note
   document.getElementById('guarantee-note').textContent = isVip
     ? (lang === 'fr' ? 'Places limitées. Réservation confirmée sous 24h.' : 'Plazas limitadas. Reserva confirmada en 24h.')
-    : (lang === 'fr' ? 'Aucune différence en 15 jours — tu repars sans avoir donné un sous.' : 'Ninguna diferencia en 7 días — te vas sin haber dado un centavo.');
+    : (lang === 'fr' ? 'Aucune différence en 7 jours — tu repars sans avoir donné un sous.' : 'Ninguna diferencia en 7 días — te vas sin haber dado un centavo.');
 
   // Pricing anchor section
   document.getElementById('pricing-section-container').innerHTML = renderPricingSection(lang);
@@ -1717,7 +1717,7 @@ function renderPricingSection(l) {
     fr: {
       section_label: "Les parcours disponibles",
       section_sub: "Deux façons d'avancer — selon là où tu en es.",
-      anchor_note: "* Prix en CAD. Essai gratuit de 15 jours — annulable à tout moment.",
+      anchor_note: "* Prix en CAD. Essai gratuit de 7 jours — annulable à tout moment.",
       items: [
         {
           name: "La Séance Privée avec Mamselle",
@@ -1735,8 +1735,8 @@ function renderPricingSection(l) {
           type: "Membership mensuel",
           price: "49 $",
           price_sub: "CAD / mois · sans engagement",
-          desc: "Accès à la méthode complète, contenu mensuel, et essai gratuit de 15 jours pour commencer sans risque.",
-          tag: "Essai gratuit de 15 jours",
+          desc: "Accès à la méthode complète, contenu mensuel, et essai gratuit de 7 jours pour commencer sans risque.",
+          tag: "Essai gratuit de 7 jours",
           highlight: true,
           latam_note: false,
           url: 'PAYWALL_FR_STANDARD'
@@ -1764,8 +1764,8 @@ function renderPricingSection(l) {
           type: "Membresía mensual",
           price: "$37",
           price_sub: "por mes · sin compromiso",
-          desc: "Acceso al método completo y al contenido mensuel, con 15 días de prueba gratuita para empezar sin riesgo.",
-          tag: "15 días para probar gratis",
+          desc: "Acceso al método completo y al contenido mensuel, con 7 días de prueba gratuita para empezar sin riesgo.",
+          tag: "7 días para probar gratis",
           highlight: true,
           latam_note: false,
           url: 'PAYWALL_ES_MEMBERSHIP'
