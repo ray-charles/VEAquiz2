@@ -1090,7 +1090,7 @@ function renderQuiz() {
   // Next button
   const nextBtn = document.getElementById('btn-next');
   nextBtn.disabled    = !hasCurrentAnswer();
-  nextBtn.textContent = currentQ === 9
+  nextBtn.textContent = currentQ === QUESTIONS.length - 1
     ? (lang === 'fr' ? 'Voir mon résultat →' : 'Ver mi resultado →')
     : (lang === 'fr' ? 'Continuer' : 'Continuar');
 }
@@ -1212,7 +1212,7 @@ function handleBack() {
 function handleNext() {
   if (!hasCurrentAnswer()) return;
   if (currentQ === 1) profile = (Array.isArray(answers[1]) && answers[1].includes(0)) ? 'pro' : 'stu';
-  if (currentQ === 9) {
+  if (currentQ === QUESTIONS.length - 1) {
     var ta = document.getElementById('q8-textarea');
     if (ta) answers[9] = ta.value;
     showResult = true;
