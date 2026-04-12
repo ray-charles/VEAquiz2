@@ -312,20 +312,7 @@
       color: #7A706A;
       line-height: 1.7;
     }
-    .btn-restart {
-      display: block;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      color: #A89E97;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin: 14px auto 0;
-      text-align: center;
-    }
-    .btn-restart:hover { color: var(--dark); }
-
-    .btn-next, .btn-back, .btn-restart, .option-card {
+    .btn-next, .btn-back, .option-card {
       touch-action: manipulation;
     }
 
@@ -503,14 +490,13 @@
         </div>
       </div>
       <div class="result-body"  id="result-body"></div>
-      <div id="cost-block" style="display:none;"></div>
       <div id="video-container"></div>
+      <div id="cost-block" style="display:none;"></div>
       <div id="conversion-section"></div>
       <!-- Elfsight Google Reviews — bottom of result page (bilingual) -->
       <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid #D8CDB5;transform:scale(0.85);transform-origin:top center;">
         <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
       </div>
-      <button class="btn-restart" id="btn-restart" onclick="handleRestart()"></button>
       <div id="second-cta-block" style="display:none;margin-top:24px;padding-top:20px;border-top:0.5px solid #D8CDB5;">
         <a id="second-cta-btn" href="#"
           style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;
@@ -526,26 +512,6 @@
           Esta oferta no aparece en publicidad. Solo está disponible
           para quienes completan el quiz.
         </p>
-      </div>
-      <div id="social-footer" style="margin-top:28px;padding-top:20px;border-top:0.5px solid #D8CDB5;text-align:center;">
-        <div style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.04em;text-transform:uppercase;color:#A89E97;margin-bottom:14px;">
-          <span class="social-label-fr">Retrouve Mamselle sur</span>
-          <span class="social-label-es" style="display:none;">Encuentra a Mamselle en</span>
-        </div>
-        <div style="display:flex;justify-content:center;align-items:center;gap:24px;">
-          <a href="https://www.youtube.com/@mamselle_ruiz" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none;color:#7A706A;transition:color .15s;" onmouseover="this.style.color='#1B4B3A'" onmouseout="this.style.color='#7A706A'">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:inherit;">YouTube</span>
-          </a>
-          <a href="https://www.facebook.com/MamselleRuizPage" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none;color:#7A706A;transition:color .15s;" onmouseover="this.style.color='#1B4B3A'" onmouseout="this.style.color='#7A706A'">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:inherit;">Facebook</span>
-          </a>
-          <a href="https://www.instagram.com/mamselle_ruiz/" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none;color:#7A706A;transition:color .15s;" onmouseover="this.style.color='#1B4B3A'" onmouseout="this.style.color='#7A706A'">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:inherit;">Instagram</span>
-          </a>
-        </div>
       </div>
     </div>
 
@@ -1085,8 +1051,8 @@ function render() {
   }
 
   // Bilingual span toggles — run AFTER all content is built so dynamically-created elements are caught
-  const frClasses = ['cred-fr','score-label-fr','ins1-fr','ins2-fr','ins3-fr','social-label-fr'];
-  const esClasses = ['cred-es','score-label-es','ins1-es','ins2-es','ins3-es','social-label-es'];
+  const frClasses = ['cred-fr','score-label-fr','ins1-fr','ins2-fr','ins3-fr'];
+  const esClasses = ['cred-es','score-label-es','ins1-es','ins2-es','ins3-es'];
   frClasses.forEach(cls => document.querySelectorAll('.' + cls).forEach(el => el.style.display = lang === 'fr' ? 'inline' : 'none'));
   esClasses.forEach(cls => document.querySelectorAll('.' + cls).forEach(el => el.style.display = lang === 'es' ? 'inline' : 'none'));
 }
@@ -1343,63 +1309,30 @@ function renderResult() {
   var MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
   var membershipUrl = (lang === 'fr') ? MEMBERSHIP_URL_FR : MEMBERSHIP_URL_ES;
 
-  var PIVOT = {
-    fr: {
-      mandibulaire: "Tu viens d'identifier le schéma exact qui bloque ta voix.",
-      respiration:  "Tu viens d'identifier le schéma exact qui bloque ta voix.",
-      nerveux:      "Tu viens d'identifier le schéma exact qui bloque ta voix.",
-      identite:     "Tu viens d'identifier le schéma exact qui sépare ta voix de qui tu es vraiment."
-    },
-    es: {
-      mandibulaire: "Acabas de identificar el patrón exacto que bloquea tu voz.",
-      respiration:  "Acabas de identificar el patrón exacto que bloquea tu voz.",
-      nerveux:      "Acabas de identificar el patrón exacto que bloquea tu voz.",
-      identite:     "Acabas de identificar el patrón exacto que separa tu voz de quien realmente eres."
-    }
-  };
-
   var CTA_LABEL = {
     fr: {
-      mandibulaire: "Réserver mon essai gratuit de 7 jours →",
-      respiration:  "Réserver mon essai gratuit de 7 jours →",
-      nerveux:      "Réserver mon essai gratuit de 7 jours →",
-      identite:     "Réserver mon essai gratuit de 7 jours →"
+      mandibulaire: "Je veux ma solution →",
+      respiration:  "Je veux ma solution →",
+      nerveux:      "Je veux ma solution →",
+      identite:     "Je veux ma solution →"
     },
     es: {
-      mandibulaire: "Asegurar mi prueba gratuita de 7 días →",
-      respiration:  "Asegurar mi prueba gratuita de 7 días →",
-      nerveux:      "Asegurar mi prueba gratuita de 7 días →",
-      identite:     "Asegurar mi prueba gratuita de 7 días →"
+      mandibulaire: "Quiero solucionar mi bloqueo →",
+      respiration:  "Quiero solucionar mi bloqueo →",
+      nerveux:      "Quiero solucionar mi bloqueo →",
+      identite:     "Quiero solucionar mi bloqueo →"
     }
   };
-
-  var BENEFITS_FR =
-    '— Le Protocole des 7 Jours inclus dès le premier jour<br>'
-    + '— Une bibliothèque d\'exercices vocaux : respiration, projection, communication et plus<br>'
-    + '— Une session en direct chaque mois avec Mamselle — de vrais exercices, de vraies questions<br>'
-    + '— 7 jours gratuits pour tout essayer, sans engagement';
-
-  var BENEFITS_ES =
-    '— El Protocolo de los 7 Días incluido desde el primer día<br>'
-    + '— Una biblioteca de ejercicios de voz: respiración, proyección, comunicación y más<br>'
-    + '— Una sesión en vivo cada mes con Mamselle — ejercicios reales, preguntas reales<br>'
-    + '— 7 días gratis para probarlo todo, sin compromiso';
-
-  var GUARANTEE_FR = '49 CAD/mois après · annule quand tu veux · sans condition';
-  var GUARANTEE_ES = '37 USD/mes después · cancela cuando quieras · sin condiciones';
-
-  var AUTHORITY_FR = 'Mamselle Ruiz accompagne des voix depuis plus de 25 ans et a travaillé avec plus de 1 000 personnes ayant exactement ce blocage.';
-  var AUTHORITY_ES = 'Mamselle Ruiz acompaña voces desde hace más de 25 años y ha trabajado con más de 1.000 personas con exactamente este bloqueo.';
 
   var TESTI_TEXT_FR =
     '« Mamselle encadre merveilleusement bien les groupes de chants. '
     + 'Elle a changé ma vie (no joke!) »';
-  var TESTI_META_FR = 'Justine Lafortune · Montréal, Canada';
+  var TESTI_META_FR = 'Justine Lafortune · Canada';
 
   var TESTI_TEXT_ES =
     '«\u00a0Mamselle guía los grupos de una manera maravillosa. '
     + '¡Cambió mi vida (en serio!)\u00a0»';
-  var TESTI_META_ES = 'Justine Lafortune · Montréal, Canada';
+  var TESTI_META_ES = 'Justine Lafortune · Canada';
 
   var JUSTINE_PHOTO = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
 
@@ -1428,24 +1361,40 @@ function renderResult() {
     if (videoContainer) videoContainer.innerHTML = '';
   }
 
-  var pivotText    = (PIVOT[lang] && PIVOT[lang][resultKey]) ? PIVOT[lang][resultKey] : PIVOT[lang]['mandibulaire'];
   var ctaLabel     = (CTA_LABEL[lang] && CTA_LABEL[lang][resultKey]) ? CTA_LABEL[lang][resultKey] : CTA_LABEL[lang]['mandibulaire'];
-  var benefitsHTML = (lang === 'fr') ? BENEFITS_FR : BENEFITS_ES;
-  var guarantee    = (lang === 'fr') ? GUARANTEE_FR : GUARANTEE_ES;
-  var authority    = (lang === 'fr') ? AUTHORITY_FR : AUTHORITY_ES;
   var testiText    = (lang === 'fr') ? TESTI_TEXT_FR : TESTI_TEXT_ES;
   var testiMeta    = (lang === 'fr') ? TESTI_META_FR : TESTI_META_ES;
 
   var conversionHTML =
     '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
 
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:400;'
-    + 'color:#2C2825;text-align:center;line-height:1.45;margin:0 0 14px;">'
-    + pivotText + '</p>'
-
+    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;'
+    + 'margin-bottom:16px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;'
+    + 'color:#2C2825;line-height:1.7;margin:0 0 10px;">'
+    + (lang === 'fr'
+        ? 'Si tu veux résoudre ton blocage, je t\'invite à rejoindre notre académie en ligne. Des personnes du monde entier nous rejoignent — et ça me touche toujours de voir les amitiés qui se créent.'
+        : 'Si quieres resolver tu bloqueo, te invito a unirte a nuestra academia en línea. Personas de todo el mundo se unen — y siempre me alegra ver las amistades que nacen.')
+    + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;'
+    + 'color:#2C2825;line-height:1.7;margin:0 0 10px;">'
+    + (lang === 'fr'
+        ? 'Habituellement, les gens paient 49 CAD/mois pour rejoindre. Parce que tu as fait le quiz, tu accèdes à tout notre contenu complètement gratuitement pendant 7 jours.'
+        : 'Normalmente, las personas pagan $37/mes para unirse. Porque hiciste el quiz, accedes a todo nuestro contenido completamente gratis durante 7 días.')
+    + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
+    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + (lang === 'fr'
+        ? 'Rappelle-toi — tu es ta voix. Y travailler est l\'un des meilleurs investissements que tu feras jamais.'
+        : 'Recuerda — tú eres tu voz. Trabajar en ella es una de las mejores inversiones que jamás harás.')
+    + '</p>'
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'color:#7A706A;line-height:2;margin:0 0 20px;">'
-    + benefitsHTML + '</p>'
+    + 'color:#7A706A;line-height:1.65;margin:0;">'
+    + (lang === 'fr'
+        ? 'Tout notre contenu, notre soutien et nos conseils — gratuits pendant 7 jours.'
+        : 'Todo nuestro contenido, apoyo y orientación — gratis durante 7 días.')
+    + '</p>'
+    + '</div>'
 
     + '<a href="' + membershipUrl + '" '
     + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
@@ -1455,19 +1404,19 @@ function renderResult() {
     + ' onclick="if(typeof fbq!==\'undefined\'){fbq(\'trackCustom\',\'Quiz_CTAClick\');}">'
     + ctaLabel + '</a>'
 
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;'
-    + 'color:#A89E97;text-align:center;margin:0 0 6px;">'
-    + guarantee + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
-    + 'color:#9B1C1C;text-align:center;margin:0 0 16px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
+    + 'color:#9B1C1C;text-align:center;margin:0 0 20px;line-height:1.55;">'
     + (lang === 'fr'
-        ? 'Cette offre n\'existe pas en publicité. Elle est uniquement disponible pour celles et ceux qui complètent le quiz — en remerciement de ton temps.'
-        : 'Esta oferta no aparece en publicidad. Solo está disponible para quienes completan el quiz — como agradecimiento por tu tiempo.')
+        ? 'Si tu pars maintenant, cette offre disparaît. C\'est ta chance d\'essayer une approche différente, gratuitement.'
+        : 'Si te vas ahora, la oferta desaparece. Es tu oportunidad de probar un método único, gratis.')
     + '</p>'
 
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'color:#7A706A;text-align:center;line-height:1.55;margin:0 0 20px;">'
-    + authority + '</p>'
+    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
+    + (lang === 'fr'
+        ? 'Depuis 25 ans, chaque jour, j\'accompagne des personnes à chanter sur scène, parler en public, et vivre comme si elles étaient nées une deuxième fois.'
+        : 'Desde hace 25 años, cada día acompaño a personas a cantar en el escenario, hablar en público, y vivir como si hubieran nacido de nuevo.')
+    + '</p>'
 
     + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
     + 'padding:16px;margin-bottom:20px;">'
@@ -1539,9 +1488,6 @@ function renderResult() {
       language:     lang
     });
   }
-
-  document.getElementById('btn-restart').textContent     =
-    lang === 'fr' ? 'Recommencer' : 'Volver a empezar';
 
   // Trigger entrance animations
   setTimeout(function() { animateResultScreen(score); }, 20);
@@ -1694,8 +1640,6 @@ function animateResultScreen(score) {
     { id: 'score-arc-container',       delay: 0   },
     { id: 'result-body',               delay: 520 },
     { id: 'cost-block',                delay: 590 },
-    { id: 'btn-restart',               delay: 1340 },
-    { id: 'social-footer',             delay: 1460 }
   ];
 
   sections.forEach(function(s) {
