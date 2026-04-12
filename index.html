@@ -85,14 +85,7 @@
       margin-bottom: 14px;
     }
     .main-headline em { font-style: italic; color: var(--green-deep); }
-    /* Results page: restore original headline size */
-    .main-headline.result-mode {
-      font-size: clamp(28px, 6vw, 36px);
-      text-transform: none;
-      font-weight: 300;
-      letter-spacing: normal;
-      line-height: 1.2;
-    }
+
 
     .subheadline {
       font-weight: 300;
@@ -422,8 +415,6 @@
     <p class="subheadline" id="subheadline"></p>
   </div>
 
-  <!-- Result subtitle — shown above quiz card on results page only -->
-  <div id="result-above-card" style="display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;color:#7A706A;line-height:1.65;max-width:440px;margin:0 auto 24px;"></div>
 
   <!-- Elfsight Google Reviews — hidden on result page -->
   <div id="elfsight-top" style="margin-bottom:24px;min-height:100px;">
@@ -1040,32 +1031,13 @@ function render() {
 
   var hlEl = document.getElementById('main-headline');
   var vData = VARIANTS[lang] && VARIANTS[lang][quizVariant];
-  hlEl.innerHTML = showResult
-    ? (lang === 'fr'
-        ? 'Quel est ton<br><em>blocage vocal ?</em>'
-        : '¿Cuál es tu<br><em>bloqueo vocal?</em>')
-    : (vData && vData.headline
-        ? vData.headline
-        : (lang === 'fr'
-            ? 'Frustré de perdre<br><em>contrôle de ta voix ?</em>'
-            : '¿Frustrado/a de perder<br><em>el control de tu voz?</em>'));
-  // Results page: revert to original headline size; landing page: large uppercase
-  if (showResult) { hlEl.classList.add('result-mode'); } else { hlEl.classList.remove('result-mode'); }
-  // Hide headline during quiz questions (shown on lead and result only)
-  hlEl.style.display = (currentQ >= 0 && !showResult) ? 'none' : 'block';
-
-  // Result subtitle above quiz card
-  var aboveCard = document.getElementById('result-above-card');
-  if (aboveCard) {
-    if (showResult) {
-      aboveCard.textContent = lang === 'fr'
-        ? 'Merci d\'avoir pris le temps de faire ce quiz. Il nous permet jour après jour d\'offrir un meilleur service à tous nos clients.'
-        : 'Gracias por tomarte el tiempo de hacer este quiz. Nos permite día a día ofrecer un mejor servicio a todos nuestros clientes.';
-      aboveCard.style.display = 'block';
-    } else {
-      aboveCard.style.display = 'none';
-    }
-  }
+  hlEl.innerHTML = (vData && vData.headline)
+    ? vData.headline
+    : (lang === 'fr'
+        ? 'Frustré de perdre<br><em>contrôle de ta voix ?</em>'
+        : '¿Frustrado/a de perder<br><em>el control de tu voz?</em>');
+  // Hide headline on result screen and during quiz questions (shown on lead page only)
+  hlEl.style.display = (!showResult && currentQ === -1) ? 'block' : 'none';
 
   var subEl = document.getElementById('subheadline');
   if (vData && vData.sub && !showResult && currentQ === -1) {
