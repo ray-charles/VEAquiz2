@@ -113,27 +113,6 @@
     }
     @media (max-width: 480px) { .quiz-card { padding: 24px 20px; } }
 
-    /* ── LANGUAGE TOGGLE ── */
-    .lang-toggle {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-bottom: 24px;
-    }
-    .lang-btn {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 6px 14px;
-      min-height: 36px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.15s;
-      border: 1px solid var(--green-deep);
-      line-height: 1;
-    }
-    .lang-btn.active        { background: var(--green-deep); color: #fff; }
-    .lang-btn:not(.active)  { background: transparent; color: var(--dark); }
 
     /* ── PROGRESS BAR ── */
     .progress-track {
@@ -310,56 +289,12 @@
     .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
 
     /* ── RESULT SCREEN ── */
-    .result-badges {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-    .badge-pill {
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-    .badge-result { background: var(--green-ghost); color: #085041; }
-    .badge-pro    { background: #EDE8F8;            color: #26215C; }
-    .badge-stu    { background: #FAEEDA;            color: #412402; }
-
-    .result-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 24px;
-      color: var(--green-deep);
-      margin-bottom: 12px;
-    }
     .result-body {
       font-weight: 300;
       font-size: 13px;
       color: #7A706A;
       line-height: 1.7;
       margin-bottom: 20px;
-    }
-    .exercise-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #7A706A;
-      margin-bottom: 4px;
-    }
-    .exercise-box {
-      border-left: 3px solid var(--green-deep);
-      background: var(--breath-mid);
-      border-radius: 0 8px 8px 0;
-      padding: 14px 16px;
-      font-size: 13px;
-      color: var(--dark);
-      line-height: 1.6;
-      margin-bottom: 20px;
-      overflow-wrap: break-word;
-      word-break: break-word;
     }
     #cost-block {
       border-left: 3px solid #C4845A;
@@ -384,42 +319,6 @@
       color: #7A706A;
       line-height: 1.7;
     }
-    .open-loop-box {
-      border: 0.5px solid var(--green-deep);
-      border-radius: 12px;
-      padding: 16px 18px;
-      background: #FAF8F4;
-    }
-    .open-loop-body {
-      font-size: 13px;
-      color: #7A706A;
-      line-height: 1.65;
-      margin-bottom: 16px;
-    }
-    .btn-cta {
-      display: block;
-      width: 100%;
-      border-radius: 6px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 13px;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      transition: opacity 0.15s;
-      text-align: center;
-    }
-    .btn-cta:hover   { opacity: 0.88; }
-    .btn-cta.standard { background: var(--green-deep); }
-    .btn-cta.course   { background: var(--terra); }
-
-    .guarantee-note {
-      font-size: 11px;
-      color: #A89E97;
-      text-align: center;
-      margin-top: 6px;
-    }
     .btn-restart {
       display: block;
       font-family: 'DM Sans', sans-serif;
@@ -433,7 +332,7 @@
     }
     .btn-restart:hover { color: var(--dark); }
 
-    .btn-next, .btn-back, .btn-cta, .lang-btn, .btn-restart, .option-card {
+    .btn-next, .btn-back, .btn-restart, .option-card {
       touch-action: manipulation;
     }
 
@@ -544,11 +443,6 @@
   <!-- QUIZ CARD -->
   <div class="quiz-card">
 
-    <!-- Language toggle -->
-    <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-fr" onclick="handleLangToggle('fr')">Français</button>
-      <button class="lang-btn"        id="btn-es" onclick="handleLangToggle('es')">Español</button>
-    </div>
 
     <!-- LEAD SCREEN -->
     <div id="lead-screen">
@@ -604,27 +498,44 @@
 
     <!-- RESULT SCREEN -->
     <div id="result-screen" style="display:none">
-      <div id="score-arc-container"></div>
-      <div class="result-badges">
-        <span class="badge-pill badge-result" id="result-badge-label"></span>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+        <div style="flex-shrink:0;" id="score-arc-container"></div>
+        <div style="flex:1;min-width:0;">
+          <div id="result-badge-label"
+            style="display:inline-block;font-size:11px;font-weight:500;
+            letter-spacing:0.07em;text-transform:uppercase;color:#085041;
+            background:#E1F5EE;padding:4px 12px;border-radius:20px;
+            margin-bottom:8px;"></div>
+          <div id="result-title"
+            style="font-family:'Cormorant Garamond',serif;font-size:22px;
+            font-weight:500;color:#2C2825;line-height:1.2;margin:0;"></div>
+        </div>
       </div>
-      <div class="result-title" id="result-title"></div>
       <div class="result-body"  id="result-body"></div>
       <div id="cost-block" style="display:none;"></div>
-      <div class="exercise-label" id="exercise-label"></div>
-      <div class="exercise-box"   id="exercise-box"></div>
-      <div class="open-loop-box">
-        <div id="sales-copy-block" style="margin-bottom:18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.75;"></div>
-        <button class="btn-cta standard" id="btn-cta"></button>
-        <div class="guarantee-note"     id="guarantee-note"></div>
-      </div>
-      <div id="pricing-section-container"></div>
+      <div id="video-container"></div>
+      <div id="conversion-section"></div>
       <!-- Elfsight Google Reviews — bottom of result page (bilingual) -->
-      <div id="elfsight-result" style="margin-top:28px;padding-top:24px;border-top:0.5px solid #D8CDB5;">
-        <div id="elfsight-result-fr" class="elfsight-app-51c462bb-16a9-435c-81c1-7138813af62e"></div>
-        <div id="elfsight-result-es" class="elfsight-app-445dc5e6-2c0e-4727-bb45-c0ea727e6cc4" style="display:none;"></div>
+      <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid #D8CDB5;transform:scale(0.85);transform-origin:top center;">
+        <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
       </div>
       <button class="btn-restart" id="btn-restart" onclick="handleRestart()"></button>
+      <div id="second-cta-block" style="display:none;margin-top:24px;padding-top:20px;border-top:0.5px solid #D8CDB5;">
+        <a id="second-cta-btn" href="#"
+          style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;
+          font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+          text-align:center;padding:17px 20px;border-radius:8px;
+          text-decoration:none;letter-spacing:0.01em;margin-bottom:8px;
+          box-sizing:border-box;">
+          Asegurar mi prueba gratuita de 7 días →
+        </a>
+        <p id="second-cta-urgency"
+          style="font-family:'DM Sans',sans-serif;font-size:12px;
+          font-weight:500;color:#9B1C1C;text-align:center;margin:0;">
+          Esta oferta no aparece en publicidad. Solo está disponible
+          para quienes completan el quiz.
+        </p>
+      </div>
       <div id="social-footer" style="margin-top:28px;padding-top:20px;border-top:0.5px solid #D8CDB5;text-align:center;">
         <div style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.04em;text-transform:uppercase;color:#A89E97;margin-bottom:14px;">
           <span class="social-label-fr">Retrouve Mamselle sur</span>
@@ -843,45 +754,6 @@ const QUESTIONS = [
     }
   },
   {
-    id: 7, type: 'multi', maxSelect: null,
-    fr: {
-      text: "Quel est le principal obstacle qui t'empêche d'y arriver ?",
-      hint: "Sélectionne tout ce qui s'applique.",
-      optionsByProfile: {
-        pro: [
-          "Je n'ai pas encore trouvé la bonne méthode pour mon cas spécifique",
-          "Le temps — je ne peux pas me permettre d'ajouter quelque chose à mon emploi du temps",
-          "Je ne suis pas sûr·e que quelque chose puisse vraiment changer ma voix à ce stade",
-          "Je ne sais pas exactement par où commencer ni ce dont j'ai besoin"
-        ],
-        stu: [
-          "Je n'ai pas encore trouvé la bonne méthode pour moi",
-          "Le temps et l'énergie — j'ai déjà beaucoup à gérer",
-          "Je doute que mon blocage puisse vraiment être libéré",
-          "Je ne sais pas exactement ce dont j'ai besoin pour avancer"
-        ]
-      }
-    },
-    es: {
-      text: "¿Cuál es el principal obstáculo que te impide llegar ahí?",
-      hint: "Selecciona todo lo que aplique.",
-      optionsByProfile: {
-        pro: [
-          "Aún no he encontrado el método adecuado para mi caso específico",
-          "El tiempo — no puedo permitirme añadir algo más a mi agenda",
-          "No estoy seguro/a de que algo pueda realmente cambiar mi voz a estas alturas",
-          "No sé exactamente por dónde empezar ni qué necesito"
-        ],
-        stu: [
-          "Aún no he encontrado el método adecuado para mí",
-          "El tiempo y la energía — ya tengo mucho que manejar",
-          "Dudo que mi bloqueo pueda realmente liberarse",
-          "No sé exactamente qué necesito para avanzar"
-        ]
-      }
-    }
-  },
-  {
     id: 8, type: 'single',
     fr: {
       text: "Si tu pouvais choisir, quel type d'accompagnement te conviendrait le mieux ?",
@@ -939,10 +811,10 @@ const COST_DATA = {
     identite:     "Une voix qui ne te représente pas finit par te convaincre. Ce n'est pas un problème vocal — c'est un problème de vie."
   },
   es: {
-    mandibulaire: "Un bloqueo mandibular no tratado no se mantiene estable — empeora, y termina por afectar tu biomecánica corporal.",
-    respiration:  "Un patrón respiratorio compensatorio no desaparece con el tiempo — se instala. Cada jornada vocal intensa lo recalibra un poco más en la dirección equivocada.",
-    nerveux:      "Tu sistema nervioso aprende lo que se le repite. Sin recalibración, seguirá limitando tu expansión y tu libertad personal.",
-    identite:     "Una voz que no te representa termina por convencerte. No es un problema vocal — es un problema de vida."
+    mandibulaire: "Este patrón no desaparece solo — se hace más profundo. Cada día que tu mandíbula compensa, tu garganta aprende a trabajar más duro de lo que necesita.",
+    respiration:  "Un patrón respiratorio compensatorio no mejora con el tiempo — se instala más. Cada sesión intensa lo refuerza un poco más en la dirección equivocada.",
+    nerveux:      "Tu sistema nervioso aprende lo que le repites. Sin recalibración, seguirá apagando tu voz exactamente cuando más la necesitas.",
+    identite:     "Una voz que no te representa termina por convencerte de que eso eres. No es un problema de voz — es un problema de presencia, de autoridad, de vida."
   }
 };
 
@@ -955,44 +827,36 @@ const RESULTS = {
       mandibulaire: {
         title: "Blocage Mandibulaire",
         body: "Ta mâchoire accumule la tension de chaque session, chaque présentation, chaque moment chargé. Quand elle se serre — souvent inconsciemment — elle réduit ta résonance, force ta gorge à compenser, et crée une fatigue qui n'a rien à voir avec ton endurance. Ce n'est pas une fragilité. C'est un pattern biomécanique précis, et il se libère.",
-        exercise: "<strong>Découvre ton blocage — L'Ouverture Consciente</strong><br><br>Pose deux doigts sur ta mâchoire, juste devant tes oreilles. Ouvre doucement — 2 cm seulement. Reste 10 secondes. Observe si un côté est plus serré que l'autre. Ferme. Répète 3 fois.<br><br><strong>Maîtrise ta voix — Étirement et Massage de la Mâchoire</strong><br><br>Ouvre la mâchoire le plus largement possible (avec précaution) pour étirer les muscles faciaux en profondeur. Puis élève le menton vers le haut et pousse les lèvres vers le ciel (bec au ciel) pour étirer les muscles situés entre la mâchoire et la clavicule. Reste dans cette position trois secondes. Reviens à l'ouverture de la mâchoire. Répète 5 fois. Termine par un massage global des muscles faciaux et de l'interstice de l'articulation mandibulaire."
       },
       respiration: {
         title: "Blocage Respiratoire",
         body: "Tu utilises une respiration compensatoire depuis longtemps — et ton corps s'y est adapté. Résultat : ta voix perd en puissance après 20-30 minutes, tu manques d'air au mauvais moment, et tu forces là où tu devrais avoir du flux. Ce n'est pas un manque d'endurance. C'est un pattern respiratoire qui se recalibre.",
-        exercise: "<strong>Découvre ton blocage — Le Scan Respiratoire</strong><br><br>Pose une main sur ta poitrine, l'autre sur ton ventre. Respire normalement, sans forcer. Quelle main bouge en premier ? Si c'est celle de la poitrine, tu utilises une respiration haute compensatoire. C'est ton point de départ.<br><br><strong>Maîtrise ta voix — La Respiration Complète en 3 Dimensions :</strong><br><br>Référence Vidéo Bibliothèque:<br><em>3-Respiration Complète</em><br><br>Inspire par le nez (ou nez + bouche selon besoin). Laisse l'air descendre sans lever les épaules. Observe trois expansions simultanées :<br><br>1. Ventre → s'avance<br>2. Côtes → s'ouvrent latéralement<br>3. Dos (lombaires) → s'élargit vers l'arrière<br><br>Image : un parapluie qui s'ouvre à 360°. Objectif : engager le diaphragme et sortir de la respiration claviculaire."
       },
       nerveux: {
         title: "Blocage du Système Nerveux",
         body: "Ta voix change sous pression non pas par manque de confiance, mais parce que ton système nerveux déclenche une réponse automatique de protection. Cette réponse encode une tension dans ton tissu vocal. Comprendre le mécanisme neurologique, c'est la première étape pour le neutraliser — pas le « gérer ».",
-        exercise: "<strong>Découvre ton blocage — Le Ralentisseur Nerveux</strong><br><br>Avant de parler ou de chanter, expire lentement pendant 6 secondes. Pas d'inspiration forcée — juste une longue expiration lente. Répète 3 fois. Observe ce qui change dans ta gorge et tes épaules.<br><br><strong>Maîtrise ta voix — Relâchement Cervical et Nerveux</strong><br><br>Assis-toi droit, colonne vertébrale vers le ciel, pieds plaqués au sol, mains sur les genoux. Laisse tomber la tête vers le bas, menton proche de la poitrine. Détache littéralement la tête du corps — elle devient lourde. Inspire et détends les muscles du cou, des épaules et des trapèzes. Reste là 30 secondes avec des respirations profondes. Remonte la tête à son axe. Répète cela cinq fois. Relax.<br><br>Cet écart que tu viens de découvrir, ce n'est pas un manque de talent ni une fatalité. C'est le résultat de compensations mécaniques qui se sont installées au fil du temps — et ça se corrige. Dans les Masterclass du membership, on déconstruit ensemble ces schémas et on installe les bases d'une mécanique vocale alignée avec qui tu es vraiment. C'est là que la transformation commence."
       },
       identite: {
         title: "Blocage d'Identité Vocale",
         body: "Ta voix ne projette pas l'autorité que tu as intérieurement. Ce décalage n'est pas psychologique — il est physique. Des années de messages sur « comment tu devrais sonner » ont façonné la façon dont tu tiens ta gorge, dont tu places ta voix. Ce blocage se libère, et quand il le fait, les gens autour de toi le remarquent avant toi.",
-        exercise: "<strong>Découvre ton blocage — L'Écoute Sans Jugement</strong><br><br>Enregistre-toi en disant ou en chantant un paragraphe. Écoute sans critiquer — juste observer. Demande-toi : est-ce que cette voix ressemble à comment je me vis intérieurement ? Si non, c'est l'écart entre ta voix perçue et ta voix authentique.<br><br><strong>Maîtrise ta voix — Ta voix n'est pas le problème, ta mécanique oui.</strong><br><br>Cet écart que tu viens de découvrir, ce n'est pas un manque de talent ni une fatalité. C'est le résultat de compensations mécaniques qui se sont installées au fil du temps — et ça se corrige. Dans les Masterclass du membership, on déconstruit ensemble ces schémas et on installe les bases d'une mécanique vocale alignée avec qui tu es vraiment. C'est là que la transformation commence."
       }
     },
     stu: {
       mandibulaire: {
         title: "Blocage Mandibulaire",
         body: "La mâchoire est le saboteur le plus sous-estimé de la voix. Quand elle est chroniquement tendue — souvent sans que tu le sentes — elle bloque la résonance, empêche les harmoniques de se déployer et rend certaines notes inaccessibles. Ce n'est pas un manque de talent. C'est un pattern biomécanique qui se libère.",
-        exercise: "<strong>Découvre ton blocage — L'Ouverture Consciente</strong><br><br>Pose deux doigts sur ta mâchoire, juste devant tes oreilles. Ouvre doucement — 2 cm seulement. Reste 10 secondes. Observe si un côté est plus serré que l'autre. Ferme. Répète 3 fois.<br><br><strong>Maîtrise ta voix — Étirement et Massage de la Mâchoire</strong><br><br>Ouvre la mâchoire le plus largement possible (avec précaution) pour étirer les muscles faciaux en profondeur. Puis élève le menton vers le haut et pousse les lèvres vers le ciel (bec au ciel) pour étirer les muscles situés entre la mâchoire et la clavicule. Reste dans cette position trois secondes. Reviens à l'ouverture de la mâchoire. Répète 5 fois. Termine par un massage global des muscles faciaux et de l'interstice de l'articulation mandibulaire."
       },
       respiration: {
         title: "Blocage Respiratoire",
         body: "Ton pattern respiratoire compense quelque chose — et tu t'y es habitué·e. Le résultat : fatigue vocale rapide, notes aiguës difficiles à soutenir, voix qui perd de la couleur sur la durée. Recalibrer ce pattern change plus de choses dans ta voix que n'importe quel exercice de chant.",
-        exercise: "<strong>Découvre ton blocage — Le Scan Respiratoire</strong><br><br>Pose une main sur ta poitrine, l'autre sur ton ventre. Respire normalement, sans forcer. Quelle main bouge en premier ? Si c'est celle de la poitrine, tu utilises une respiration haute compensatoire. C'est ton point de départ.<br><br><strong>Maîtrise ta voix — La Respiration Complète en 3 Dimensions :</strong><br><br>Référence Vidéo Bibliothèque:<br><em>3-Respiration Complète</em><br><br>Inspire par le nez (ou nez + bouche selon besoin). Laisse l'air descendre sans lever les épaules. Observe trois expansions simultanées :<br><br>1. Ventre → s'avance<br>2. Côtes → s'ouvrent latéralement<br>3. Dos (lombaires) → s'élargit vers l'arrière<br><br>Image : un parapluie qui s'ouvre à 360°. Objectif : engager le diaphragme et sortir de la respiration claviculaire."
       },
       nerveux: {
         title: "Blocage du Système Nerveux",
         body: "Quand ta voix tremble, se ferme ou perd de la fluidité sous le regard des autres ou devant un micro, ton système nerveux est en mode protection. Ce n'est pas de la timidité. C'est physiologique. Et c'est exactement le type de blocage qui répond le mieux à une approche qui combine biomécanique et régulation nerveuse.",
-        exercise: "<strong>Découvre ton blocage — Le Ralentisseur Nerveux</strong><br><br>Avant de parler ou de chanter, expire lentement pendant 6 secondes. Pas d'inspiration forcée — juste une longue expiration lente. Répète 3 fois. Observe ce qui change dans ta gorge et tes épaules.<br><br><strong>Maîtrise ta voix — Relâchement Cervical et Nerveux</strong><br><br>Assis-toi droit, colonne vertébrale vers le ciel, pieds plaqués au sol, mains sur les genoux. Laisse tomber la tête vers le bas, menton proche de la poitrine. Détache littéralement la tête du corps — elle devient lourde. Inspire et détends les muscles du cou, des épaules et des trapèzes. Reste là 30 secondes avec des respirations profondes. Remonte la tête à son axe. Répète cela cinq fois. Relax.<br><br>Cet écart que tu viens de découvrir, ce n'est pas un manque de talent ni une fatalité. C'est le résultat de compensations mécaniques qui se sont installées au fil du temps — et ça se corrige. Dans les Masterclass du membership, on déconstruit ensemble ces schémas et on installe les bases d'une mécanique vocale alignée avec qui tu es vraiment. C'est là que la transformation commence."
       },
       identite: {
         title: "Blocage d'Identité Vocale",
         body: "Ta voix ne sonne pas comme toi — et tu le sens. Il y a un écart entre qui tu es et ce que ta voix exprime. Ce n'est pas abstrait : c'est la façon dont tu places ta voix, dont tu gères ton souffle, influencée par des années d'écoute et de comparaison. Ce blocage se libère quand on identifie exactement ce qui crée le décalage.",
-        exercise: "<strong>Découvre ton blocage — L'Écoute Sans Jugement</strong><br><br>Enregistre-toi en disant ou en chantant un paragraphe. Écoute sans critiquer — juste observer. Demande-toi : est-ce que cette voix ressemble à comment je me vis intérieurement ? Si non, c'est l'écart entre ta voix perçue et ta voix authentique.<br><br><strong>Maîtrise ta voix — Ta voix n'est pas le problème, ta mécanique oui.</strong><br><br>Cet écart que tu viens de découvrir, ce n'est pas un manque de talent ni une fatalité. C'est le résultat de compensations mécaniques qui se sont installées au fil du temps — et ça se corrige. Dans les Masterclass du membership, on déconstruit ensemble ces schémas et on installe les bases d'une mécanique vocale alignée avec qui tu es vraiment. C'est là que la transformation commence."
       }
     }
   },
@@ -1000,45 +864,37 @@ const RESULTS = {
     pro: {
       mandibulaire: {
         title: "Bloqueo Mandibular",
-        body: "Tu mandíbula acumula la tensión de cada sesión, cada presentación, cada momento cargado. Cuando se aprieta — a menudo inconscientemente — reduce tu resonancia, fuerza a la garganta a compensar y crea una fatiga que no tiene nada que ver con tu resistencia. No es fragilidad. Es un patrón biomecánico preciso, y se libera.",
-        exercise: "<strong>Descubre tu bloqueo — La Apertura Consciente</strong><br><br>Pon dos dedos en la mandíbula, justo frente a las orejas. Abre suavemente — solo 2 cm. Quédate 10 segundos. Observa si un lado está más tenso que el otro. Cierra. Repite 3 veces.<br><br><strong>Domina tu voz — Estiramiento y Masaje de la Mandíbula</strong><br><br>Abre la mandíbula lo más posible (con precaución) para estirar los músculos faciales en profundidad. Luego eleva el mentón hacia arriba y empuja los labios hacia el cielo (beso al cielo) para estirar los músculos situados entre la mandíbula y la clavícula. Quédate en esta posición por tres segundos. Repite 5 veces. Termina con un masaje global de los músculos faciales y de la articulación mandibular."
+        body: "Tu mandíbula acumula tensión en cada conversación difícil, cada presentación, cada momento de presión. Al apretarse — con frecuencia sin que lo notes — reduce tu resonancia y obliga a la garganta a compensar. Por eso te cansas. Por eso la voz se apaga justo cuando más la necesitas. No es fragilidad. Es un patrón que se puede cambiar.",
       },
       respiration: {
         title: "Bloqueo de Respiración",
-        body: "Usas una respiración compensatoria desde hace tiempo — y tu cuerpo se adaptó. Resultado: la voz pierde potencia después de 20-30 minutos, te quedas sin aire en el momento equivocado. No es falta de resistencia. Es un patrón respiratorio que se recalibra.",
-        exercise: "<strong>Descubre tu bloqueo — El Escaneo Respiratorio</strong><br><br>Pon una mano en el pecho, la otra en el vientre. Respira normalmente, sin forzar. ¿Qué mano se mueve primero? Si es la del pecho, usas una respiración alta compensatoria. Ese es tu punto de partida.<br><br><strong>Domina tu voz — La Respiración Completa en 3 Dimensiones:</strong><br><br>Referencia Video Biblioteca:<br><em>3-Respiración Completa</em><br><br>Inspira por la nariz (o nariz + boca según necesidad). Deja que el aire baje sin levantar los hombros. Observa tres expansiones simultáneas:<br><br>1. Vientre → avanza<br>2. Costillas → se abren lateralmente<br>3. Espalda (lumbares) → se ensancha hacia atrás<br><br>Imagen: un paraguas que se abre a 360°. Objetivo: activar el diafragma y salir de la respiración clavicular."
+        body: "Usas una respiración compensatoria — y tu cuerpo lleva tiempo adaptándose a ella. El resultado: la voz pierde potencia después de 20 o 30 minutos, te quedas sin aire en el momento equivocado. No es falta de resistencia. Es un hábito que tu cuerpo aprendió sin que te dieras cuenta, y que se puede recalibrar.",
       },
       nerveux: {
         title: "Bloqueo del Sistema Nervioso",
-        body: "Tu voz cambia bajo presión no por falta de confianza, sino porque el sistema nervioso activa una respuesta automática de protección. Esta respuesta codifica tensión en el tejido vocal. Entender el mecanismo neurológico es el primer paso para neutralizarlo — no solo «manejarlo».",
-        exercise: "<strong>Descubre tu bloqueo — El Desacelerador Nervioso</strong><br><br>Antes de hablar o cantar, respira lentamente durante 6 segundos. Sin inspiración forzada — solo una larga expiración lenta. Repite 3 veces. Observa qué cambia en tu garganta y tus hombros.<br><br><strong>Domina tu voz — Relajación Cervical y Nerviosa</strong><br><br>Siéntate derecho, columna vertebral hacia el cielo, pies apoyados en el suelo, manos sobre las rodillas. Deja caer la cabeza hacia abajo, mentón cerca del pecho. Desconecta literalmente la cabeza del cuerpo — se vuelve pesada. Inspira y relaja los músculos del cuello, los hombros y los trapecios. Quédate ahí 30 segundos con respiraciones profundas. Sube la cabeza a su eje. Relájate.<br><br>Esta brecha que acabas de descubrir no es una falta de talento ni una fatalidad. Es el resultado de compensaciones mecánicas que se han instalado con el tiempo — y eso se puede corregir. En las Masterclass del membership, deconstruimos juntos estos esquemas e instalamos las bases de una mecánica vocal alineada con quien realmente eres. Ahí es donde comienza la transformación."
+        body: "Tu voz cambia bajo presión — no por falta de confianza, sino porque tu cuerpo activa una respuesta automática de protección. Esa respuesta pone tensión directo en tu voz. No lo decides tú. Por eso no se arregla con 'relájate más'. Se arregla cuando entiendes exactamente qué está pasando — y cómo interrumpirlo.",
       },
       identite: {
         title: "Bloqueo de Identidad Vocal",
-        body: "Tu voz no proyecta la autoridad que tienes por dentro. Este desfase no es psicológico — es físico. Años de mensajes sobre «cómo deberías sonar» han moldeado la forma en que sostienes la garganta. Este bloqueo se libera, y cuando lo hace, los demás lo notan antes que tú.",
-        exercise: "<strong>Descubre tu bloqueo — La Escucha Sin Juicio</strong><br><br>Grábate diciendo o cantando un párrafo. Toma el tiempo de escuchar sin criticar — solo observar. Pregúntate: ¿esta voz se parece a cómo me vivo por dentro? Si no, esa es la brecha entre tu voz percibida y tu voz auténtica.<br><br><strong>Domina tu voz — Tu voz no es el problema, tu mecánica sí.</strong><br><br>La mayoría de las personas que completaron este programa lo describen como «Una nueva visión del entrenamiento vocal». 7 días. Un objetivo preciso cada día, los fundamentos revisitados. La mecánica vocal, el porqué, el método, en ejercicios extremadamente eficaces y muy fáciles de seguir.<br><br>✓ Acceso inmediato tras el pago.<br>✓ Garantía de resultado: si no sientes diferencia al final de los 7 días, te devolvemos el dinero.<br>✓ Queremos tu éxito."
+        body: "Tu voz no suena como tú por dentro. Esa diferencia no es psicológica — es física. Años de mensajes sobre cómo deberías sonar han cambiado la forma en que sostienes la garganta, la mandíbula, la respiración. Tu cuerpo aprendió a producir una voz que no es tuya. Ese patrón tiene nombre — y se puede cerrar.",
       }
     },
     stu: {
       mandibulaire: {
         title: "Bloqueo Mandibular",
-        body: "La mandíbula es el saboteador más subestimado de la voz. Cuando está crónicamente tensa — muchas veces sin sentirlo — bloquea la resonancia, impide que los armónicos se desplieguen y hace que ciertas notas sean inaccesibles. No es falta de talento. Es un patrón biomecánico que se libera.",
-        exercise: "<strong>Descubre tu bloqueo — La Apertura Consciente</strong><br><br>Pon dos dedos en la mandíbula, justo frente a las orejas. Abre suavemente — solo 2 cm. Quédate 10 segundos. Observa si un lado está más tenso que el otro. Cierra. Repite 3 veces.<br><br><strong>Domina tu voz — Estiramiento y Masaje de la Mandíbula</strong><br><br>Abre la mandíbula lo más posible (con precaución) para estirar los músculos faciales en profundidad. Luego eleva el mentón hacia arriba y empuja los labios hacia el cielo (beso al cielo) para estirar los músculos situados entre la mandíbula y la clavícula. Quédate en esta posición por tres segundos. Repite 5 veces. Termina con un masaje global de los músculos faciales y de la articulación mandibular."
+        body: "Tu mandíbula acumula tensión en cada conversación difícil, cada presentación, cada momento de presión. Al apretarse — con frecuencia sin que lo notes — reduce tu resonancia y obliga a la garganta a compensar. Por eso te cansas. Por eso la voz se apaga justo cuando más la necesitas. No es fragilidad. Es un patrón que se puede cambiar.",
       },
       respiration: {
         title: "Bloqueo de Respiración",
-        body: "Tu patrón respiratorio compensa algo — y te has acostumbrado. El resultado: fatiga vocal rápida, notas agudas difíciles de sostener, voz que pierde color con el tiempo. Recalibrar este patrón cambia más tu voz que cualquier ejercicio de canto.",
-        exercise: "<strong>Descubre tu bloqueo — El Escaneo Respiratorio</strong><br><br>Pon una mano en el pecho, la otra en el vientre. Respira normalmente, sin forzar. ¿Qué mano se mueve primero? Si es la del pecho, usas una respiración alta compensatoria. Ese es tu punto de partida.<br><br><strong>Domina tu voz — La Respiración Completa en 3 Dimensiones:</strong><br><br>Referencia Video Biblioteca:<br><em>3-Respiración Completa</em><br><br>Inspira por la nariz (o nariz + boca según necesidad). Deja que el aire baje sin levantar los hombros. Observa tres expansiones simultáneas:<br><br>1. Vientre → avanza<br>2. Costillas → se abren lateralmente<br>3. Espalda (lumbares) → se ensancha hacia atrás<br><br>Imagen: un paraguas que se abre a 360°. Objetivo: activar el diafragma y salir de la respiración clavicular."
+        body: "Usas una respiración compensatoria — y tu cuerpo lleva tiempo adaptándose a ella. El resultado: la voz pierde potencia después de 20 o 30 minutos, te quedas sin aire en el momento equivocado. No es falta de resistencia. Es un hábito que tu cuerpo aprendió sin que te dieras cuenta, y que se puede recalibrar.",
       },
       nerveux: {
         title: "Bloqueo del Sistema Nervioso",
-        body: "Cuando tu voz tiembla, se cierra o pierde fluidez bajo la mirada de otros o frente a un micrófono, el sistema nervioso está en modo protección. No es timidez. Es fisiológico. Y es exactamente el tipo de bloqueo que mejor responde a un enfoque que combina biomecánica y regulación nerviosa.",
-        exercise: "<strong>Descubre tu bloqueo — El Desacelerador Nervioso</strong><br><br>Antes de hablar o cantar, respira lentamente durante 6 segundos. Sin inspiración forzada — solo una larga expiración lenta. Repite 3 veces. Observa qué cambia en tu garganta y tus hombros.<br><br><strong>Domina tu voz — Relajación Cervical y Nerviosa</strong><br><br>Siéntate derecho, columna vertebral hacia el cielo, pies apoyados en el suelo, manos sobre las rodillas. Deja caer la cabeza hacia abajo, mentón cerca del pecho. Desconecta literalmente la cabeza del cuerpo — se vuelve pesada. Inspira y relaja los músculos del cuello, los hombros y los trapecios. Quédate ahí 30 segundos con respiraciones profundas. Sube la cabeza a su eje. Relájate.<br><br>Esta brecha que acabas de descubrir no es una falta de talento ni una fatalidad. Es el resultado de compensaciones mecánicas que se han instalado con el tiempo — y eso se puede corregir. En las Masterclass del membership, deconstruimos juntos estos esquemas e instalamos las bases de una mecánica vocal alineada con quien realmente eres. Ahí es donde comienza la transformación."
+        body: "Tu voz cambia bajo presión — no por falta de confianza, sino porque tu cuerpo activa una respuesta automática de protección. Esa respuesta pone tensión directo en tu voz. No lo decides tú. Por eso no se arregla con 'relájate más'. Se arregla cuando entiendes exactamente qué está pasando — y cómo interrumpirlo.",
       },
       identite: {
         title: "Bloqueo de Identidad Vocal",
-        body: "Tu voz no suena como tú — y lo sientes. Hay una brecha entre quién eres y lo que expresa tu voz. No es abstracto: es la forma en que colocas la voz, influenciada por años de escuchar y compararte. Este bloqueo se libera cuando se identifica exactamente qué crea el desfase.",
-        exercise: "<strong>Descubre tu bloqueo — La Escucha Sin Juicio</strong><br><br>Grábate diciendo o cantando un párrafo. Toma el tiempo de escuchar sin criticar — solo observar. Pregúntate: ¿esta voz se parece a cómo me vivo por dentro? Si no, esa es la brecha entre tu voz percibida y tu voz auténtica.<br><br><strong>Domina tu voz — Tu voz no es el problema, tu mecánica sí.</strong><br><br>La mayoría de las personas que completaron este programa lo describen como «Una nueva visión del entrenamiento vocal». 7 días. Un objetivo preciso cada día, los fundamentos revisitados. La mecánica vocal, el porqué, el método, en ejercicios extremadamente eficaces y muy fáciles de seguir.<br><br>✓ Acceso inmediato tras el pago.<br>✓ Garantía de resultado: si no sientes diferencia al final de los 7 días, te devolvemos el dinero.<br>✓ Queremos tu éxito."
+        body: "Tu voz no suena como tú por dentro. Esa diferencia no es psicológica — es física. Años de mensajes sobre cómo deberías sonar han cambiado la forma en que sostienes la garganta, la mandíbula, la respiración. Tu cuerpo aprendió a producir una voz que no es tuya. Ese patrón tiene nombre — y se puede cerrar.",
       }
     }
   }
@@ -1177,8 +1033,6 @@ function calculateResult() {
 // ================================================================
 function render() {
   document.documentElement.lang = lang;
-  document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
-  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
 
   // Logo placement: always outside the card, just above copyright
   document.getElementById('logo-outside-fr').style.display = (lang === 'fr') ? 'block' : 'none';
@@ -1218,14 +1072,8 @@ function render() {
     subEl.innerHTML = '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">' + vData.sub + '</span>';
   } else {
     subEl.innerHTML = lang === 'fr'
-      ? '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Il est temps que ta voix ressemble à qui tu es.</span>'
-        + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Découvre ton blocage et reprends contrôle.</span>'
-        + '<span style="display:block;margin-top:6px;">+ reçois un exercice ciblé</span>'
-        + '<span style="display:block;">en répondant aux 10 prochaines questions</span>'
-      : '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Es hora de que tu voz se parezca a quien eres.</span>'
-        + '<span style="display:block;font-size:17px;font-weight:700;text-decoration:underline;color:var(--terra);">Descubre tu bloqueo y retoma el control.</span>'
-        + '<span style="display:block;margin-top:6px;">+ recibe un ejercicio específico</span>'
-        + '<span style="display:block;">respondiendo las 10 siguientes preguntas</span>';
+      ? '<span style="display:block;font-size:15px;font-weight:300;color:#7A706A;line-height:1.65;">Ta voix est l\'outil que tu utilises le plus — et celui que tu comprends le moins. Ce quiz identifie en moins de 3 minutes pourquoi ta voix te lâche exactement quand tu en as le plus besoin.</span>'
+      : '<span style="display:block;font-size:15px;font-weight:300;color:#7A706A;line-height:1.65;">Tu voz es la herramienta que más usas — y la que menos entiendes. Este quiz identifica en menos de 3 minutos por qué tu voz te falla exactamente cuando más la necesitas.</span>';
   }
 
   var footerEl = document.getElementById('site-footer');
@@ -1246,12 +1094,6 @@ function render() {
     if (pfr) pfr.style.display = lang === 'fr' ? 'inline' : 'none';
     if (pes) pes.style.display = lang === 'es' ? 'inline' : 'none';
   }
-
-  // Elfsight bottom result widgets — toggle by language
-  var rFr = document.getElementById('elfsight-result-fr');
-  var rEs = document.getElementById('elfsight-result-es');
-  if (rFr) rFr.style.display = lang === 'fr' ? 'block' : 'none';
-  if (rEs) rEs.style.display = lang === 'es' ? 'block' : 'none';
 
   if (showResult) {
     document.getElementById('lead-screen').style.display   = 'none';
@@ -1282,12 +1124,12 @@ function renderQuiz() {
   const qData = q[lang];
 
   // Progress
-  document.getElementById('progress-fill').style.width = ((currentQ + 1) / 10 * 100) + '%';
+  document.getElementById('progress-fill').style.width = ((currentQ + 1) / 9 * 100) + '%';
 
   // Counter
   document.getElementById('question-counter').textContent = lang === 'fr'
-    ? `Question ${currentQ + 1} / 10`
-    : `Pregunta ${currentQ + 1} / 10`;
+    ? `Question ${currentQ + 1} / 9`
+    : `Pregunta ${currentQ + 1} / 9`;
 
   // Question text
   document.getElementById('question-text').textContent = qData.text;
@@ -1513,10 +1355,10 @@ function renderResult() {
 
   document.getElementById('result-body').innerHTML = bodyHTML;
 
-  // Cost-of-inaction block (standalone section between body and exercise)
+  // Cost-of-inaction block
   var costEl = document.getElementById('cost-block');
   var costText = (COST_DATA[lang] && COST_DATA[lang][resultKey]) ? COST_DATA[lang][resultKey] : '';
-  var costTitle = lang === 'fr' ? "CE QU'IL COÛTE SANS INTERVENTION" : "LO QUE CUESTA SIN INTERVENCIÓN";
+  var costTitle = lang === 'fr' ? "Ce que ça coûte sans rien changer" : "Lo que cuesta no hacer nada";
   if (costText) {
     costEl.innerHTML = '<div class="cost-title">' + costTitle + '</div><div class="cost-body">' + costText + '</div>';
     costEl.style.display = 'block';
@@ -1524,87 +1366,189 @@ function renderResult() {
     costEl.style.display = 'none';
   }
 
-  document.getElementById('exercise-label').textContent =
-    lang === 'fr' ? 'Ton exercice ciblé' : 'Tu ejercicio específico';
-  document.getElementById('exercise-box').innerHTML = d.exercise;
+  // ── CONVERSION SECTION ──────────────────────────────────────────
+  var MEMBERSHIP_URL_FR = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voix-essence-academytm';
+  var MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+  var membershipUrl = (lang === 'fr') ? MEMBERSHIP_URL_FR : MEMBERSHIP_URL_ES;
 
-  // Q7-based CTA routing
-  var q8ans = (answers.length > 8 && answers[8] !== null && answers[8] !== undefined) ? answers[8] : null;
+  var PIVOT = {
+    fr: {
+      mandibulaire: "Tu viens d'identifier le schéma exact qui bloque ta voix.",
+      respiration:  "Tu viens d'identifier le schéma exact qui bloque ta voix.",
+      nerveux:      "Tu viens d'identifier le schéma exact qui bloque ta voix.",
+      identite:     "Tu viens d'identifier le schéma exact qui sépare ta voix de qui tu es vraiment."
+    },
+    es: {
+      mandibulaire: "Acabas de identificar el patrón exacto que bloquea tu voz.",
+      respiration:  "Acabas de identificar el patrón exacto que bloquea tu voz.",
+      nerveux:      "Acabas de identificar el patrón exacto que bloquea tu voz.",
+      identite:     "Acabas de identificar el patrón exacto que separa tu voz de quien realmente eres."
+    }
+  };
 
-  // Determine route key
-  // FR: 0,2→standard(membership)  1→vip
-  // ES: 0→membership   1→vip    2→course (intensive)
+  var CTA_LABEL = {
+    fr: {
+      mandibulaire: "Réserver mon essai gratuit de 7 jours →",
+      respiration:  "Réserver mon essai gratuit de 7 jours →",
+      nerveux:      "Réserver mon essai gratuit de 7 jours →",
+      identite:     "Réserver mon essai gratuit de 7 jours →"
+    },
+    es: {
+      mandibulaire: "Asegurar mi prueba gratuita de 7 días →",
+      respiration:  "Asegurar mi prueba gratuita de 7 días →",
+      nerveux:      "Asegurar mi prueba gratuita de 7 días →",
+      identite:     "Asegurar mi prueba gratuita de 7 días →"
+    }
+  };
+
+  var BENEFITS_FR =
+    '— Le Protocole des 7 Jours inclus dès le premier jour<br>'
+    + '— Une bibliothèque d\'exercices vocaux : respiration, projection, communication et plus<br>'
+    + '— Une session en direct chaque mois avec Mamselle — de vrais exercices, de vraies questions<br>'
+    + '— 7 jours gratuits pour tout essayer, sans engagement';
+
+  var BENEFITS_ES =
+    '— El Protocolo de los 7 Días incluido desde el primer día<br>'
+    + '— Una biblioteca de ejercicios de voz: respiración, proyección, comunicación y más<br>'
+    + '— Una sesión en vivo cada mes con Mamselle — ejercicios reales, preguntas reales<br>'
+    + '— 7 días gratis para probarlo todo, sin compromiso';
+
+  var GUARANTEE_FR = '49 CAD/mois après · annule quand tu veux · sans condition';
+  var GUARANTEE_ES = '37 USD/mes después · cancela cuando quieras · sin condiciones';
+
+  var AUTHORITY_FR = 'Mamselle Ruiz accompagne des voix depuis plus de 25 ans et a travaillé avec plus de 1 000 personnes ayant exactement ce blocage.';
+  var AUTHORITY_ES = 'Mamselle Ruiz acompaña voces desde hace más de 25 años y ha trabajado con más de 1.000 personas con exactamente este bloqueo.';
+
+  var TESTI_TEXT_FR =
+    '« Mamselle encadre merveilleusement bien les groupes de chants. '
+    + 'Elle a changé ma vie (no joke!) »';
+  var TESTI_META_FR = 'Justine Lafortune · Montréal, Canada';
+
+  var TESTI_TEXT_ES =
+    '«\u00a0Mamselle guía los grupos de una manera maravillosa. '
+    + '¡Cambió mi vida (en serio!)\u00a0»';
+  var TESTI_META_ES = 'Justine Lafortune · Montréal, Canada';
+
+  var JUSTINE_PHOTO = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
+
+  var videoIds = {
+    mandibulaire: (lang === 'es') ? 'VfoYECa3lnE' : '',
+    respiration:  (lang === 'es') ? 'uAlIEAIVxgM' : '',
+    nerveux:      (lang === 'es') ? 'pe2XyNkRolo' : '',
+    identite:     (lang === 'es') ? 'dbkzQoZaiJA' : ''
+  };
+
+  var vid = videoIds[resultKey] || '';
+  if (vid && vid.length > 0) {
+    var videoContainer = document.getElementById('video-container');
+    if (videoContainer) {
+      videoContainer.innerHTML =
+        '<div style="position:relative;padding-bottom:56.25%;height:0;'
+        + 'overflow:hidden;border-radius:12px;margin:20px 0;">'
+        + '<iframe src="https://www.youtube.com/embed/' + vid
+        + '?rel=0&modestbranding=1" '
+        + 'style="position:absolute;top:0;left:0;width:100%;height:100%;'
+        + 'border:none;" allowfullscreen loading="lazy"></iframe>'
+        + '</div>';
+    }
+  } else {
+    var videoContainer = document.getElementById('video-container');
+    if (videoContainer) videoContainer.innerHTML = '';
+  }
+
+  var pivotText    = (PIVOT[lang] && PIVOT[lang][resultKey]) ? PIVOT[lang][resultKey] : PIVOT[lang]['mandibulaire'];
+  var ctaLabel     = (CTA_LABEL[lang] && CTA_LABEL[lang][resultKey]) ? CTA_LABEL[lang][resultKey] : CTA_LABEL[lang]['mandibulaire'];
+  var benefitsHTML = (lang === 'fr') ? BENEFITS_FR : BENEFITS_ES;
+  var guarantee    = (lang === 'fr') ? GUARANTEE_FR : GUARANTEE_ES;
+  var authority    = (lang === 'fr') ? AUTHORITY_FR : AUTHORITY_ES;
+  var testiText    = (lang === 'fr') ? TESTI_TEXT_FR : TESTI_TEXT_ES;
+  var testiMeta    = (lang === 'fr') ? TESTI_META_FR : TESTI_META_ES;
+
+  var conversionHTML =
+    '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
+
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-weight:400;'
+    + 'color:#2C2825;text-align:center;line-height:1.45;margin:0 0 14px;">'
+    + pivotText + '</p>'
+
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'color:#7A706A;line-height:2;margin:0 0 20px;">'
+    + benefitsHTML + '</p>'
+
+    + '<a href="' + membershipUrl + '" '
+    + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
+    + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
+    + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
+    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;"'
+    + ' onclick="if(typeof fbq!==\'undefined\'){fbq(\'trackCustom\',\'Quiz_CTAClick\');}">'
+    + ctaLabel + '</a>'
+
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;'
+    + 'color:#A89E97;text-align:center;margin:0 0 6px;">'
+    + guarantee + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
+    + 'color:#9B1C1C;text-align:center;margin:0 0 16px;">'
+    + (lang === 'fr'
+        ? 'Cette offre n\'existe pas en publicité. Elle est uniquement disponible pour celles et ceux qui complètent le quiz — en remerciement de ton temps.'
+        : 'Esta oferta no aparece en publicidad. Solo está disponible para quienes completan el quiz — como agradecimiento por tu tiempo.')
+    + '</p>'
+
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'color:#7A706A;text-align:center;line-height:1.55;margin:0 0 20px;">'
+    + authority + '</p>'
+
+    + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
+    + 'padding:16px;margin-bottom:20px;">'
+    + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
+    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine Lafortune" '
+    + 'style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+    + '<div>'
+    + '<div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
+    + 'color:#7A706A;margin-top:2px;">' + testiMeta + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'color:#2C2825;line-height:1.65;margin:0;font-style:italic;">'
+    + testiText + '</p>'
+    + '</div>';
+
+  document.getElementById('conversion-section').innerHTML = conversionHTML;
+  // ── END CONVERSION SECTION ───────────────────────────────────────
+
+  var secondCtaBlock = document.getElementById('second-cta-block');
+  var secondCtaBtn   = document.getElementById('second-cta-btn');
+  var secondCtaMsg   = document.getElementById('second-cta-urgency');
+
+  if (secondCtaBlock && secondCtaBtn && secondCtaMsg) {
+    secondCtaBtn.href = membershipUrl;
+    secondCtaBtn.textContent = (lang === 'fr')
+      ? 'Réserver mon essai gratuit de 7 jours →'
+      : 'Asegurar mi prueba gratuita de 7 días →';
+    secondCtaMsg.textContent = (lang === 'fr')
+      ? 'Cette offre n\'existe pas en publicité. Elle est uniquement disponible pour celles et ceux qui complètent le quiz.'
+      : 'Esta oferta no aparece en publicidad. Solo está disponible para quienes completan el quiz.';
+    secondCtaBtn.onclick = function() {
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'Quiz_CTAClick');
+      }
+    };
+    secondCtaBlock.style.display = 'block';
+  }
+
+  // CTA routing — hardcoded to membership
   var routeKey;
   if (window._previewRoute) {
     routeKey = window._previewRoute;
-  } else if (lang === 'fr') {
-    routeKey = (q8ans === 1) ? 'vip' : 'standard';
   } else {
-    if (q8ans === 1)      routeKey = 'vip';
-    else if (q8ans === 2) routeKey = 'course';
-    else                  routeKey = 'membership';
+    routeKey = (lang === 'fr') ? 'standard' : 'membership';
   }
-  var isVip = (routeKey === 'vip');
+  var isVip = false;
 
   // Submit lead + full quiz data once per completion
   if (!leadSubmitted && leadData.email) {
     leadSubmitted = true;
     submitLead(resultKey, score, routeKey);
-  }
-
-  // Cialdini-style sales copy — route-specific, inside CTA box
-  var CIALDINI = {
-    fr: {
-      standard: [
-        'Tu viens de comprendre pourquoi rien n\'a fonctionné jusqu\'ici.<br>Pas un manque de talent. Pas un manque d\'endurance.<br>Un pattern compensatoire que personne n\'avait jamais identifié.',
-        'Maintenant tu as deux choix.',
-        'Tu fermes cette page. Tu retournes aux exercices YouTube.<br>Dans 6 mois tu es exactement au même endroit —<br>même fatigue, même frustration, même voix qui ne te représente pas.',
-        'Ou tu essaies 7 jours. Gratuitement.',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">CE QUE TU DÉBLOQUES DÈS AUJOURD\'HUI</strong>',
-        '• Bibliothèque d\'exercices complète (675$)<br>• Masterclasses de groupe mensuels (150$/mois)<br>• Suivi et Support 24/7 (15$/mois)<br>• Actualités pour être à la une de la science de la voix et du bien-être (25$/mois)<br>• Coachs disponibles en tout temps pour des questions techniques (15$/mois)',
-        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valeur totale de <strong style="font-weight:bold;color:#C4845A;">880$</strong> — aujourd\'hui : <strong style="font-weight:bold;color:#1B4B3A;">0$</strong></span>',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">7 JOURS GRATUITS. 49$/mois après, ACCÈS COMPLET À 100%</strong>',
-        'Annulation en un clic. Sans condition. Sans jugement.',
-        'Tu ne devrais prendre aucune décision si tu n\'as pas accès à toute l\'information. C\'est pourquoi la seule manière de savoir si l\'Académie t\'aide vraiment, c\'est de l\'essayer.'
-      ],
-      vip: [
-        'Mamselle travaille avec un nombre limité de clients à la fois — parce qu\'une voix, ça ne se transforme pas à la chaîne.',
-        '55 minutes. Un plan d\'action personnalisé, taillé pour <strong>TON instrument</strong>, que tu peux mettre en œuvre dès le lendemain.',
-        'Une séance avec quelqu\'un qui accompagne des voix depuis plus de 25 ans — et qui arrive à la tienne avec une attention complète, rien que pour toi.',
-        'Les places ce mois-ci sont limitées. Confirmation dans les 24 heures suivant ta réservation.'
-      ]
-    },
-    es: {
-      membership: [
-        'Acabas de entender por qué nada ha funcionado hasta ahora.<br>No es falta de talento. No es falta de resistencia.<br>Es un patrón compensatorio que nadie había identificado jamás.',
-        'Ahora tienes dos opciones.',
-        'Cierras esta página. Vuelves a los ejercicios de YouTube.<br>En 6 meses estás exactamente en el mismo lugar misma fatiga, misma frustración, misma voz que no te representa.',
-        'O pruebas 7 días. Gratuitamente.',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">LO QUE DESBLOQUEAS DESDE HOY</strong>',
-        '• Biblioteca de ejercicios completa (675$)<br>• Masterclasses de grupo mensuales (150$/mes)<br>• Seguimiento y soporte 24/7 (15$/mes)<br>• Actualidades para estar al día en la ciencia de la voz y el bienestar (25$/mes)<br>• Coaches disponibles en todo momento para preguntas técnicas (15$/mes)',
-        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#C4845A;display:block;margin-bottom:16px;">Valor total de <strong style="font-weight:bold;color:#C4845A;">880$</strong> — hoy : <strong style="font-weight:bold;color:#1B4B3A;">0$ durante 7 días.</strong></span>',
-        '<strong style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1B4B3A;display:block;margin-top:6px;">7 DÍAS GRATIS. 37$/mes después, ACCESO COMPLETO AL 100%</strong>',
-        'Cancelación en un clic. Sin condición. Sin juicio.',
-        'No deberías tomar ninguna decisión sin tener acceso a toda la información. Por eso la única manera de saber si la Academia realmente te ayuda, es probarla.'
-      ],
-      vip: [
-        'Mamselle trabaja con un número limitado de clientes a la vez — porque una voz no se transforma en serie.',
-        '55 minutos. Un plan de acción personalizado, hecho para <strong>TU instrumento</strong>, que puedes aplicar desde el día siguiente.',
-        'Una sesión con alguien que acompaña voces desde hace más de 25 años — y que llega a la tuya con una atención completa, solo para ti.',
-        'Las plazas de este mes son limitadas. Confirmación en las 24 horas siguientes a tu reserva.'
-      ],
-      course: [
-        '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.05rem;color:#1B4B3A;">«Una nueva visión del entrenamiento vocal»</span><span style="font-family:\'DM Sans\',sans-serif;font-weight:300;font-size:0.88rem;color:#7A706A;"> — así es como la mayoría de las personas describen este programa después de haberlo completado.</span><br><br><span style="font-family:\'DM Sans\',sans-serif;font-weight:300;font-size:0.92rem;color:#2C2825;line-height:1.75;display:block;">Tu cuerpo es un instrumento preciso. Nadie te enseñó a usarlo — por eso tu voz se bloquea, se cansa, o no te representa. Este programa de 7 días te da la mecánica exacta, día a día, para que tu voz fluya sin esfuerzo y sin tensión — auténticamente tuya.</span><br><span style="display:block;font-family:\'DM Sans\',sans-serif;font-weight:500;font-size:13px;color:#1B4B3A;margin-bottom:4px;">✓ Acceso inmediato tras el pago.</span><span style="display:block;font-family:\'DM Sans\',sans-serif;font-weight:500;font-size:13px;color:#1B4B3A;margin-bottom:4px;">✓ Garantía de resultado: ninguna diferencia en 7 días — te devolvemos el dinero.</span><span style="display:block;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-weight:bold;font-size:1.3rem;color:#C4845A;margin-top:16px;">Tu Día 1 te espera.</span>'
-      ]
-    }
-  };
-
-  var copyLines = (CIALDINI[lang] && CIALDINI[lang][routeKey]) ? CIALDINI[lang][routeKey] : [];
-  var salesCopyEl = document.getElementById('sales-copy-block');
-  if (salesCopyEl && copyLines.length) {
-    salesCopyEl.innerHTML = copyLines.map(function(line, i) {
-      return '<p style="margin:' + (i === 0 ? '0' : '10px') + ' 0 0;font-size:13px;font-weight:' + (i === 0 ? '400' : '300') + ';color:' + (i === 0 ? '#2C2825' : '#7A706A') + ';line-height:1.75;">' + line + '</p>';
-    }).join('');
   }
 
   // Meta Pixel: result viewed — fire once per quiz completion
@@ -1623,50 +1567,6 @@ function renderResult() {
       language:     lang
     });
   }
-
-  // CTA config per route
-  var ctaConfig = {
-    fr: {
-      standard:   { text: 'COMMENCER MON ESSAI GRATUIT →',            bg: '#1B4B3A', name: 'Voix Essence Academy™',        id: 'voix-essence-academie',    value: 37,  url: PAYWALL_URLS.fr.standard },
-      vip:        { text: 'Réserver ma Séance Privée — $200',           bg: '#7B5EA7', name: 'Séance Privée avec Mamselle',   id: 'seance-privee-200',        value: 200, url: PAYWALL_URLS.fr.vip }
-    },
-    es: {
-      course:     { text: 'Acceder a Tu Voz Auténtica en 7 Días',       bg: '#1B4B3A', name: 'Tu Voz Auténtica en 7 Días',    id: 'tu-voz-autentica-7-dias',  value: 47,  url: PAYWALL_URLS.es.course },
-      membership: { text: 'COMENZAR MI PRUEBA GRATUITA →',              bg: '#1B4B3A', name: 'Voz Esencia Academy™',          id: 'voz-esencia-academy',      value: 37,  url: PAYWALL_URLS.es.membership },
-      vip:        { text: 'Reservar mi Coaching Vocal Privado — $147',  bg: '#7B5EA7', name: 'Coaching Vocal Privado',        id: 'coaching-vocal-privado-147', value: 147, url: PAYWALL_URLS.es.vip }
-    }
-  };
-  var cfg = ctaConfig[lang][routeKey] || ctaConfig[lang][lang === 'fr' ? 'standard' : 'membership'];
-
-  // CTA button
-  const ctaBtn = document.getElementById('btn-cta');
-  ctaBtn.textContent    = cfg.text;
-  ctaBtn.style.background = cfg.bg;
-  ctaBtn.className      = 'btn-cta';
-  ctaBtn.onclick = function() {
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'InitiateCheckout', {
-        content_name: cfg.name,
-        content_ids:  [cfg.id],
-        value: cfg.value, currency: 'USD', num_items: 1
-      });
-      fbq('trackCustom', 'Quiz_CTAClick', {
-        offer:       cfg.id,
-        routing:     routeKey,
-        vocal_block: calculateResult(),
-        language:    lang
-      });
-    }
-    window.open(cfg.url, '_blank');
-  };
-
-  // Guarantee note
-  document.getElementById('guarantee-note').textContent = isVip
-    ? (lang === 'fr' ? 'Places limitées. Réservation confirmée sous 24h.' : 'Plazas limitadas. Reserva confirmada en 24h.')
-    : (lang === 'fr' ? 'Aucune différence en 7 jours — tu repars sans avoir donné un sous.' : 'Ninguna diferencia en 7 días — te vas sin haber dado un centavo.');
-
-  // Pricing anchor section
-  document.getElementById('pricing-section-container').innerHTML = renderPricingSection(lang);
 
   document.getElementById('btn-restart').textContent     =
     lang === 'fr' ? 'Recommencer' : 'Volver a empezar';
@@ -1696,150 +1596,6 @@ function handleLangToggle(newLang) {
   if (lang === newLang) return;
   lang = newLang;
   render();
-}
-
-// ================================================================
-// PRICING SECTION
-// ================================================================
-function resolvePricingUrl(token) {
-  var map = {
-    PAYWALL_FR_VIP:        PAYWALL_URLS.fr.vip,
-    PAYWALL_FR_STANDARD:   PAYWALL_URLS.fr.standard,
-    PAYWALL_ES_VIP:        PAYWALL_URLS.es.vip,
-    PAYWALL_ES_MEMBERSHIP: PAYWALL_URLS.es.membership,
-    PAYWALL_ES_COURSE:     PAYWALL_URLS.es.course
-  };
-  return map[token] || '#';
-}
-
-function renderPricingSection(l) {
-  var PRICING = {
-    fr: {
-      section_label: "Les parcours disponibles",
-      section_sub: "Deux façons d'avancer — selon là où tu en es.",
-      anchor_note: "* Prix en CAD. Essai gratuit de 7 jours — annulable à tout moment.",
-      items: [
-        {
-          name: "La Séance Privée avec Mamselle",
-          type: "Coaching individuel",
-          price: "200 $",
-          price_sub: "CAD par séance",
-          desc: "55 minutes. Diagnostic complet, protocole personnalisé, résultat actionnable immédiatement.",
-          tag: "Places limitées",
-          highlight: false,
-          latam_note: false,
-          url: 'PAYWALL_FR_VIP'
-        },
-        {
-          name: "Voix Essence Academy™",
-          type: "Membership mensuel",
-          price: "49 $",
-          price_sub: "CAD / mois · sans engagement",
-          desc: "Accès à la méthode complète, contenu mensuel, et essai gratuit de 7 jours pour commencer sans risque.",
-          tag: "Essai gratuit de 7 jours",
-          highlight: true,
-          latam_note: false,
-          url: 'PAYWALL_FR_STANDARD'
-        }
-      ]
-    },
-    es: {
-      section_label: "Los caminos disponibles",
-      section_sub: "Tres formas de avanzar — según donde estés.",
-      anchor_note: "* Precios en USD.",
-      items: [
-        {
-          name: "Coaching Vocal Privado",
-          type: "Coaching individual",
-          price: "$147",
-          price_sub: "sesión única",
-          desc: "55 minutos con Mamselle. Diagnóstico completo, protocolo personalizado, resultado accionable de inmediato.",
-          tag: "Plazas limitadas",
-          highlight: false,
-          latam_note: false,
-          url: 'PAYWALL_ES_VIP'
-        },
-        {
-          name: "Voz Esencia Academy™",
-          type: "Membresía mensual",
-          price: "$37",
-          price_sub: "por mes · sin compromiso",
-          desc: "Acceso al método completo y al contenido mensuel, con 7 días de prueba gratuita para empezar sin riesgo.",
-          tag: "7 días para probar gratis",
-          highlight: true,
-          latam_note: false,
-          url: 'PAYWALL_ES_MEMBERSHIP'
-        },
-        {
-          name: "Tu Voz Auténtica en 7 Días",
-          type: "Curso intensivo",
-          price: "$47",
-          price_sub: "pago único",
-          desc: "Un programa intensivo de 7 días calibrado para tu bloqueo específico. Acceso inmediato.",
-          tag: null,
-          highlight: false,
-          latam_note: false,
-          url: 'PAYWALL_ES_COURSE'
-        }
-      ]
-    }
-  };
-  var p = PRICING[l];
-  var cardsHTML = '';
-
-  p.items.forEach(function(item) {
-    var url = resolvePricingUrl(item.url);
-    var latamNote = item.latam_note
-      ? '<div style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;color:#A89E97;font-style:italic;margin-top:5px;">Tarifa LATAM disponible — escríbenos antes de reservar.</div>'
-      : '';
-    var clickableStyle = 'cursor:pointer;text-decoration:none;display:block;';
-
-    if (item.highlight) {
-      cardsHTML +=
-        '<a href="' + url + '" target="_blank" rel="noopener" style="' + clickableStyle + '">'
-        + '<div style="display:inline-block;background:#1B4B3A;color:white;font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px 20px 0 0;margin-bottom:-1px;margin-left:12px;">' + item.tag + '</div>'
-        + '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-radius:10px;border:1.5px solid #1B4B3A;background:#E1F5EE;transition:opacity .15s;" onmouseover="this.style.opacity=\'0.88\'" onmouseout="this.style.opacity=\'1\'">'
-        + '<div style="flex-shrink:0;width:64px;text-align:center;padding-top:2px;">'
-        + '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:22px;font-weight:400;color:#2C2825;line-height:1;">' + item.price + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:300;color:#A89E97;line-height:1.3;margin-top:3px;">' + item.price_sub + '</div>'
-        + '</div>'
-        + '<div style="flex:1;min-width:0;">'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#2D7A5E;margin-bottom:2px;">' + item.type + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#1B4B3A;margin-bottom:4px;">' + item.name + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;color:#7A706A;line-height:1.5;">' + item.desc + '</div>'
-        + '</div>'
-        + '</div>'
-        + '</a>';
-    } else {
-      var tagPill = item.tag
-        ? ' <span style="display:inline-block;background:#EDE8F8;color:#7B5EA7;font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;">' + item.tag + '</span>'
-        : '';
-      cardsHTML +=
-        '<a href="' + url + '" target="_blank" rel="noopener" style="' + clickableStyle + '">'
-        + '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-radius:10px;border:0.5px solid #D8CDB5;background:#FAF8F4;transition:border-color .15s;" onmouseover="this.style.borderColor=\'#1B4B3A\'" onmouseout="this.style.borderColor=\'#D8CDB5\'">'
-        + '<div style="flex-shrink:0;width:64px;text-align:center;padding-top:2px;">'
-        + '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:22px;font-weight:400;color:#2C2825;line-height:1;">' + item.price + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:300;color:#A89E97;line-height:1.3;margin-top:3px;">' + item.price_sub + '</div>'
-        + '</div>'
-        + '<div style="flex:1;min-width:0;">'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:#A89E97;margin-bottom:2px;">' + item.type + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2C2825;margin-bottom:4px;">' + item.name + tagPill + '</div>'
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:300;color:#7A706A;line-height:1.5;">' + item.desc + '</div>'
-        + latamNote
-        + '</div>'
-        + '</div>'
-        + '</a>';
-    }
-  });
-
-  return '<div style="margin-top:28px;padding-top:24px;border-top:0.5px solid #D8CDB5;">'
-    + '<div style="text-align:center;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:#A89E97;margin-bottom:6px;">' + p.section_label + '</div>'
-    + '<div style="text-align:center;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#7A706A;margin-bottom:20px;line-height:1.5;">' + p.section_sub + '</div>'
-    + '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">'
-    + cardsHTML
-    + '</div>'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;color:#A89E97;font-style:italic;text-align:center;line-height:1.5;margin-bottom:4px;">' + p.anchor_note + '</div>'
-    + '</div>';
 }
 
 // ================================================================
@@ -1964,14 +1720,8 @@ function animateResultScreen(score) {
   // Staggered fade-up for each result section
   var sections = [
     { id: 'score-arc-container',       delay: 0   },
-    { sel: '.result-badges',           delay: 220 },
-    { id: 'result-title',              delay: 380 },
     { id: 'result-body',               delay: 520 },
     { id: 'cost-block',                delay: 590 },
-    { id: 'exercise-label',            delay: 660 },
-    { id: 'exercise-box',              delay: 700 },
-    { sel: '.open-loop-box',           delay: 840 },
-    { id: 'pricing-section-container', delay: 1160 },
     { id: 'btn-restart',               delay: 1340 },
     { id: 'social-footer',             delay: 1460 }
   ];
