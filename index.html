@@ -509,8 +509,7 @@
         <p id="second-cta-urgency"
           style="font-family:'DM Sans',sans-serif;font-size:12px;
           font-weight:500;color:#9B1C1C;text-align:center;margin:0;">
-          Esta oferta no aparece en publicidad. Solo está disponible
-          para quienes completan el quiz.
+          Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.
         </p>
       </div>
     </div>
@@ -1446,8 +1445,8 @@ function renderResult() {
       ? 'Je prends mon accès gratuit de 7 jours →'
       : 'Tomo mi acceso gratuito de 7 días →';
     secondCtaMsg.textContent = (lang === 'fr')
-      ? 'Cette offre n\'existe pas en publicité. Elle est uniquement disponible pour celles et ceux qui complètent le quiz.'
-      : 'Esta oferta no aparece en publicidad. Solo está disponible para quienes completan el quiz.';
+      ? 'C\'est ta seule opportunité de résoudre ton blocage, totalement gratuitement.'
+      : 'Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.';
     secondCtaBtn.onclick = function() {
       if (typeof fbq !== 'undefined') {
         fbq('trackCustom', 'Quiz_CTAClick');
