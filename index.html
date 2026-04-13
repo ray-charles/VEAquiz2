@@ -1394,12 +1394,11 @@ function renderResult() {
     + '</p>'
     + '</div>'
 
-    + '<a href="' + membershipUrl + '" '
+    + '<a href="' + membershipUrl + '" id="main-cta-btn" '
     + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
-    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;"'
-    + ' onclick="if(typeof fbq!==\'undefined\'){fbq(\'trackCustom\',\'Quiz_CTAClick\');}">'
+    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;">'
     + ctaLabel + '</a>'
 
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
@@ -1435,6 +1434,20 @@ function renderResult() {
   document.getElementById('conversion-section').innerHTML = conversionHTML;
   // ── END CONVERSION SECTION ───────────────────────────────────────
 
+  var mainCtaBtn = document.getElementById('main-cta-btn');
+  if (mainCtaBtn) {
+    mainCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'Quiz_CTAClick');
+      }
+      setTimeout(function() {
+        window.location.href = dest;
+      }, 300);
+    });
+  }
+
   var secondCtaBlock = document.getElementById('second-cta-block');
   var secondCtaBtn   = document.getElementById('second-cta-btn');
   var secondCtaMsg   = document.getElementById('second-cta-urgency');
@@ -1447,11 +1460,16 @@ function renderResult() {
     secondCtaMsg.textContent = (lang === 'fr')
       ? 'C\'est ta seule opportunité de résoudre ton blocage, totalement gratuitement.'
       : 'Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.';
-    secondCtaBtn.onclick = function() {
+    secondCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
       if (typeof fbq !== 'undefined') {
         fbq('trackCustom', 'Quiz_CTAClick');
       }
-    };
+      setTimeout(function() {
+        window.location.href = dest;
+      }, 300);
+    });
     secondCtaBlock.style.display = 'block';
   }
 
