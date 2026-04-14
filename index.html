@@ -1371,14 +1371,8 @@ function renderResult() {
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;'
     + 'color:#2C2825;line-height:1.7;margin:0 0 10px;">'
     + (lang === 'fr'
-        ? 'Si tu veux résoudre ton blocage, je t\'invite à rejoindre notre académie en ligne.'
-        : 'Si quieres resolver tu bloqueo, te invito a unirte a nuestra academia en línea.')
-    + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;'
-    + 'color:#2C2825;line-height:1.7;margin:0 0 10px;">'
-    + (lang === 'fr'
-        ? 'Habituellement, les gens paient 49 CAD/mois pour rejoindre. Parce que tu as fait le quiz, tu accèdes à tout notre contenu complètement gratuitement pendant 7 jours.'
-        : 'Normalmente, las personas pagan $37/mes para unirse. Porque hiciste el quiz, accedes a todo nuestro contenido completamente gratis durante 7 días.')
+        ? 'Ta voix a un schéma spécifique qui limite tout ce que tu exprimes. L\'identifier était la première étape. Le relâcher est la suivante.<br><br>Accède à l\'Académie Voz Esencia 7 jours complètement gratuitement — puis seulement 7 $/mois. Annule quand tu veux, sans questions.'
+        : 'Tu voz tiene un patrón específico que está limitando todo lo que expresas. Identificarlo fue el primer paso. Soltarlo es el siguiente.<br><br>Accede a la Academia Voz Esencia 7 días completamente gratis — luego solo $7/mes. Cancela cuando quieras, sin preguntas.')
     + '</p>'
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
     + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
@@ -1621,8 +1615,20 @@ function submitLead(resultKey, score, routeKey) {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body:    JSON.stringify(data)
-    }).catch(function() {});
-  } catch(err) {}
+    })
+    .then(function(res) {
+      if (!res.ok) {
+        res.text().then(function(txt) {
+          console.error('[Formspree] Submission failed — status:', res.status, '— response:', txt);
+        });
+      } else {
+        console.log('[Formspree] Submission OK — status:', res.status);
+      }
+    })
+    .catch(function(err) {
+      console.error('[Formspree] Network error:', err);
+    });
+  } catch(err) { console.error('[Formspree] Unexpected error in submitLead:', err); }
 }
 
 // ================================================================
