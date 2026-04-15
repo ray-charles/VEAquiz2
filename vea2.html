@@ -362,7 +362,7 @@
       animation: fadeInUp 0.3s ease forwards;
     }
     .siguiente-affordance {
-      display: inline-block;
+      display: block;
       margin: 24px auto 0;
       padding: 12px 32px;
       background: var(--green-deep);
@@ -498,41 +498,14 @@
 
     <!-- RESULT SCREEN -->
     <div id="result-screen" style="display:none">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-        <div style="flex-shrink:0;" id="score-arc-container"></div>
-        <div style="flex:1;min-width:0;">
-          <div id="result-badge-label"
-            style="display:inline-block;font-size:11px;font-weight:500;
-            letter-spacing:0.07em;text-transform:uppercase;color:#085041;
-            background:#E1F5EE;padding:4px 12px;border-radius:20px;
-            margin-bottom:8px;"></div>
-          <div id="result-title"
-            style="font-family:'Cormorant Garamond',serif;font-size:30px;
-            font-weight:500;color:#2C2825;line-height:1.15;margin:0;"></div>
-        </div>
-      </div>
-      <div class="result-body"  id="result-body"></div>
-      <div id="video-container"></div>
+      <div id="score-arc-container" style="margin-bottom:16px;"></div>
+      <div class="result-body" id="result-body"></div>
       <div id="cost-block" style="display:none;"></div>
+      <div id="video-container"></div>
       <div id="conversion-section"></div>
       <!-- Elfsight Google Reviews — bottom of result page -->
       <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid #D8CDB5;transform:scale(0.85);transform-origin:top center;">
         <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
-      </div>
-      <div id="second-cta-block" style="display:none;margin-top:24px;padding-top:20px;border-top:0.5px solid #D8CDB5;">
-        <a id="second-cta-btn" href="#"
-          style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;
-          font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
-          text-align:center;padding:17px 20px;border-radius:8px;
-          text-decoration:none;letter-spacing:0.01em;margin-bottom:8px;
-          box-sizing:border-box;">
-          Tomo mi acceso gratuito de 7 días →
-        </a>
-        <p id="second-cta-urgency"
-          style="font-family:'DM Sans',sans-serif;font-size:12px;
-          font-weight:500;color:#9B1C1C;text-align:center;margin:0;">
-          Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.
-        </p>
       </div>
     </div>
 
@@ -1073,7 +1046,7 @@ function showMicrofeedback(text, container, useDarkColor) {
     requestAnimationFrame(function() {
       requestAnimationFrame(function() { sig.style.opacity = '1'; });
     });
-  }, 800);
+  }, 2000);
 }
 
 function handleOptionClick(qId, idx, q) {
@@ -1235,11 +1208,7 @@ function renderResult() {
   // ── SCORE ARC ──
   document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
 
-  // ── BADGE + TITLE ──
-  document.getElementById('result-badge-label').textContent = 'Tu bloqueo principal';
-  document.getElementById('result-title').textContent = d.title;
-
-  // ── RESULT BODY ──
+  // ── RESULT BODY — mirror headline (hero) + eyebrow badge + subtext ──
   var possibilityLines = d.possibility.split('\n').map(function(l) {
     return l.trim() === '' ? '<br>' : '<span>' + l + '</span><br>';
   }).join('');
@@ -1248,13 +1217,18 @@ function renderResult() {
   }).join('');
 
   document.getElementById('result-body').innerHTML =
-    // Dynamic mirror headline
-    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(18px,4vw,22px);font-weight:400;'
-    + 'font-style:italic;color:#2C2825;line-height:1.5;margin:0 0 12px;">'
+    // Mirror headline — promoted to hero size
+    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:400;'
+    + 'font-style:italic;color:#2C2825;line-height:1.35;margin:0 0 14px;">'
     + headline + '</p>'
+    // TU BLOQUEO PRINCIPAL + block name — demoted, small eyebrow
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
+    + 'letter-spacing:0.08em;text-transform:uppercase;color:#085041;'
+    + 'background:#E1F5EE;display:inline-block;padding:4px 12px;border-radius:20px;margin:0 0 16px;">'
+    + 'Tu bloqueo principal\u00a0— ' + d.title + '</p>'
     // Confirmation subtext
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
-    + 'letter-spacing:0.08em;text-transform:uppercase;color:#C4845A;line-height:1.6;margin:0 0 20px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:400;'
+    + 'letter-spacing:0.05em;color:#C4845A;line-height:1.6;margin:0 0 20px;">'
     + d.subtext + '</p>';
 
   // ── COST BLOCK → repurposed for possibility statement ──
