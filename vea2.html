@@ -662,56 +662,84 @@ const TIEBREAK_OPTIONS = {
 };
 
 // ================================================================
-// COST-OF-INACTION DATA
+// BLOCK DATA (unified result + cost-of-inaction data)
 // ================================================================
-const COST_DATA = {
-  mandibulaire: "Este patrón no desaparece solo — se hace más profundo. Cada día que tu mandíbula compensa, tu garganta aprende a trabajar más duro de lo que necesita.",
-  respiration:  "Un patrón respiratorio compensatorio no mejora con el tiempo — se instala más. Cada sesión intensa lo refuerza un poco más en la dirección equivocada.",
-  nerveux:      "Tu sistema nervioso aprende lo que le repites. Sin recalibración, seguirá apagando tu voz exactamente cuando más la necesitas.",
-  identite:     "Una voz que no te representa termina por convencerte de que eso eres. No es un problema de voz — es un problema de presencia, de autoridad, de vida."
-};
-
-// ================================================================
-// RESULTS DATA
-// ================================================================
-const RESULTS = {
-  pro: {
-    mandibulaire: {
-      title: "Bloqueo Mandibular",
-      body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+const BLOCK_DATA = {
+  mandibulaire: {
+    title: "Bloqueo Mandibular",
+    mirrorHeadlines: {
+      q1: "Sentiste tensión en la garganta o la mandíbula — y no pudiste cantar ni hablar como querías.",
+      q2: "En la mandíbula o la garganta. Algo apretado que no se suelta."
     },
-    respiration: {
-      title: "Bloqueo de Respiración",
-      body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
-    },
-    nerveux: {
-      title: "Bloqueo del Sistema Nervioso",
-      body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
-    },
-    identite: {
-      title: "Bloqueo de Identidad Vocal",
-      body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
-    }
+    subtext: "Y no eres la única. Es uno de los patrones más frecuentes que trabajamos — y uno de los que más rápido se transforma.",
+    possibility: "Lo que describes no es falta de talento ni de disciplina.\n\nEs un patrón físico específico — tu mandíbula acumula tensión, tu garganta compensa, y tu voz paga el precio.\n\nLos patrones físicos se cambian. Hemos visto esta transformación cientos de veces. Siempre empieza en el mismo lugar: saber exactamente qué liberar — y cómo.",
+    bridge: "Sin intervención específica, este patrón no desaparece — se instala más profundo.",
+    outcome: "En tus primeros 7 días dentro de la Academia vas a:\n\n— Identificar exactamente dónde vive esa tensión en tu cuerpo\n— Recibir la secuencia específica del protocolo para liberarla\n— Sentir la diferencia — sin técnica compleja, sin dolor, sin adivinar\n\nNo es un curso genérico de voz.\nEs el protocolo diseñado para lo que acabas de describir.",
+    blockConfirmation: "Lo que describes tiene nombre: bloqueo mandibular.\nEs uno de nuestros casos más frecuentes — y más transformadores.",
+    offerMiddle: "Siete días para trabajar tu bloqueo mandibular con el protocolo diseñado exactamente para él.",
+    ctaPrimary: "Quiero liberar esta tensión →"
   },
-  stu: {
-    mandibulaire: {
-      title: "Bloqueo Mandibular",
-      body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+  nerveux: {
+    title: "Bloqueo del Sistema Nervioso",
+    mirrorHeadlines: {
+      q1: "Tu voz se cortó, tembló o se cerró — justo cuando más la necesitabas.",
+      q2: "Los nervios tomaron el control. Tu voz dejó de ser tuya."
     },
-    respiration: {
-      title: "Bloqueo de Respiración",
-      body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
+    subtext: "Eso no es debilidad. Es tu sistema nervioso haciendo exactamente lo que aprendió a hacer — y se puede reentrenar.",
+    possibility: "Tu voz no falla por falta de preparación ni de confianza.\n\nFalla porque tu sistema nervioso aprendió a asociar ciertos momentos con peligro — y reacciona antes de que tú puedas hacer algo.\n\nEsa respuesta automática tiene una mecánica específica. Y lo que tiene mecánica específica tiene solución específica.",
+    bridge: "Sin recalibración, tu sistema nervioso seguirá apagando tu voz exactamente cuando más la necesitas.",
+    outcome: "En tus primeros 7 días dentro de la Academia vas a:\n\n— Entender por qué tu sistema nervioso dispara esa respuesta\n— Recibir el protocolo de recalibración específico para tu patrón\n— Experimentar cómo se siente hablar o cantar sin ese freno interno\n\nNo más adivinar. No más respirar hondo y esperar lo mejor.\nEl protocolo diseñado para lo que acabas de describir.",
+    blockConfirmation: "Lo que describes tiene nombre: bloqueo del sistema nervioso vocal.\nEs uno de los más comunes — y de los más transformadores cuando se trabaja con el protocolo correcto.",
+    offerMiddle: "Siete días para trabajar tu bloqueo nervioso con el protocolo diseñado exactamente para él.",
+    ctaPrimary: "Quiero una voz que no me falle cuando más la necesito →"
+  },
+  respiration: {
+    title: "Bloqueo Respiratorio",
+    mirrorHeadlines: {
+      q1: "Tu voz se fue apagando — te quedaste sin aire o sin fuerza antes de terminar.",
+      q2: "En el aire. Se te acaba antes de terminar lo que quieres decir."
     },
-    nerveux: {
-      title: "Bloqueo del Sistema Nervioso",
-      body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
+    subtext: "Eso no es falta de resistencia. Es tu cuerpo usando el patrón compensatorio equivocado — y tiene solución directa.",
+    possibility: "Tu voz no se agota porque seas débil o porque te falte técnica.\n\nSe agota porque tu cuerpo aprendió un patrón respiratorio compensatorio — y lo repite cada vez que usas tu voz.\n\nEs como correr con los pies apuntando hacia adentro. No es falta de forma física. Es un patrón que se corrige.",
+    bridge: "Sin corrección, cada sesión vocal refuerza ese patrón un poco más en la dirección equivocada.",
+    outcome: "En tus primeros 7 días dentro de la Academia vas a:\n\n— Descubrir el patrón compensatorio específico que agota tu voz\n— Recibir la secuencia correcta para reemplazarlo\n— Notar cómo tu voz aguanta donde antes se apagaba\n\nTu voz tiene más resistencia de la que crees.\nSolo necesita el patrón correcto para demostrarlo.",
+    blockConfirmation: "Lo que describes tiene nombre: bloqueo respiratorio compensatorio.\nEs uno de los patrones más frecuentes que trabajamos — y uno de los que produce resultados más rápidos.",
+    offerMiddle: "Siete días para trabajar tu patrón respiratorio con el protocolo diseñado exactamente para él.",
+    ctaPrimary: "Quiero una voz que aguante tanto como yo →"
+  },
+  identite: {
+    title: "Bloqueo de Identidad Vocal",
+    mirrorHeadlines: {
+      q1: "Escuchaste tu voz y no te reconociste. No sonaba como tú.",
+      q2: "No es un lugar físico. Es que tu voz no se siente tuya."
     },
-    identite: {
-      title: "Bloqueo de Identidad Vocal",
-      body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
-    }
+    subtext: "Esa distancia entre quién eres y lo que sale cuando hablas o cantas tiene una causa concreta. Y se puede cerrar.",
+    possibility: "Lo que sientes no es abstracto ni psicológico.\n\nHay una brecha real entre tu voz interior y la voz que el mundo escucha. Esa brecha se formó con el tiempo — mensajes sobre cómo deberías sonar, comparaciones, correcciones — y cambió físicamente la manera en que produces tu voz.\n\nLo que se formó con el tiempo se puede desformar. Hemos visto esta transformación — es la más profunda que existe.",
+    bridge: "Una voz que no te representa termina por convencerte de que eso es todo lo que hay.",
+    outcome: "En tus primeros 7 días dentro de la Academia vas a:\n\n— Identificar la brecha específica entre quien eres y lo que sale\n— Entender su causa física — no psicológica\n— Empezar a cerrarla con el protocolo diseñado para tu patrón\n\nNo se trata de sonar mejor. Se trata de sonar como tú.\nPor fin.",
+    blockConfirmation: "Lo que describes tiene nombre: bloqueo de identidad vocal.\nEs el más profundo de los cuatro patrones que trabajamos — y el más transformador cuando se libera.",
+    offerMiddle: "Siete días para empezar a cerrar esa brecha con el protocolo diseñado exactamente para tu patrón.",
+    ctaPrimary: "Quiero reconocerme en mi voz →"
   }
 };
+
+function getMirrorAnswer(winningBlock, ans) {
+  // Q0 votes map: [nerveux, mandibulaire, respiration, identite]
+  const q0map = ['nerveux', 'mandibulaire', 'respiration', 'identite'];
+  // Q1 votes map: [mandibulaire, respiration, nerveux, identite]
+  const q1map = ['mandibulaire', 'respiration', 'nerveux', 'identite'];
+
+  var q0voted = (ans[0] !== null && q0map[ans[0]] === winningBlock);
+  var q1voted = (ans[1] !== null && q1map[ans[1]] === winningBlock);
+
+  // Q0 = quiz question 1 (painful memory) → use q1 headline key
+  // Q1 = quiz question 2 (physical location) → use q2 headline key
+  // Priority: Q0 (more emotional) over Q1
+  if (q0voted) return 'q1';
+  if (q1voted) return 'q2';
+  // Fallback: Q5 (dream state) voted — use q1 headline as default
+  return 'q1';
+}
 
 // ================================================================
 // BACKGROUND GRADIENT PROGRESSION
@@ -1180,225 +1208,196 @@ function getResultKey() {
 // ================================================================
 function renderResult() {
   const resultKey = getResultKey();
-  const pKey      = profile || 'stu';
-  const d         = RESULTS[pKey][resultKey];
-
-  // Score arc
+  const d = BLOCK_DATA[resultKey];
   const score = calcVocalScore(answers);
+  const mirrorKey = getMirrorAnswer(resultKey, answers);
+  const headline = d.mirrorHeadlines[mirrorKey];
 
-  document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
+  const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+  const JUSTINE_PHOTO  = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
+  const TESTI_TEXT     = '«\u00a0Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar.\u00a0»';
+  const TESTI_META     = 'Justine Lafortune · Canada';
 
-  // Badge
-  document.getElementById('result-badge-label').textContent = 'Tu bloqueo principal';
-
-  // Title
-  document.getElementById('result-title').textContent = d.title;
-
-  // Result body — simplified (just d.body, no old personalization inputs)
-  var bodyHTML =
-    '<div style="margin-bottom:14px;">'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#1B4B3A;margin-bottom:8px;">'
-    + 'Lo que ocurre'
-    + '</div>'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;color:#7A706A;line-height:1.7;">' + d.body + '</div>'
-    + '</div>';
-
-  document.getElementById('result-body').innerHTML = bodyHTML;
-
-  // Cost-of-inaction block
-  var costEl = document.getElementById('cost-block');
-  var costText = COST_DATA[resultKey] || '';
-  var costTitle = "Lo que cuesta no hacer nada";
-  if (costText) {
-    costEl.innerHTML = '<div class="cost-title">' + costTitle + '</div><div class="cost-body">' + costText + '</div>';
-    costEl.style.display = 'block';
-  } else {
-    costEl.style.display = 'none';
-  }
-
-  // Video embeds
-  var videoIds = {
+  const videoIds = {
     mandibulaire: 'VfoYECa3lnE',
     respiration:  'uAlIEAIVxgM',
     nerveux:      'pe2XyNkRolo',
     identite:     'dbkzQoZaiJA'
   };
+  const vid = videoIds[resultKey] || '';
+  const videoHTML = vid
+    ? '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:20px 0;">'
+      + '<iframe src="https://www.youtube.com/embed/' + vid + '?rel=0&modestbranding=1" '
+      + 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>'
+      + '</div>'
+    : '<div style="background:#F5F0E8;border-radius:12px;padding:24px;text-align:center;margin:20px 0;color:#7A706A;font-family:\'DM Sans\',sans-serif;font-size:13px;">[VIDEO — próximamente]</div>';
 
-  var vid = videoIds[resultKey] || '';
+  // ── SCORE ARC ──
+  document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
+
+  // ── BADGE + TITLE ──
+  document.getElementById('result-badge-label').textContent = 'Tu bloqueo principal';
+  document.getElementById('result-title').textContent = d.title;
+
+  // ── RESULT BODY ──
+  var possibilityLines = d.possibility.split('\n').map(function(l) {
+    return l.trim() === '' ? '<br>' : '<span>' + l + '</span><br>';
+  }).join('');
+  var outcomeLines = d.outcome.split('\n').map(function(l) {
+    return l.trim() === '' ? '<br>' : '<span>' + l + '</span><br>';
+  }).join('');
+
+  document.getElementById('result-body').innerHTML =
+    // Dynamic mirror headline
+    '<p style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(18px,4vw,22px);font-weight:400;'
+    + 'font-style:italic;color:#2C2825;line-height:1.5;margin:0 0 12px;">'
+    + headline + '</p>'
+    // Confirmation subtext
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
+    + 'letter-spacing:0.08em;text-transform:uppercase;color:#C4845A;line-height:1.6;margin:0 0 20px;">'
+    + d.subtext + '</p>';
+
+  // ── COST BLOCK → repurposed for possibility statement ──
+  var costEl = document.getElementById('cost-block');
+  costEl.style.display = 'block';
+  costEl.innerHTML =
+    '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:300;'
+    + 'color:#2C2825;line-height:1.75;">' + possibilityLines + '</div>';
+
+  // ── VIDEO ──
   var videoContainer = document.getElementById('video-container');
-  if (vid && videoContainer) {
-    videoContainer.innerHTML =
-      '<div style="position:relative;padding-bottom:56.25%;height:0;'
-      + 'overflow:hidden;border-radius:12px;margin:20px 0;">'
-      + '<iframe src="https://www.youtube.com/embed/' + vid
-      + '?rel=0&modestbranding=1" '
-      + 'style="position:absolute;top:0;left:0;width:100%;height:100%;'
-      + 'border:none;" allowfullscreen loading="lazy"></iframe>'
-      + '</div>';
-  } else if (videoContainer) {
-    videoContainer.innerHTML = '';
-  }
+  if (videoContainer) videoContainer.innerHTML = videoHTML;
 
-  // ── CONVERSION SECTION ──────────────────────────────────────────
-  var TESTI_TEXT_ES =
-    '«\u00a0Mamselle guía los grupos maravillosamente bien. '
-    + '¡Cambió mi vida (no es broma!) '
-    + 'Yo que no creía que podía cantar.\u00a0»';
-  var TESTI_META_ES = 'Justine Lafortune · Canada';
-  var JUSTINE_PHOTO = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
-
-  var defaultCtaLabel = 'Quiero solucionar mi bloqueo →';
-
-  var conversionHTML =
+  // ── CONVERSION SECTION ──
+  document.getElementById('conversion-section').innerHTML =
     '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
+
+    // Bridge
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
+    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 16px;">'
+    + d.bridge + '</p>'
+
+    // Explicit connection
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
+    + 'color:#1B4B3A;text-align:center;line-height:1.6;margin:0 0 20px;">'
+    + 'El Protocolo Voz Esencia™ fue construido exactamente para esto.' + '</p>'
+
+    // Block-specific outcome
+    + '<div style="background:#F5F0E8;border-radius:12px;padding:20px 22px;margin-bottom:20px;">'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
+    + 'color:#2C2825;line-height:1.75;">' + outcomeLines + '</div>'
+    + '</div>'
+
+    // Block name confirmation
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:400;'
+    + 'color:#7A706A;line-height:1.65;margin:0 0 24px;">'
+    + d.blockConfirmation.replace('\n', '<br>') + '</p>'
+
+    // Authority line
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
+    + 'Desde hace 25 años acompaño a personas a cantar en escenario,<br>'
+    + 'hablar en público, y vivir como si hubieran nacido de nuevo.<br>'
+    + '<strong style="font-weight:500;">— Mamselle Ruiz Coach</strong></p>'
+
+    // Testimonial
+    + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;padding:16px;margin-bottom:20px;">'
+    + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
+    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+    + '<div><div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;color:#7A706A;margin-top:2px;">' + TESTI_META + '</div>'
+    + '</div></div>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.65;margin:0;font-style:italic;">' + TESTI_TEXT + '</p>'
+    + '</div>'
 
     // Social proof line
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
-    + 'letter-spacing:3px;text-transform:uppercase;color:var(--green-deep);'
-    + 'text-align:center;margin-bottom:20px;">'
-    + 'Más de 1,000 voces liberadas con el Protocolo Voz Esencia™'
-    + '</p>'
+    + 'letter-spacing:3px;text-transform:uppercase;color:var(--green-deep);text-align:center;margin:0 0 20px;">'
+    + 'Más de 1,000 voces liberadas con el Protocolo Voz Esencia™</p>'
 
     // Readiness widget
     + '<div id="readiness-widget" style="text-align:center;margin:28px 0 20px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;'
-    + 'color:#7A706A;margin-bottom:14px;letter-spacing:0.02em;">'
-    + '¿Qué tan list@ te sientes para trabajar en esto?'
-    + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;color:#7A706A;margin-bottom:14px;letter-spacing:0.02em;">¿Qué tan list@ te sientes para trabajar en esto?</p>'
     + '<div id="readiness-options" style="display:flex;justify-content:center;gap:10px;"></div>'
     + '</div>'
 
-    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;'
-    + 'margin-bottom:16px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
-    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
-    + 'Tu voz tiene un patrón específico que está limitando todo lo que expresas. Identificarlo fue el primer paso. Soltarlo es el siguiente.<br><br>Accede a la Academia Voz Esencia 7 días completamente gratis — luego solo $7/mes. Cancela cuando quieras, sin preguntas.'
-    + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
-    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
-    + 'Recuerda — tú eres tu voz. Trabajar en ella es una de las mejores inversiones que jamás harás.'
-    + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
-    + 'color:#2C2825;line-height:1.65;margin:0;text-decoration:underline;">'
-    + 'Todo nuestro contenido, apoyo y orientación — gratis durante 7 días.'
-    + '</p>'
+    // Offer block
+    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;margin-bottom:16px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + 'Tu primera semana es completamente gratuita.</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + d.offerMiddle + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2C2825;line-height:1.65;margin:0;text-decoration:underline;">'
+    + 'Luego $7/mes — menos de lo que cuesta una clase. Cancela cuando quieras, sin preguntas.</p>'
     + '</div>'
 
+    // Primary CTA button
     + '<a href="' + MEMBERSHIP_URL + '" id="main-cta-btn" '
     + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
-    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;">'
-    + defaultCtaLabel + '</a>'
+    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;" id="main-cta-btn">'
+    + d.ctaPrimary + '</a>'
 
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
-    + 'color:#9B1C1C;text-align:center;margin:0 0 20px;line-height:1.55;">'
-    + 'Si te vas ahora, la oferta desaparece. Es tu oportunidad de probar un método único, gratis.'
-    + '</p>'
+    // Below CTA line
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;'
+    + 'color:#7A706A;text-align:center;margin:0 0 20px;line-height:1.55;">'
+    + 'El primer paso es gratis. Lo que descubras en 7 días lo decides tú.</p>'
 
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
-    + 'Desde hace 25 años, cada día acompaño a personas a cantar en el escenario, hablar en público, y vivir como si hubieran nacido de nuevo.'
-    + '</p>'
-
-    + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
-    + 'padding:16px;margin-bottom:20px;">'
-    + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
-    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine Lafortune" '
-    + 'style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
-    + '<div>'
-    + '<div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
-    + 'color:#7A706A;margin-top:2px;">' + TESTI_META_ES + '</div>'
-    + '</div>'
-    + '</div>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'color:#2C2825;line-height:1.65;margin:0;font-style:italic;">'
-    + TESTI_TEXT_ES + '</p>'
+    // Second CTA
+    + '<div id="second-cta-block" style="margin-top:24px;padding-top:20px;border-top:0.5px solid #D8CDB5;">'
+    + '<a href="' + MEMBERSHIP_URL + '" id="second-cta-btn" '
+    + 'style="display:block;width:100%;background:transparent;color:#1B4B3A;'
+    + 'font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
+    + 'text-align:center;padding:14px 20px;border-radius:8px;text-decoration:none;'
+    + 'border:1.5px solid #1B4B3A;box-sizing:border-box;">'
+    + 'Tomo mi acceso gratuito de 7 días →</a>'
     + '</div>';
 
-  document.getElementById('conversion-section').innerHTML = conversionHTML;
-
-  // Render readiness circles
-  var readinessContainer = document.getElementById('readiness-options');
-  if (readinessContainer) {
-    for (var ri = 1; ri <= 5; ri++) {
+  // ── READINESS WIDGET CIRCLES ──
+  var roEl = document.getElementById('readiness-options');
+  if (roEl) {
+    roEl.innerHTML = '';
+    for (var i = 1; i <= 5; i++) {
       (function(score) {
-        var circle = document.createElement('div');
-        circle.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid var(--green-deep);'
-          + 'display:flex;align-items:center;justify-content:center;cursor:pointer;'
-          + 'font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;color:var(--green-deep);'
-          + 'transition:background 0.15s,color 0.15s;';
-        circle.textContent = String(score);
-        circle.addEventListener('click', function() {
-          // Update circle styles
-          var all = readinessContainer.querySelectorAll('div');
-          all.forEach(function(c) {
-            c.style.background = '';
-            c.style.color = 'var(--green-deep)';
+        var btn = document.createElement('button');
+        btn.textContent = score;
+        btn.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid var(--green-deep);'
+          + 'background:transparent;color:var(--green-deep);font-family:"DM Sans",sans-serif;'
+          + 'font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;';
+        btn.addEventListener('click', function() {
+          // Update all circles
+          roEl.querySelectorAll('button').forEach(function(b) {
+            b.style.background = 'transparent';
+            b.style.color = 'var(--green-deep)';
           });
-          circle.style.background = 'var(--green-deep)';
-          circle.style.color = '#fff';
-
+          btn.style.background = 'var(--green-deep)';
+          btn.style.color = '#F5F0E8';
           // Update CTA text
-          var ctaBtn = document.getElementById('main-cta-btn');
-          if (ctaBtn) {
-            var ctaText;
-            if (score <= 2) {
-              ctaText = 'Empezar gratis — sin compromiso, cancela cuando quieras →';
-            } else if (score === 3) {
-              var blockCtas = {
-                mandibulaire: 'Quiero liberar esta tensión →',
-                nerveux:      'Quiero una voz que no me falle cuando más la necesito →',
-                respiration:  'Quiero una voz que aguante tanto como yo →',
-                identite:     'Quiero que mi voz suene como quien realmente soy →'
-              };
-              ctaText = blockCtas[resultKey] || 'Quiero solucionar mi bloqueo →';
-            } else {
-              ctaText = 'Estoy list@ — empezar ahora →';
-            }
-            ctaBtn.textContent = ctaText;
+          var mainBtn = document.getElementById('main-cta-btn');
+          if (!mainBtn) return;
+          if (score <= 2) {
+            mainBtn.textContent = 'Empezar gratis — sin compromiso, cancela cuando quieras →';
+          } else if (score === 3) {
+            mainBtn.textContent = d.ctaPrimary;
+          } else {
+            mainBtn.textContent = 'Estoy list@ — empezar ahora →';
           }
         });
-        readinessContainer.appendChild(circle);
-      })(ri);
+        roEl.appendChild(btn);
+      })(i);
     }
   }
-  // ── END CONVERSION SECTION ───────────────────────────────────────
 
+  // ── CTA CLICK TRACKING ──
   var mainCtaBtn = document.getElementById('main-cta-btn');
   if (mainCtaBtn) {
     mainCtaBtn.addEventListener('click', function(e) {
       e.preventDefault();
       var dest = this.href;
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'Quiz_CTAClick');
-      }
-      setTimeout(function() {
-        window.location.href = dest;
-      }, 300);
+      if (typeof fbq !== 'undefined') fbq('trackCustom', 'Quiz_CTAClick');
+      setTimeout(function() { window.location.href = dest; }, 300);
     });
-  }
-
-  var secondCtaBlock = document.getElementById('second-cta-block');
-  var secondCtaBtn   = document.getElementById('second-cta-btn');
-  var secondCtaMsg   = document.getElementById('second-cta-urgency');
-
-  if (secondCtaBlock && secondCtaBtn && secondCtaMsg) {
-    secondCtaBtn.href = MEMBERSHIP_URL;
-    secondCtaBtn.textContent = 'Tomo mi acceso gratuito de 7 días →';
-    secondCtaMsg.textContent = 'Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.';
-    secondCtaBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      var dest = this.href;
-      if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'Quiz_CTAClick');
-      }
-      setTimeout(function() {
-        window.location.href = dest;
-      }, 300);
-    });
-    secondCtaBlock.style.display = 'block';
   }
 
   // Submit lead + full quiz data once per completion
@@ -1407,30 +1406,19 @@ function renderResult() {
     submitLead(resultKey, score);
   }
 
-  // Meta Pixel: result viewed — fire once per quiz completion
+  // ── META PIXEL ──
   if (!pixelFired && typeof fbq !== 'undefined') {
     pixelFired = true;
-    fbq('track', 'CompleteRegistration', {
-      content_name: resultKey,
-      content_category: pKey,
-      status: 'es'
-    });
+    fbq('track', 'CompleteRegistration', { content_name: resultKey, status: 'es' });
     fbq('trackCustom', 'Quiz_ResultViewed', {
-      vocal_block:  resultKey,
-      profile_type: pKey,
-      vocal_score:  score,
-      language:     'es'
+      vocal_block: resultKey, vocal_score: score, language: 'es'
     });
   }
 
-  // Trigger entrance animations
+  // ── ANIMATIONS ──
   setTimeout(function() { animateResultScreen(score); }, 20);
-
-  // Re-init Elfsight widgets
   setTimeout(function() {
-    if (window.eapps && window.eapps.Platform) {
-      window.eapps.Platform.initApps();
-    }
+    if (window.eapps && window.eapps.Platform) window.eapps.Platform.initApps();
   }, 600);
 }
 
