@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Qué bloquea tu voz? — Voz Esencia Academy</title>
+  <meta name="description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
+  <meta property="og:title" content="¿Qué bloquea tu voz? — Voz Esencia Academy">
+  <meta property="og:description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://quiz.veacademy.studio">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="¿Qué bloquea tu voz? — Voz Esencia Academy">
+  <meta name="twitter:description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Elfsight -->
+  <script src="https://elfsightcdn.com/platform.js" async></script>
+
+  <!-- Meta Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','1888097325094612');
+  fbq('track','PageView');
+  fbq('trackCustom','Quiz_PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1888097325094612&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel -->
+
+  <style>
+    :root {
+      --green-deep:  #1B4B3A;
+      --green-mid:   #2D7A5E;
+      --terra:       #C4845A;
+      --dark:        #2C2825;
+      --breath:      #F5F0E8;
+      --breath-mid:  #EDE5D6;
+      --green-ghost: #E1F5EE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--breath);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 24px 48px;
+    }
+    @media (max-width: 480px) { .page-wrapper { padding: 24px 16px 48px; } }
+
+    /* ── TOP SECTION ── */
+    .top-section { text-align: center; margin-bottom: 32px; }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 12px;
+    }
+
+    .main-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(2.6rem, 9vw, 3.5rem);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--dark);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .main-headline em { font-style: italic; color: var(--green-deep); }
+
+
+    .subheadline {
+      font-weight: 300;
+      font-size: 14px;
+      color: #7A706A;
+      line-height: 1.65;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* ── QUIZ CARD ── */
+    .quiz-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 0.5px solid #D8CDB5;
+      padding: 32px 28px;
+      box-shadow: 0 4px 24px rgba(27,75,58,0.06);
+    }
+    @media (max-width: 480px) { .quiz-card { padding: 24px 20px; } }
+
+    .quiz-card--dark { color: var(--breath); }
+    .quiz-card--dark .question-text { color: var(--breath); }
+    .quiz-card--dark .question-hint { color: rgba(245,240,232,0.6); }
+    .quiz-card--dark .option-card { border-color: rgba(245,240,232,0.3); color: var(--breath); }
+    .quiz-card--dark .option-card.selected { background: var(--breath); color: var(--dark); }
+    .quiz-card--dark .btn-back { color: var(--breath); border-color: rgba(245,240,232,0.4); }
+    .quiz-card--dark .btn-back:hover { border-color: var(--breath); }
+    .quiz-card--dark #question-counter { color: rgba(245,240,232,0.5); }
+    .quiz-card--dark .microfeedback { color: rgba(245,240,232,0.8); }
+    .quiz-card--dark .siguiente-affordance { color: #C4845A; }
+    .quiz-card--light { color: var(--dark); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-track {
+      height: 3px;
+      background: var(--breath-mid);
+      border-radius: 2px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--green-deep);
+      border-radius: 2px;
+      transition: width 0.35s ease;
+    }
+
+    /* ── QUESTION ── */
+    .question-counter {
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #7A706A;
+      margin-bottom: 10px;
+    }
+    .question-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 3.5vw, 21px);
+      font-weight: 500;
+      color: var(--dark);
+      line-height: 1.4;
+    }
+    .question-hint {
+      font-size: 12px;
+      font-style: italic;
+      color: #7A706A;
+      margin-top: 6px;
+    }
+
+    /* ── OPTIONS ── */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 16px 0 24px;
+    }
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 15px;
+      border-radius: 10px;
+      border: 0.5px solid #D8CDB5;
+      background: #FAF8F4;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option-card:hover { border-color: var(--green-deep); }
+    .option-card.selected {
+      border: 1.5px solid var(--green-deep);
+      background: var(--green-ghost);
+    }
+    .option-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+      flex-shrink: 0;
+      background: var(--breath-mid);
+      color: #7A706A;
+      transition: background 0.15s, color 0.15s;
+    }
+    .option-card.selected .option-badge { background: var(--green-deep); color: #fff; }
+    .option-text { font-size: 13px; color: var(--dark); line-height: 1.45; }
+
+
+    /* ── NAVIGATION ── */
+    .nav-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-back {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--dark);
+      background: transparent;
+      border: 1px solid #D8CDB5;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      margin-right: auto;
+    }
+    .btn-back:hover { border-color: var(--green-deep); }
+
+    .btn-next {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--green-deep);
+      border: none;
+      padding: 11px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .btn-next:hover:not(:disabled) { background: var(--green-mid); }
+    .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ── RESULT SCREEN ── */
+    .result-body {
+      font-weight: 500;
+      font-size: 15px;
+      color: #7A706A;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    #cost-block {
+      border-left: 3px solid #C4845A;
+      background: #FDF6F0;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    #cost-block .cost-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #C4845A;
+      margin-bottom: 8px;
+    }
+    #cost-block .cost-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #7A706A;
+      line-height: 1.7;
+    }
+    .btn-next, .btn-back, .option-card {
+      touch-action: manipulation;
+    }
+
+    /* ── LEAD SCREEN ── */
+    .lead-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .lead-subtext {
+      font-size: 13px;
+      font-weight: 300;
+      color: #7A706A;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .field-group { margin-bottom: 14px; }
+    .field-label {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+    .optional {
+      font-size: 11px;
+      font-weight: 300;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #A89E97;
+    }
+    .field-input {
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--dark);
+      background: #FAF8F4;
+      border: 0.5px solid #D8CDB5;
+      border-radius: 8px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s, border-width 0.15s;
+      -webkit-appearance: none;
+    }
+    .field-input:focus        { border-color: var(--green-deep); border-width: 1.5px; }
+    .field-input::placeholder { color: #C4BAB0; }
+    .lead-privacy {
+      font-size: 11px;
+      font-style: italic;
+      color: #A89E97;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #A89E97;
+      padding: 24px 0 40px;
+    }
+
+    /* ── RESULT ANIMATIONS ── */
+    @keyframes resultFadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes resultScalePop {
+      0%   { opacity: 0; transform: scale(0.82); }
+      65%  { opacity: 1; transform: scale(1.04); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── MICROFEEDBACK ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .microfeedback {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--green-mid);
+      text-align: center;
+      margin-top: 20px;
+      padding: 12px 16px;
+      opacity: 0;
+      animation: fadeInUp 0.3s ease forwards;
+    }
+    .siguiente-affordance {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--terra);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    /* ── BREATHE ANIMATION ── */
+    @keyframes breathe {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- TOP SECTION -->
+  <div class="top-section">
+    <h1 class="main-headline" id="main-headline"></h1>
+    <p class="subheadline" id="subheadline"></p>
+  </div>
+
+
+  <!-- Elfsight Google Reviews — hidden on result page -->
+  <div id="elfsight-top" style="margin-bottom:24px;min-height:100px;">
+    <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
+    <p id="widget-caption" style="text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#7A706A;margin-top:10px;">
+      Quiz 100% Gratuito — nos permite servirte mejor. 🙂
+    </p>
+  </div>
+
+  <!-- 92% social proof — shown during quiz only -->
+  <div id="quiz-social-proof" style="display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;font-style:italic;color:#7A706A;margin-bottom:12px;line-height:1.6;">
+    92% de las personas que comenzaron este quiz lo terminaron y encontraron valor en los ejercicios.
+  </div>
+
+  <!-- QUIZ CARD -->
+  <div class="quiz-card" id="quiz-card-el">
+
+
+    <!-- LEAD SCREEN -->
+    <div id="lead-screen">
+      <h2 class="lead-headline" id="lead-headline"></h2>
+      <p  class="lead-subtext"  id="lead-subtext"></p>
+      <form id="lead-form" onsubmit="handleLeadSubmit(event)" novalidate>
+        <div class="field-group">
+          <label class="field-label" for="lead-name"  id="label-name"></label>
+          <input class="field-input" type="text"  id="lead-name"  name="name"  autocomplete="name" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="lead-email" id="label-email"></label>
+          <input class="field-input" type="email" id="lead-email" name="email" autocomplete="email" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="lead-phone" id="label-phone"></label>
+          <input class="field-input" type="tel"   id="lead-phone" name="phone" autocomplete="tel">
+        </div>
+        <button type="submit" class="btn-next" id="btn-lead-submit" style="width:100%;margin-top:8px;padding:13px;"></button>
+      </form>
+      <p class="lead-privacy" id="lead-privacy"></p>
+      <p id="credibility-line" style="
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 11px;
+        font-weight: 300;
+        font-style: italic;
+        color: #A89E97;
+        margin: 16px 0 0;
+        line-height: 1.6;
+        border-top: 0.5px solid #EDE5D6;
+        padding-top: 14px;
+      ">
+        Creado por Mamselle Ruiz Coach — 25 años de experiencia · más de 1 000 voces acompañadas · quiz construido con los principios de biomecánica vocal
+      </p>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" style="display:none">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="question-counter" id="question-counter"></div>
+      <div class="question-text"    id="question-text"></div>
+      <div class="question-hint"    id="question-hint" style="display:none"></div>
+      <div class="options-list"     id="options-container"></div>
+      <div class="nav-row" id="nav-row">
+        <button class="btn-back" id="btn-back" onclick="handleBack()" style="display:none">← Atrás</button>
+        <button class="btn-next" id="btn-next" onclick="handleNext()" disabled>Continuar</button>
+      </div>
+    </div>
+
+    <!-- TRANSITION SCREEN -->
+    <div id="transition-screen" style="display:none; text-align:center; padding: 40px 24px;">
+      <div style="width:12px;height:12px;border-radius:50%;background:var(--green-deep);
+        margin:0 auto 32px; animation: breathe 1.5s ease-in-out infinite;"></div>
+      <div style="background:rgba(123,94,167,0.06); border-left:4px solid #7B5EA7;
+        border-radius:12px; padding:20px 24px; max-width:380px; margin:0 auto 24px; text-align:left;">
+        <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+          font-style:italic;color:#2C2825;line-height:1.65;margin:0 0 16px;">
+          «&nbsp;Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar.&nbsp;»
+        </p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png"
+            style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+          <span style="font-family:'DM Sans',sans-serif;font-size:12px;color:#7A706A;">Justine Lafortune · Canada</span>
+        </div>
+      </div>
+      <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:#7A706A;
+        letter-spacing:2px;text-transform:uppercase;">Preparando tu diagnóstico...</p>
+    </div>
+
+    <!-- TIEBREAK SCREEN -->
+    <div id="tiebreak-screen" style="display:none">
+      <div class="progress-track">
+        <div class="progress-fill" style="width:100%"></div>
+      </div>
+      <div class="question-counter">Una última pregunta</div>
+      <div class="question-text" style="margin-bottom:16px;">¿Cuál de estas describe mejor lo que sientes con tu voz?</div>
+      <div class="options-list" id="tiebreak-options-container"></div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" style="display:none">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+        <div style="flex-shrink:0;" id="score-arc-container"></div>
+        <div style="flex:1;min-width:0;">
+          <div id="result-badge-label"
+            style="display:inline-block;font-size:11px;font-weight:500;
+            letter-spacing:0.07em;text-transform:uppercase;color:#085041;
+            background:#E1F5EE;padding:4px 12px;border-radius:20px;
+            margin-bottom:8px;"></div>
+          <div id="result-title"
+            style="font-family:'Cormorant Garamond',serif;font-size:30px;
+            font-weight:500;color:#2C2825;line-height:1.15;margin:0;"></div>
+        </div>
+      </div>
+      <div class="result-body"  id="result-body"></div>
+      <div id="video-container"></div>
+      <div id="cost-block" style="display:none;"></div>
+      <div id="conversion-section"></div>
+      <!-- Elfsight Google Reviews — bottom of result page -->
+      <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid #D8CDB5;transform:scale(0.85);transform-origin:top center;">
+        <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
+      </div>
+      <div id="second-cta-block" style="display:none;margin-top:24px;padding-top:20px;border-top:0.5px solid #D8CDB5;">
+        <a id="second-cta-btn" href="#"
+          style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;
+          font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+          text-align:center;padding:17px 20px;border-radius:8px;
+          text-decoration:none;letter-spacing:0.01em;margin-bottom:8px;
+          box-sizing:border-box;">
+          Tomo mi acceso gratuito de 7 días →
+        </a>
+        <p id="second-cta-urgency"
+          style="font-family:'DM Sans',sans-serif;font-size:12px;
+          font-weight:500;color:#9B1C1C;text-align:center;margin:0;">
+          Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /quiz-card -->
+
+  <!-- Logo outside quiz card — ES only -->
+  <div id="logo-outside-es" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-es.png" alt="Voz Esencia™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
+
+  <div class="footer" id="site-footer"></div>
+</div><!-- /page-wrapper -->
+
+<script>
+// ================================================================
+// CONFIGURATION
+// ================================================================
+const lang = 'es';
+
+const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+
+const FORMSPREE_ENDPOINT_V2 = 'PLACEHOLDER_INSERT_ENDPOINT';
+
+// ================================================================
+// QUESTIONS
+// ================================================================
+const QUESTIONS = [
+  {
+    id: 0, type: 'single',
+    text: "Piensa en un momento en que tu voz te falló cuando más la necesitabas. ¿Qué pasó?",
+    options: [
+      "Me puse nervios@ y mi voz se cortó, tembló o se cerró",
+      "Sentí tensión en la garganta o mandíbula y no pude cantar o hablar como quería",
+      "Mi voz se fue apagando — me quedé sin aire o sin fuerza antes de terminar",
+      "Escuché mi voz y no me reconocí — no sonaba como yo"
+    ],
+    votes: ['nerveux', 'mandibulaire', 'respiration', 'identite'],
+    microfeedback: "No fue tu culpa. Ese momento tiene una causa exacta. Y tiene nombre."
+  },
+  {
+    id: 1, type: 'single',
+    text: "Cuando tu voz falla, ¿dónde lo sientes en tu cuerpo?",
+    options: [
+      "En la mandíbula o la garganta — hay algo apretado que no se suelta",
+      "En el aire — se me acaba antes de terminar lo que quiero decir",
+      "En todo el cuerpo — los nervios toman el control",
+      "En ningún lugar físico — es más como que mi voz no es mía"
+    ],
+    votes: ['mandibulaire', 'respiration', 'nerveux', 'identite'],
+    microfeedback: "Eso que sientes tiene una explicación biomecánica. No es solo en tu cabeza."
+  },
+  {
+    id: 2, type: 'multi',
+    text: "Seguramente ya intentaste algo para mejorar tu voz. ¿Qué fue?",
+    options: [
+      "Vi videos en YouTube o busqué ejercicios gratis",
+      "Hice ejercicios de respiración o de diafragma",
+      "Tuve clases con un profe o un coach vocal",
+      "No intenté nada todavía — no sabía por dónde empezar"
+    ],
+    votes: null,
+    microfeedbackConditional: true,
+    microfeedbackDefault: "Lo que probaste trata los síntomas. Lo que necesitas trata la causa. Son cosas distintas.",
+    microfeedbackNone: "Bien. Así no tenemos que desaprender nada. Empezamos desde donde estás."
+  },
+  {
+    id: 3, type: 'multi',
+    text: "Imagina que dentro de 30 días tu voz cambió. ¿Qué hizo que funcionara esta vez?",
+    options: [
+      "Supe exactamente qué tenía yo — no consejos genéricos",
+      "Tuve ejercicios específicos para mi tipo de bloqueo",
+      "Alguien me guió y me dijo si iba bien",
+      "Pude aprender a mi ritmo, sin presión"
+    ],
+    votes: null,
+    microfeedback: "Todo eso existe. Y está diseñado exactamente para tu tipo de bloqueo."
+  },
+  {
+    id: 4, type: 'single',
+    text: "Sé honesta contigo misma: ¿qué es lo que realmente no tuviste antes?",
+    options: [
+      "Un diagnóstico real — nunca supe qué tenía exactamente",
+      "Un método para mí, no para todos",
+      "Apoyo y constancia — empiezo pero no termino sola",
+      "Un lugar donde practicar sin miedo a equivocarme"
+    ],
+    votes: null,
+    microfeedback: "Eso no es una falla tuya. Es lo que pasa cuando el sistema que usas no fue hecho para ti."
+  },
+  {
+    id: 5, type: 'single',
+    text: "Si tu voz pudiera ser exactamente como la sientes por dentro, ¿cómo sería?",
+    options: [
+      "Cantar o hablar sin tensión, sin grietas, sin contenerme",
+      "Una voz que aguante todo el día sin cansarse ni apagarse",
+      "Una voz que responda igual sola que frente a los demás",
+      "Una voz que suene como quien realmente soy"
+    ],
+    votes: ['mandibulaire', 'respiration', 'nerveux', 'identite'],
+    microfeedback: "Eso no es un sueño. Es lo que pasa cuando el bloqueo se libera."
+  },
+  {
+    id: 6, type: 'single',
+    text: "Una última cosa — ¿cómo describes tu relación con tu voz ahora mismo?",
+    options: [
+      "Canto — en clases, en escenario o por placer",
+      "Uso mi voz para trabajar — enseño, hablo en público o hago coaching",
+      "Quiero crear contenido pero mi voz me frena",
+      "Solo quiero que mi voz suene como quien soy"
+    ],
+    votes: null,
+    microfeedback: "Perfecto. Tu diagnóstico está list@."
+  },
+  {
+    id: 7, type: 'textarea',
+    text: "¿Hay algo más que te gustaría que Mamselle supiera sobre tu voz?",
+    placeholder: "Puedes compartir lo que quieras — una situación particular, una pregunta, un contexto que consideres importante. Nada aquí es obligatorio.",
+    votes: null,
+    microfeedback: null
+  }
+];
+
+// Tiebreak question — shown only when calculateResult() returns isTie:true
+const TIEBREAK_OPTIONS = {
+  mandibulaire: "Mi voz se tensa físicamente — siento la mandíbula o la garganta apretadas",
+  respiration:  "Mi voz existe pero se agota — necesita esfuerzo para durar",
+  nerveux:      "Mi voz cambia según cómo me siento — los nervios la controlan",
+  identite:     "Mi voz existe pero no me representa — no me reconozco en ella"
+};
+
+// ================================================================
+// COST-OF-INACTION DATA
+// ================================================================
+const COST_DATA = {
+  mandibulaire: "Este patrón no desaparece solo — se hace más profundo. Cada día que tu mandíbula compensa, tu garganta aprende a trabajar más duro de lo que necesita.",
+  respiration:  "Un patrón respiratorio compensatorio no mejora con el tiempo — se instala más. Cada sesión intensa lo refuerza un poco más en la dirección equivocada.",
+  nerveux:      "Tu sistema nervioso aprende lo que le repites. Sin recalibración, seguirá apagando tu voz exactamente cuando más la necesitas.",
+  identite:     "Una voz que no te representa termina por convencerte de que eso eres. No es un problema de voz — es un problema de presencia, de autoridad, de vida."
+};
+
+// ================================================================
+// RESULTS DATA
+// ================================================================
+const RESULTS = {
+  pro: {
+    mandibulaire: {
+      title: "Bloqueo Mandibular",
+      body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+    },
+    respiration: {
+      title: "Bloqueo de Respiración",
+      body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
+    },
+    nerveux: {
+      title: "Bloqueo del Sistema Nervioso",
+      body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
+    },
+    identite: {
+      title: "Bloqueo de Identidad Vocal",
+      body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
+    }
+  },
+  stu: {
+    mandibulaire: {
+      title: "Bloqueo Mandibular",
+      body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+    },
+    respiration: {
+      title: "Bloqueo de Respiración",
+      body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
+    },
+    nerveux: {
+      title: "Bloqueo del Sistema Nervioso",
+      body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
+    },
+    identite: {
+      title: "Bloqueo de Identidad Vocal",
+      body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
+    }
+  }
+};
+
+// ================================================================
+// BACKGROUND GRADIENT PROGRESSION
+// ================================================================
+const BG_PROGRESSION = [
+  '#2C2825', '#3D3632', '#524A45', '#1B4B3A',
+  '#2D7A5E', '#D8CDB5', '#EDE5D6', '#F5F0E8'
+];
+
+// ================================================================
+// VOCAL HEALTH SCORE
+// ================================================================
+function calcVocalScore(ans) {
+  var score = 50;
+  // Q0 answer: nerveux=0, mandibulaire=1, respiration=2, identite=3
+  var q0penalties = [10, 15, 12, 8];
+  if (ans[0] !== null && ans[0] !== undefined) score -= (q0penalties[ans[0]] || 0);
+  // Q1 physical answer
+  var q1penalties = [15, 12, 10, 8];
+  if (ans[1] !== null && ans[1] !== undefined) score -= (q1penalties[ans[1]] || 0);
+  if (score < 15) score = 15;
+  if (score > 75) score = 75;
+  return Math.round(score);
+}
+
+function renderScoreArc(score) {
+  var radius = 36;
+  var circumference = 2 * Math.PI * radius;
+  return '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px;">'
+    + '<svg width="96" height="96" viewBox="0 0 96 96">'
+    + '<circle cx="48" cy="48" r="' + radius + '" fill="none" stroke="#EDE5D6" stroke-width="6"/>'
+    + '<circle id="arc-progress-circle" cx="48" cy="48" r="' + radius + '" fill="none" stroke="#1B4B3A" stroke-width="6"'
+    + ' stroke-dasharray="' + circumference.toFixed(1) + '"'
+    + ' stroke-dashoffset="' + circumference.toFixed(1) + '"'
+    + ' stroke-linecap="round"'
+    + ' transform="rotate(-90 48 48)"/>'
+    + '<text x="48" y="44" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif"'
+    + ' font-size="22" font-weight="400" fill="#2C2825" id="arc-score-number">0</text>'
+    + '<text x="48" y="58" text-anchor="middle" font-family="DM Sans, sans-serif"'
+    + ' font-size="9" font-weight="400" fill="#A89E97">/100</text>'
+    + '</svg>'
+    + '<span style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;'
+    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;">'
+    + 'Salud vocal actual</span>'
+    + '</div>';
+}
+
+// ================================================================
+// APP STATE
+// ================================================================
+let currentQ      = -1;   // -1 = lead screen, 0–7 = quiz questions, 'tiebreak' = tiebreak
+let answers = [null, null, [], [], null, null, null, ''];
+// index 0 = Q0 single, 1 = Q1 single, 2 = Q2 multi, 3 = Q3 multi,
+// 4 = Q4 single, 5 = Q5 single, 6 = Q6 single, 7 = Q7 textarea
+let tiebreakAnswer = null;
+let isTiebreakUsed = false;
+let isTiebreakActive = false;
+
+let profile       = null;   // 'pro' | 'stu'
+let showResult    = false;
+let leadData      = { name: '', email: '', phone: '' };
+let leadSubmitted = false;
+let pixelFired    = false;
+let microfeedbackShown = false;
+
+const RESULT_KEYS = ['mandibulaire', 'respiration', 'nerveux', 'identite'];
+
+// ================================================================
+// SCORING
+// ================================================================
+function calculateResult() {
+  const scores = { mandibulaire: 0, respiration: 0, nerveux: 0, identite: 0 };
+  const BLOCKS = ['mandibulaire', 'respiration', 'nerveux', 'identite'];
+
+  // Q0 votes: ['nerveux','mandibulaire','respiration','identite']
+  if (answers[0] !== null) scores[['nerveux','mandibulaire','respiration','identite'][answers[0]]]++;
+
+  // Q1 votes: ['mandibulaire','respiration','nerveux','identite']
+  if (answers[1] !== null) scores[['mandibulaire','respiration','nerveux','identite'][answers[1]]]++;
+
+  // Q5 votes: ['mandibulaire','respiration','nerveux','identite']
+  if (answers[5] !== null) scores[['mandibulaire','respiration','nerveux','identite'][answers[5]]]++;
+
+  // Q2, Q3, Q4, Q6, Q7 — no block votes
+
+  const maxScore = Math.max(...Object.values(scores));
+  const tied = BLOCKS.filter(b => scores[b] === maxScore);
+
+  if (tied.length === 1) return { winner: tied[0], isTie: false, tiedBlocks: [] };
+  return { winner: null, isTie: true, tiedBlocks: tied };
+}
+
+// ================================================================
+// RENDER
+// ================================================================
+function render() {
+  document.documentElement.lang = 'es';
+
+  // Logo placement
+  document.getElementById('logo-outside-es').style.display = 'block';
+
+  var hlEl = document.getElementById('main-headline');
+  hlEl.innerHTML = '¿Tu voz te falla cuando más la necesitas?';
+  hlEl.style.display = (!showResult && currentQ === -1) ? 'block' : 'none';
+
+  var subEl = document.getElementById('subheadline');
+  if (!showResult && currentQ === -1) {
+    subEl.innerHTML = '<span style="display:block;font-size:15px;font-weight:300;color:#7A706A;line-height:1.65;">En 2 minutos descubrimos exactamente qué la bloquea — y qué hacer al respecto.</span>';
+  }
+  subEl.style.display = (currentQ === -1 && !showResult) ? 'block' : 'none';
+
+  var footerEl = document.getElementById('site-footer');
+  if (footerEl) footerEl.textContent = '© 2026 Voz Esencia™ Academy · Mamselle Ruiz Coach';
+
+  // Elfsight top widget — shown on lead page only
+  document.getElementById('elfsight-top').style.display = (!showResult && currentQ === -1) ? 'block' : 'none';
+
+  // 92% social proof — shown during quiz only
+  var proofEl = document.getElementById('quiz-social-proof');
+  if (proofEl) {
+    proofEl.style.display = (!showResult && currentQ !== -1 && currentQ !== 'tiebreak') ? 'block' : 'none';
+  }
+
+  if (showResult) {
+    document.getElementById('lead-screen').style.display       = 'none';
+    document.getElementById('quiz-screen').style.display       = 'none';
+    document.getElementById('tiebreak-screen').style.display   = 'none';
+    document.getElementById('transition-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display     = 'block';
+    renderResult();
+  } else if (currentQ === 'tiebreak') {
+    document.getElementById('lead-screen').style.display       = 'none';
+    document.getElementById('quiz-screen').style.display       = 'none';
+    document.getElementById('tiebreak-screen').style.display   = 'block';
+    document.getElementById('transition-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display     = 'none';
+    renderTiebreak();
+  } else if (currentQ === -1) {
+    document.getElementById('lead-screen').style.display       = 'block';
+    document.getElementById('quiz-screen').style.display       = 'none';
+    document.getElementById('tiebreak-screen').style.display   = 'none';
+    document.getElementById('transition-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display     = 'none';
+    renderLead();
+  } else {
+    document.getElementById('lead-screen').style.display       = 'none';
+    document.getElementById('quiz-screen').style.display       = 'block';
+    document.getElementById('tiebreak-screen').style.display   = 'none';
+    document.getElementById('transition-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display     = 'none';
+    renderQuiz();
+  }
+}
+
+function renderQuiz() {
+  const q = QUESTIONS[currentQ];
+  microfeedbackShown = false;
+
+  // Clear any microfeedback + Siguiente left over from the previous question
+  var existingFeedback = document.getElementById('microfeedback-text');
+  if (existingFeedback) existingFeedback.remove();
+  var existingSiguiente = document.getElementById('btn-siguiente');
+  if (existingSiguiente) existingSiguiente.remove();
+  // Also sweep by class in case old elements used class-only
+  document.querySelectorAll('.microfeedback, .siguiente-affordance').forEach(function(el) { el.remove(); });
+
+  // Apply background progression
+  var quizCard = document.getElementById('quiz-card-el');
+  quizCard.style.background = BG_PROGRESSION[currentQ] || '#F5F0E8';
+  quizCard.style.transition = 'background 400ms ease';
+  // Dark/light theme classes
+  quizCard.classList.remove('quiz-card--dark', 'quiz-card--light');
+  if (currentQ <= 4) {
+    quizCard.classList.add('quiz-card--dark');
+  } else {
+    quizCard.classList.add('quiz-card--light');
+  }
+
+  // Progress
+  document.getElementById('progress-fill').style.width = ((currentQ + 1) / 8 * 100) + '%';
+
+  // Counter
+  document.getElementById('question-counter').textContent = 'Pregunta ' + (currentQ + 1) + ' / 8';
+
+  // Question text
+  document.getElementById('question-text').textContent = q.text;
+
+  // Hint
+  const hintEl = document.getElementById('question-hint');
+  if (q.type === 'multi') {
+    hintEl.textContent   = 'Selecciona todo lo que aplique.';
+    hintEl.style.display = 'block';
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  // Options
+  renderOptions(q);
+
+  // Back button
+  const backBtn = document.getElementById('btn-back');
+  backBtn.style.display = 'block';
+  backBtn.textContent   = '← Atrás';
+
+  // Nav row / next button
+  const navRow = document.getElementById('nav-row');
+  const nextBtn = document.getElementById('btn-next');
+
+  if (q.type === 'textarea') {
+    // Last question — show submit button
+    nextBtn.style.display   = 'block';
+    nextBtn.disabled        = false;
+    nextBtn.textContent     = 'Ver mi resultado →';
+    navRow.style.justifyContent = 'flex-end';
+  } else {
+    // single and multi — hide btn-next; Siguiente affordance handles navigation
+    nextBtn.style.display = 'none';
+    navRow.style.justifyContent = 'flex-start';
+  }
+
+  // Swipe detection
+  var swipeStartX = 0;
+  quizCard.ontouchstart = function(e) { swipeStartX = e.touches[0].clientX; };
+  quizCard.ontouchend = function(e) {
+    var delta = e.changedTouches[0].clientX - swipeStartX;
+    if (delta >= 50 && microfeedbackShown) advanceQuestion();
+  };
+}
+
+function hasCurrentAnswer() {
+  if (currentQ === 'tiebreak') return tiebreakAnswer !== null;
+  const q = QUESTIONS[currentQ];
+  if (q.type === 'textarea') return true;
+  return q.type === 'multi'
+    ? answers[currentQ].length > 0
+    : answers[currentQ] !== null;
+}
+
+const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+function renderOptions(q) {
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+
+  // Handle textarea type
+  if (q.type === 'textarea') {
+    const ta = document.createElement('textarea');
+    ta.id = 'q7-textarea';
+    ta.style.cssText = 'width:100%;min-height:100px;border:0.5px solid #D8CDB5;'
+      + 'border-radius:8px;padding:12px 14px;font-family:\'DM Sans\',sans-serif;'
+      + 'font-size:13px;font-weight:300;color:#2C2825;background:#FAF8F4;'
+      + 'resize:vertical;outline:none;box-sizing:border-box;';
+    ta.placeholder = q.placeholder || '';
+    ta.value = answers[q.id] || '';
+    ta.addEventListener('input', function() { answers[q.id] = ta.value; });
+    ta.addEventListener('focus', function() { ta.style.border = '1px solid #1B4B3A'; });
+    ta.addEventListener('blur',  function() { ta.style.border = '0.5px solid #D8CDB5'; });
+    container.appendChild(ta);
+    return;
+  }
+
+  const opts = q.options;
+
+  opts.forEach(function(text, idx) {
+    const isSelected = q.type === 'multi'
+      ? answers[q.id].includes(idx)
+      : answers[q.id] === idx;
+
+    const card = document.createElement('div');
+    card.className = 'option-card' + (isSelected ? ' selected' : '');
+
+    const badge = document.createElement('div');
+    badge.className   = 'option-badge';
+    badge.textContent = LETTERS[idx];
+
+    const label = document.createElement('div');
+    label.className   = 'option-text';
+    label.textContent = text;
+
+    card.appendChild(badge);
+    card.appendChild(label);
+
+    card.addEventListener('click', function() { handleOptionClick(q.id, idx, q); });
+    container.appendChild(card);
+  });
+}
+
+function getMicrofeedback(qId, idx, currentAnswer) {
+  var q = QUESTIONS.find(function(q) { return q.id === qId; });
+  if (!q || !q.microfeedback && !q.microfeedbackConditional) return null;
+  if (q.microfeedbackConditional) {
+    var arr = Array.isArray(currentAnswer) ? currentAnswer : [];
+    var onlyNothing = (arr.length === 1 && arr[0] === 3);
+    return onlyNothing ? q.microfeedbackNone : q.microfeedbackDefault;
+  }
+  return q.microfeedback || null;
+}
+
+function showMicrofeedback(text, container, useDarkColor) {
+  // Remove any existing microfeedback/siguiente (by ID and class)
+  var oldFb = document.getElementById('microfeedback-text');
+  if (oldFb) oldFb.remove();
+  var oldSig = document.getElementById('btn-siguiente');
+  if (oldSig) oldSig.remove();
+
+  var mf = document.createElement('p');
+  mf.id = 'microfeedback-text';
+  mf.className = 'microfeedback';
+  mf.textContent = text;
+  mf.style.opacity = '0';
+  mf.style.transition = 'opacity 0.3s ease';
+  if (useDarkColor) mf.style.color = 'var(--dark)';
+  container.appendChild(mf);
+  microfeedbackShown = true;
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { mf.style.opacity = '1'; });
+  });
+
+  setTimeout(function() {
+    // Only inject Siguiente if microfeedback is still the current one
+    if (document.getElementById('microfeedback-text') !== mf) return;
+    var sig = document.createElement('button');
+    sig.id = 'btn-siguiente';
+    sig.className = 'siguiente-affordance';
+    sig.textContent = 'Siguiente →';
+    sig.style.opacity = '0';
+    sig.style.transition = 'opacity 0.3s ease';
+    sig.style.cssText += ';display:block;margin:14px auto 0;background:none;border:none;' +
+      'font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;' +
+      'letter-spacing:2px;text-transform:uppercase;color:var(--terra);cursor:pointer;padding:8px 16px;';
+    sig.addEventListener('click', function() { advanceQuestion(); });
+    container.appendChild(sig);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { sig.style.opacity = '1'; });
+    });
+  }, 800);
+}
+
+function handleOptionClick(qId, idx, q) {
+  if (q.type === 'single') {
+    answers[qId] = idx;
+    renderOptions(q);
+  } else {
+    // multi — toggle selection
+    const arr = answers[qId];
+    const pos = arr.indexOf(idx);
+    if (pos >= 0) { arr.splice(pos, 1); } else { arr.push(idx); }
+    renderOptions(q);
+  }
+
+  // Show microfeedback for any question type that has it
+  var feedbackText = getMicrofeedback(qId, idx, answers[qId]);
+  var quizScreen = document.getElementById('quiz-screen');
+  if (feedbackText) {
+    // Q6 (index 5) and Q7 (index 6) have light backgrounds — use dark text
+    var isLightQ = (currentQ === 5 || currentQ === 6);
+    showMicrofeedback(feedbackText, quizScreen, isLightQ);
+  } else if (q.type === 'single') {
+    // Single with no feedback — advance immediately
+    microfeedbackShown = true;
+    advanceQuestion();
+  }
+}
+
+function handleBack() {
+  if (currentQ === 'tiebreak') {
+    // go back to last quiz question
+    currentQ = QUESTIONS.length - 1;
+    isTiebreakActive = false;
+    render();
+  } else if (currentQ > 0) {
+    currentQ--;
+    render();
+  } else if (currentQ === 0) {
+    currentQ = -1;
+    render();
+  }
+}
+
+function advanceQuestion() {
+  microfeedbackShown = false;
+  if (currentQ === QUESTIONS.length - 1) {
+    // Last question — grab textarea value then go to transition
+    var ta = document.getElementById('q7-textarea');
+    if (ta) answers[7] = ta.value;
+    // Profile detection: Q6 (index 6) option 1 = pro
+    profile = (answers[6] === 1) ? 'pro' : 'stu';
+
+    // Check for tie
+    var calcRes = calculateResult();
+    if (calcRes.isTie) {
+      isTiebreakActive = true;
+      currentQ = 'tiebreak';
+      render();
+    } else {
+      showTransitionThenResult();
+    }
+    return;
+  }
+  currentQ++;
+  render();
+}
+
+function handleNext() {
+  // Only called by textarea "Ver mi resultado →" button
+  advanceQuestion();
+}
+
+function showTransitionThenResult() {
+  // Show all screens hidden, transition visible
+  document.getElementById('lead-screen').style.display       = 'none';
+  document.getElementById('quiz-screen').style.display       = 'none';
+  document.getElementById('tiebreak-screen').style.display   = 'none';
+  document.getElementById('transition-screen').style.display = 'block';
+  document.getElementById('result-screen').style.display     = 'none';
+  document.getElementById('quiz-social-proof').style.display = 'none';
+
+  setTimeout(function() {
+    showResult = true;
+    sessionStorage.setItem('veaQuizState', JSON.stringify({ answers: answers, profile: profile, leadData: leadData, tiebreakAnswer: tiebreakAnswer }));
+    render();
+  }, 3000);
+}
+
+// ================================================================
+// TIEBREAK
+// ================================================================
+function renderTiebreak() {
+  var calcRes = calculateResult();
+  var tiedBlocks = calcRes.tiedBlocks;
+  var container = document.getElementById('tiebreak-options-container');
+  container.innerHTML = '';
+
+  tiedBlocks.forEach(function(block) {
+    var text = TIEBREAK_OPTIONS[block];
+    var card = document.createElement('div');
+    card.className = 'option-card' + (tiebreakAnswer === block ? ' selected' : '');
+
+    var badge = document.createElement('div');
+    badge.className = 'option-badge';
+    badge.textContent = '○';
+
+    var label = document.createElement('div');
+    label.className = 'option-text';
+    label.textContent = text;
+
+    card.appendChild(badge);
+    card.appendChild(label);
+    card.addEventListener('click', function() {
+      tiebreakAnswer = block;
+      isTiebreakUsed = true;
+      showTransitionThenResult();
+    });
+    container.appendChild(card);
+  });
+}
+
+function getResultKey() {
+  if (isTiebreakActive && tiebreakAnswer) return tiebreakAnswer;
+  var calcRes = calculateResult();
+  if (!calcRes.isTie) return calcRes.winner;
+  // Fallback: first tied block
+  return calcRes.tiedBlocks[0] || 'mandibulaire';
+}
+
+// ================================================================
+// RESULT
+// ================================================================
+function renderResult() {
+  const resultKey = getResultKey();
+  const pKey      = profile || 'stu';
+  const d         = RESULTS[pKey][resultKey];
+
+  // Score arc
+  const score = calcVocalScore(answers);
+
+  document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
+
+  // Badge
+  document.getElementById('result-badge-label').textContent = 'Tu bloqueo principal';
+
+  // Title
+  document.getElementById('result-title').textContent = d.title;
+
+  // Result body — simplified (just d.body, no old personalization inputs)
+  var bodyHTML =
+    '<div style="margin-bottom:14px;">'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#1B4B3A;margin-bottom:8px;">'
+    + 'Lo que ocurre'
+    + '</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;color:#7A706A;line-height:1.7;">' + d.body + '</div>'
+    + '</div>';
+
+  document.getElementById('result-body').innerHTML = bodyHTML;
+
+  // Cost-of-inaction block
+  var costEl = document.getElementById('cost-block');
+  var costText = COST_DATA[resultKey] || '';
+  var costTitle = "Lo que cuesta no hacer nada";
+  if (costText) {
+    costEl.innerHTML = '<div class="cost-title">' + costTitle + '</div><div class="cost-body">' + costText + '</div>';
+    costEl.style.display = 'block';
+  } else {
+    costEl.style.display = 'none';
+  }
+
+  // Video embeds
+  var videoIds = {
+    mandibulaire: 'VfoYECa3lnE',
+    respiration:  'uAlIEAIVxgM',
+    nerveux:      'pe2XyNkRolo',
+    identite:     'dbkzQoZaiJA'
+  };
+
+  var vid = videoIds[resultKey] || '';
+  var videoContainer = document.getElementById('video-container');
+  if (vid && videoContainer) {
+    videoContainer.innerHTML =
+      '<div style="position:relative;padding-bottom:56.25%;height:0;'
+      + 'overflow:hidden;border-radius:12px;margin:20px 0;">'
+      + '<iframe src="https://www.youtube.com/embed/' + vid
+      + '?rel=0&modestbranding=1" '
+      + 'style="position:absolute;top:0;left:0;width:100%;height:100%;'
+      + 'border:none;" allowfullscreen loading="lazy"></iframe>'
+      + '</div>';
+  } else if (videoContainer) {
+    videoContainer.innerHTML = '';
+  }
+
+  // ── CONVERSION SECTION ──────────────────────────────────────────
+  var TESTI_TEXT_ES =
+    '«\u00a0Mamselle guía los grupos maravillosamente bien. '
+    + '¡Cambió mi vida (no es broma!) '
+    + 'Yo que no creía que podía cantar.\u00a0»';
+  var TESTI_META_ES = 'Justine Lafortune · Canada';
+  var JUSTINE_PHOTO = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
+
+  var defaultCtaLabel = 'Quiero solucionar mi bloqueo →';
+
+  var conversionHTML =
+    '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
+
+    // Social proof line
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
+    + 'letter-spacing:3px;text-transform:uppercase;color:var(--green-deep);'
+    + 'text-align:center;margin-bottom:20px;">'
+    + 'Más de 1,000 voces liberadas con el Protocolo Voz Esencia™'
+    + '</p>'
+
+    // Readiness widget
+    + '<div id="readiness-widget" style="text-align:center;margin:28px 0 20px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;'
+    + 'color:#7A706A;margin-bottom:14px;letter-spacing:0.02em;">'
+    + '¿Qué tan list@ te sientes para trabajar en esto?'
+    + '</p>'
+    + '<div id="readiness-options" style="display:flex;justify-content:center;gap:10px;"></div>'
+    + '</div>'
+
+    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;'
+    + 'margin-bottom:16px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
+    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + 'Tu voz tiene un patrón específico que está limitando todo lo que expresas. Identificarlo fue el primer paso. Soltarlo es el siguiente.<br><br>Accede a la Academia Voz Esencia 7 días completamente gratis — luego solo $7/mes. Cancela cuando quieras, sin preguntas.'
+    + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
+    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + 'Recuerda — tú eres tu voz. Trabajar en ella es una de las mejores inversiones que jamás harás.'
+    + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
+    + 'color:#2C2825;line-height:1.65;margin:0;text-decoration:underline;">'
+    + 'Todo nuestro contenido, apoyo y orientación — gratis durante 7 días.'
+    + '</p>'
+    + '</div>'
+
+    + '<a href="' + MEMBERSHIP_URL + '" id="main-cta-btn" '
+    + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
+    + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
+    + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
+    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;">'
+    + defaultCtaLabel + '</a>'
+
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
+    + 'color:#9B1C1C;text-align:center;margin:0 0 20px;line-height:1.55;">'
+    + 'Si te vas ahora, la oferta desaparece. Es tu oportunidad de probar un método único, gratis.'
+    + '</p>'
+
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
+    + 'Desde hace 25 años, cada día acompaño a personas a cantar en el escenario, hablar en público, y vivir como si hubieran nacido de nuevo.'
+    + '</p>'
+
+    + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
+    + 'padding:16px;margin-bottom:20px;">'
+    + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
+    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine Lafortune" '
+    + 'style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+    + '<div>'
+    + '<div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
+    + 'color:#7A706A;margin-top:2px;">' + TESTI_META_ES + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
+    + 'color:#2C2825;line-height:1.65;margin:0;font-style:italic;">'
+    + TESTI_TEXT_ES + '</p>'
+    + '</div>';
+
+  document.getElementById('conversion-section').innerHTML = conversionHTML;
+
+  // Render readiness circles
+  var readinessContainer = document.getElementById('readiness-options');
+  if (readinessContainer) {
+    for (var ri = 1; ri <= 5; ri++) {
+      (function(score) {
+        var circle = document.createElement('div');
+        circle.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid var(--green-deep);'
+          + 'display:flex;align-items:center;justify-content:center;cursor:pointer;'
+          + 'font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;color:var(--green-deep);'
+          + 'transition:background 0.15s,color 0.15s;';
+        circle.textContent = String(score);
+        circle.addEventListener('click', function() {
+          // Update circle styles
+          var all = readinessContainer.querySelectorAll('div');
+          all.forEach(function(c) {
+            c.style.background = '';
+            c.style.color = 'var(--green-deep)';
+          });
+          circle.style.background = 'var(--green-deep)';
+          circle.style.color = '#fff';
+
+          // Update CTA text
+          var ctaBtn = document.getElementById('main-cta-btn');
+          if (ctaBtn) {
+            var ctaText;
+            if (score <= 2) {
+              ctaText = 'Empezar gratis — sin compromiso, cancela cuando quieras →';
+            } else if (score === 3) {
+              var blockCtas = {
+                mandibulaire: 'Quiero liberar esta tensión →',
+                nerveux:      'Quiero una voz que no me falle cuando más la necesito →',
+                respiration:  'Quiero una voz que aguante tanto como yo →',
+                identite:     'Quiero que mi voz suene como quien realmente soy →'
+              };
+              ctaText = blockCtas[resultKey] || 'Quiero solucionar mi bloqueo →';
+            } else {
+              ctaText = 'Estoy list@ — empezar ahora →';
+            }
+            ctaBtn.textContent = ctaText;
+          }
+        });
+        readinessContainer.appendChild(circle);
+      })(ri);
+    }
+  }
+  // ── END CONVERSION SECTION ───────────────────────────────────────
+
+  var mainCtaBtn = document.getElementById('main-cta-btn');
+  if (mainCtaBtn) {
+    mainCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'Quiz_CTAClick');
+      }
+      setTimeout(function() {
+        window.location.href = dest;
+      }, 300);
+    });
+  }
+
+  var secondCtaBlock = document.getElementById('second-cta-block');
+  var secondCtaBtn   = document.getElementById('second-cta-btn');
+  var secondCtaMsg   = document.getElementById('second-cta-urgency');
+
+  if (secondCtaBlock && secondCtaBtn && secondCtaMsg) {
+    secondCtaBtn.href = MEMBERSHIP_URL;
+    secondCtaBtn.textContent = 'Tomo mi acceso gratuito de 7 días →';
+    secondCtaMsg.textContent = 'Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.';
+    secondCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
+      if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'Quiz_CTAClick');
+      }
+      setTimeout(function() {
+        window.location.href = dest;
+      }, 300);
+    });
+    secondCtaBlock.style.display = 'block';
+  }
+
+  // Submit lead + full quiz data once per completion
+  if (!leadSubmitted && leadData.email) {
+    leadSubmitted = true;
+    submitLead(resultKey, score);
+  }
+
+  // Meta Pixel: result viewed — fire once per quiz completion
+  if (!pixelFired && typeof fbq !== 'undefined') {
+    pixelFired = true;
+    fbq('track', 'CompleteRegistration', {
+      content_name: resultKey,
+      content_category: pKey,
+      status: 'es'
+    });
+    fbq('trackCustom', 'Quiz_ResultViewed', {
+      vocal_block:  resultKey,
+      profile_type: pKey,
+      vocal_score:  score,
+      language:     'es'
+    });
+  }
+
+  // Trigger entrance animations
+  setTimeout(function() { animateResultScreen(score); }, 20);
+
+  // Re-init Elfsight widgets
+  setTimeout(function() {
+    if (window.eapps && window.eapps.Platform) {
+      window.eapps.Platform.initApps();
+    }
+  }, 600);
+}
+
+function handleRestart() {
+  currentQ      = 0;
+  answers       = [null, null, [], [], null, null, null, ''];
+  tiebreakAnswer = null;
+  isTiebreakUsed = false;
+  isTiebreakActive = false;
+  profile       = null;
+  showResult    = false;
+  pixelFired    = false;
+  sessionStorage.removeItem('veaQuizState');
+  render();
+}
+
+// ================================================================
+// LEAD SCREEN
+// ================================================================
+function renderLead() {
+  document.getElementById('lead-headline').textContent = 'Descubre tu Bloqueo';
+  document.getElementById('lead-subtext').textContent  = 'Escribe tu nombre y tu mejor correo — recibirás tu perfil vocal completo al terminar el quiz.';
+  document.getElementById('label-name').textContent    = 'Nombre';
+  document.getElementById('label-email').textContent   = 'Correo electrónico';
+  document.getElementById('label-phone').innerHTML     = 'Teléfono <span class="optional">(opcional)</span>';
+  document.getElementById('lead-name').placeholder     = 'María';
+  document.getElementById('lead-email').placeholder    = 'maria@ejemplo.com';
+  document.getElementById('lead-phone').placeholder    = '+34 612 345 678';
+  document.getElementById('btn-lead-submit').textContent = 'Empezar';
+  document.getElementById('lead-privacy').textContent  = 'Tus datos son confidenciales. Nada de spam.';
+  // Restore previously entered values
+  document.getElementById('lead-name').value  = leadData.name  || '';
+  document.getElementById('lead-email').value = leadData.email || '';
+  document.getElementById('lead-phone').value = leadData.phone || '';
+}
+
+function handleLeadSubmit(e) {
+  e.preventDefault();
+  var name  = document.getElementById('lead-name').value.trim();
+  var email = document.getElementById('lead-email').value.trim();
+  var phone = document.getElementById('lead-phone').value.trim();
+  if (!name)  { document.getElementById('lead-name').focus();  return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('lead-email').focus(); return;
+  }
+  leadData = { name: name, email: email, phone: phone };
+  // Meta Pixel: Lead captured
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'Lead', {
+      content_name: 'Vocal Block Quiz',
+      content_category: 'Quiz Lead'
+    });
+    fbq('trackCustom', 'Quiz_LeadCapture', {
+      content_name: 'Vocal Block Quiz',
+      language:     'es'
+    });
+  }
+  currentQ = 0;
+  render();
+}
+
+function submitLead(resultKey, vocalScore) {
+  if (!FORMSPREE_ENDPOINT_V2 || FORMSPREE_ENDPOINT_V2 === 'PLACEHOLDER_INSERT_ENDPOINT') return;
+  try {
+    var data = {
+      name:            leadData.name,
+      email:           leadData.email,
+      phone:           leadData.phone,
+      vocal_block:     resultKey,
+      vocal_score:     vocalScore,
+      profile:         profile,
+      variant:         'v2',
+      language:        'es',
+      q1_memory:       answers[0],
+      q2_physical:     answers[1],
+      q3_tried:        answers[2],
+      q4_needs:        answers[3],
+      q5_lacked:       answers[4],
+      q6_dream:        answers[5],
+      q7_profile:      answers[6],
+      q8_freetext:     answers[7],
+      tiebreak_used:   isTiebreakUsed,
+      tiebreak_answer: tiebreakAnswer
+    };
+    fetch(FORMSPREE_ENDPOINT_V2, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify(data)
+    })
+    .then(function(res) {
+      if (!res.ok) {
+        res.text().then(function(txt) {
+          console.error('[Formspree] Submission failed — status:', res.status, '— response:', txt);
+        });
+      } else {
+        console.log('[Formspree] Submission OK — status:', res.status);
+      }
+    })
+    .catch(function(err) {
+      console.error('[Formspree] Network error:', err);
+    });
+  } catch(err) { console.error('[Formspree] Unexpected error in submitLead:', err); }
+}
+
+// ================================================================
+// RESULT ANIMATIONS
+// ================================================================
+function animateResultScreen(score) {
+  var circumference = 2 * Math.PI * 36;
+  var targetOffset  = circumference * (1 - score / 100);
+
+  var arcEl = document.getElementById('arc-progress-circle');
+  var numEl = document.getElementById('arc-score-number');
+  if (arcEl) {
+    var duration = 1500;
+    var startTs  = null;
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function step(ts) {
+      if (!startTs) startTs = ts;
+      var p = Math.min((ts - startTs) / duration, 1);
+      var e = easeOut(p);
+      arcEl.style.strokeDashoffset = String(circumference - (circumference - targetOffset) * e);
+      if (numEl) numEl.textContent = Math.round(score * e);
+      if (p < 1) requestAnimationFrame(step);
+      else if (numEl) numEl.textContent = score;
+    }
+    requestAnimationFrame(step);
+  }
+
+  var sections = [
+    { id: 'score-arc-container', delay: 0   },
+    { id: 'result-body',         delay: 520 },
+    { id: 'cost-block',          delay: 590 },
+  ];
+
+  sections.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    if (!el || el.style.display === 'none') return;
+    el.style.opacity   = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = 'none';
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+      el.style.opacity    = '1';
+      el.style.transform  = 'translateY(0)';
+    }, s.delay);
+  });
+}
+
+// ================================================================
+// PREVIEW MODE — ?r=mandibulaire|respiration|nerveux|identite&p=pro|stu
+// ================================================================
+(function() {
+  var hash = window.location.hash.replace('#','');
+  var params = new URLSearchParams(hash);
+  var r = params.get('r');
+  var p = params.get('p');
+  if (!r || !RESULT_KEYS.includes(r)) return;
+  var presets = {
+    mandibulaire: [0, 0, [], [], null, 0, 0, ''],
+    respiration:  [2, 1, [], [], null, 1, 0, ''],
+    nerveux:      [0, 2, [], [], null, 2, 1, ''],
+    identite:     [3, 3, [], [], null, 3, 3, '']
+  };
+  answers = presets[r];
+  profile = (r === 'nerveux' || r === 'respiration') ? 'pro' : 'stu';
+  if (p === 'pro' || p === 'stu') profile = p;
+  showResult = true;
+})();
+
+// Restore result page on reload
+(function() {
+  var saved = sessionStorage.getItem('veaQuizState');
+  if (saved && !showResult) {
+    try {
+      var s = JSON.parse(saved);
+      answers        = s.answers        || answers;
+      profile        = s.profile        || profile;
+      leadData       = s.leadData       || leadData;
+      tiebreakAnswer = s.tiebreakAnswer || null;
+      leadSubmitted  = true;
+      showResult     = true;
+    } catch(e) {
+      sessionStorage.removeItem('veaQuizState');
+    }
+  }
+})();
+
+// Init
+render();
+</script>
+</body>
+</html>
