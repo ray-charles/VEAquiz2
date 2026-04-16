@@ -381,6 +381,31 @@
       background: var(--green-mid);
     }
 
+    /* ── SECONDARY CTA ── */
+    .btn-secondary-cta {
+      display: block;
+      margin: 20px auto 24px;
+      padding: 11px 28px;
+      background: transparent;
+      color: var(--green-deep);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 1.5px solid var(--green-deep);
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+      max-width: 280px;
+    }
+    .btn-secondary-cta:hover {
+      background: var(--green-deep);
+      color: var(--breath);
+    }
+
     /* ── BREATHE ANIMATION ── */
     @keyframes breathe {
       0%, 100% { opacity: 0.4; transform: scale(1); }
@@ -1261,6 +1286,9 @@ function renderResult() {
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
     + 'color:#2C2825;line-height:1.75;">' + outcomeLines + '</div>'
     + '</div>'
+
+    // Secondary CTA — outlined, after outcome block
+    + '<a href="' + MEMBERSHIP_URL + '" class="btn-secondary-cta">Quiero empezar mi semana gratis →</a>'
 
     // Authority line
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
