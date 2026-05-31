@@ -1308,16 +1308,16 @@ function renderResult() {
 
   var CTA_LABEL = {
     fr: {
-      mandibulaire: "Je veux ma solution →",
-      respiration:  "Je veux ma solution →",
-      nerveux:      "Je veux ma solution →",
-      identite:     "Je veux ma solution →"
+      mandibulaire: "Je veux ma première semaine complètement gratuite →",
+      respiration:  "Je veux ma première semaine complètement gratuite →",
+      nerveux:      "Je veux ma première semaine complètement gratuite →",
+      identite:     "Je veux ma première semaine complètement gratuite →"
     },
     es: {
-      mandibulaire: "Quiero solucionar mi bloqueo →",
-      respiration:  "Quiero solucionar mi bloqueo →",
-      nerveux:      "Quiero solucionar mi bloqueo →",
-      identite:     "Quiero solucionar mi bloqueo →"
+      mandibulaire: "Quiero mi primera semana completamente gratis →",
+      respiration:  "Quiero mi primera semana completamente gratis →",
+      nerveux:      "Quiero mi primera semana completamente gratis →",
+      identite:     "Quiero mi primera semana completamente gratis →"
     }
   };
 
@@ -1366,49 +1366,7 @@ function renderResult() {
   var conversionHTML =
     '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
 
-    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;'
-    + 'margin-bottom:16px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
-    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
-    + (lang === 'fr'
-        ? 'Ta voix a un schéma spécifique qui limite tout ce que tu exprimes. L\'identifier était la première étape. Le relâcher est la suivante.<br><br>Accède à l\'Académie Voz Esencia 7 jours complètement gratuitement — puis seulement 7 $/mois. Annule quand tu veux, sans questions.'
-        : 'Tu voz tiene un patrón específico que está limitando todo lo que expresas. Identificarlo fue el primer paso. Soltarlo es el siguiente.<br><br>Accede a la Academia Voz Esencia 7 días completamente gratis — luego solo $7/mes. Cancela cuando quieras, sin preguntas.')
-    + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:500;'
-    + 'color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
-    + (lang === 'fr'
-        ? 'Rappelle-toi — tu es ta voix. Y travailler est l\'un des meilleurs investissements que tu feras jamais.'
-        : 'Recuerda — tú eres tu voz. Trabajar en ella es una de las mejores inversiones que jamás harás.')
-    + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
-    + 'color:#2C2825;line-height:1.65;margin:0;text-decoration:underline;">'
-    + (lang === 'fr'
-        ? 'Tout notre contenu, notre soutien et nos conseils — gratuits pendant 7 jours.'
-        : 'Todo nuestro contenido, apoyo y orientación — gratis durante 7 días.')
-    + '</p>'
-    + '</div>'
-
-    + '<a href="' + membershipUrl + '" id="main-cta-btn" '
-    + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
-    + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
-    + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
-    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;">'
-    + ctaLabel + '</a>'
-
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;'
-    + 'color:#9B1C1C;text-align:center;margin:0 0 20px;line-height:1.55;">'
-    + (lang === 'fr'
-        ? 'Si tu pars maintenant, cette offre disparaît. C\'est ta chance d\'essayer une approche différente, gratuitement.'
-        : 'Si te vas ahora, la oferta desaparece. Es tu oportunidad de probar un método único, gratis.')
-    + '</p>'
-
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
-    + (lang === 'fr'
-        ? 'Depuis 25 ans, chaque jour, j\'accompagne des personnes à chanter sur scène, parler en public, et vivre comme si elles étaient nées une deuxième fois.'
-        : 'Desde hace 25 años, cada día acompaño a personas a cantar en el escenario, hablar en público, y vivir como si hubieran nacido de nuevo.')
-    + '</p>'
-
+    // Testimonial card
     + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
     + 'padding:16px;margin-bottom:20px;">'
     + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
@@ -1423,7 +1381,30 @@ function renderResult() {
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
     + 'color:#2C2825;line-height:1.65;margin:0;font-style:italic;">'
     + testiText + '</p>'
-    + '</div>';
+    + '</div>'
+
+    // Social proof sentence
+    + (lang === 'fr'
+        ? '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.65;text-align:center;margin:0 0 6px;">La plupart des personnes qui rejoignent notre communauté <strong style="font-weight:500;">résolvent leur blocage.</strong></p>'
+        : '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.65;text-align:center;margin:0 0 6px;">La mayoría de las personas que se unen a nuestra comunidad <strong style="font-weight:500;">resuelven su bloqueo.</strong></p>')
+
+    // Social count
+    + (lang === 'fr'
+        ? '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#1B4B3A;text-align:center;margin:0 0 20px;">Plus de 1 000 voix libérées avec le Protocole Voz Esencia™</p>'
+        : '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#1B4B3A;text-align:center;margin:0 0 20px;">Más de 1.000 voces liberadas con el Protocolo Voz Esencia™</p>')
+
+    // Pre-CTA question
+    + (lang === 'fr'
+        ? '<p style="font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:400;font-style:italic;color:#2C2825;text-align:center;margin:0 0 14px;line-height:1.4;">Tu veux résoudre ton blocage une bonne fois pour toutes ?</p>'
+        : '<p style="font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:400;font-style:italic;color:#2C2825;text-align:center;margin:0 0 14px;line-height:1.4;">¿Quieres resolver tu bloqueo de una vez por todas?</p>')
+
+    // CTA button
+    + '<a href="' + membershipUrl + '" id="main-cta-btn" '
+    + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
+    + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
+    + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
+    + 'letter-spacing:0.01em;margin-bottom:20px;box-sizing:border-box;">'
+    + ctaLabel + '</a>';
 
   document.getElementById('conversion-section').innerHTML = conversionHTML;
   // ── END CONVERSION SECTION ───────────────────────────────────────
@@ -1464,7 +1445,7 @@ function renderResult() {
         window.location.href = dest;
       }, 300);
     });
-    secondCtaBlock.style.display = 'block';
+    secondCtaBlock.style.display = 'none';
   }
 
   // CTA routing — hardcoded to membership

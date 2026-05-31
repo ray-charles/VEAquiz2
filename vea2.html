@@ -577,77 +577,58 @@ const QUESTIONS = [
       "En todo el cuerpo — los nervios toman el control",
       "En ningún lugar físico — es más como que mi voz no es mía"
     ],
-    votes: ['mandibulaire', 'respiration', 'nerveux', 'identite'],
-    microfeedback: "Eso que sientes tiene una explicación biomecánica. No es solo en tu cabeza."
+    votes: null,
+    microfeedback: "Lo que describes tiene una explicación concreta."
   },
   {
     id: 2, type: 'multi',
-    text: "Seguramente ya intentaste algo para mejorar tu voz. ¿Qué fue?",
+    text: "¿Qué probaste que no resolvió el problema?",
     options: [
-      "Vi videos en YouTube o busqué ejercicios gratis",
-      "Hice ejercicios de respiración o de diafragma",
-      "Tuve clases con un profe o un coach vocal",
-      "No intenté nada todavía — no sabía por dónde empezar"
+      "Videos de YouTube o ejercicios gratuitos — los hice pero nada cambió de verdad",
+      "Ejercicios de respiración o diafragma — mejoré un poco pero el problema seguía ahí",
+      "Clases con un profe o coach vocal — recibí consejos pero no llegué a la raíz",
+      "Todavía no intenté nada — no sé por dónde empezar"
     ],
     votes: null,
     microfeedbackConditional: true,
-    microfeedbackDefault: "Lo que probaste trata los síntomas. Lo que necesitas trata la causa. Son cosas distintas.",
-    microfeedbackNone: "Bien. Así no tenemos que desaprender nada. Empezamos desde donde estás."
+    microfeedbackDefault: "Gracias por compartir eso. Lo que probaste no funcionó. Lo que vamos a trabajar es la causa.",
+    microfeedbackNone: "Perfecto punto de partida. Así empezamos desde donde estás, sin nada que desaprender."
   },
   {
-    id: 3, type: 'multi',
-    text: "Imagina que dentro de 30 días tu voz cambió. ¿Qué hizo que funcionara esta vez?",
+    id: 3, type: 'single',
+    text: "Cierra los ojos un segundo. Imagina que tu voz suena exactamente como el potencial que sabes que tiene. ¿Qué se siente?",
     options: [
-      "Supe exactamente qué tenía yo — no consejos genéricos",
-      "Tuve ejercicios específicos para mi tipo de bloqueo",
-      "Alguien me guió y me dijo si iba bien",
-      "Pude aprender a mi ritmo, sin presión"
+      "Una voz segura y poderosa — que cuando hablo, la gente me escucha y me toma en serio",
+      "Una voz libre que fluye sin esfuerzo — que canta sin miedo a quebrarse en el peor momento",
+      "Una voz que dure — que al final del día suene igual que al principio, sin dolor ni cansancio",
+      "Una voz que me represente — que cuando la escuche grabada, piense: eso soy yo"
     ],
     votes: null,
-    microfeedback: "Todo eso existe. Y está diseñado exactamente para tu tipo de bloqueo."
+    microfeedback: "Eso no es un sueño lejano. Es exactamente lo que queda cuando el bloqueo se libera."
   },
   {
     id: 4, type: 'single',
-    text: "Sé honesta contigo misma: ¿qué es lo que realmente no tuviste antes?",
+    text: "Con esa voz que imaginas — ¿qué cambia en tu vida?",
     options: [
-      "Un diagnóstico real — nunca supe qué tenía exactamente",
-      "Un método para mí, no para todos",
-      "Apoyo y constancia — empiezo pero no termino sol@",
-      "Un lugar donde practicar sin miedo a equivocarme"
+      "Convenzo más — en mis ventas, mis presentaciones, mis conversaciones que importan",
+      "Me atrevo más — subo al escenario, enciendo la cámara, dejo de posponer por miedo a cómo sueno",
+      "Enseño mejor — mis alumnos me escuchan distinto, mi voz llega sin que yo tenga que esforzarme",
+      "Me presento diferente — con presencia, con calma, como la persona que ya soy por dentro"
     ],
     votes: null,
-    microfeedback: "Eso no es una falla tuya. Es lo que pasa cuando el sistema que usas no fue hecho para ti."
+    microfeedback: "Eso no es ambición. Es lo que te pertenece. Y es exactamente lo que vamos a trabajar."
   },
   {
     id: 5, type: 'single',
-    text: "Si tu voz pudiera ser exactamente como la sientes por dentro, ¿cómo sería?",
+    text: "Una sola pregunta antes de ver tu resultado: ¿estás list@ para dejar de vivir con ese bloqueo?",
     options: [
-      "Cantar o hablar sin tensión, sin grietas, sin contenerme",
-      "Una voz que aguante todo el día sin cansarse ni apagarse",
-      "Una voz que responda igual sola que frente a los demás",
-      "Una voz que suene como quien realmente soy"
-    ],
-    votes: ['mandibulaire', 'respiration', 'nerveux', 'identite'],
-    microfeedback: "Eso no es un sueño. Es lo que pasa cuando el bloqueo se libera."
-  },
-  {
-    id: 6, type: 'single',
-    text: "Una última cosa — ¿cómo describes tu relación con tu voz ahora mismo?",
-    options: [
-      "Canto — en clases, en escenario o por placer",
-      "Uso mi voz para trabajar — enseño, hablo en público o hago coaching",
-      "Quiero crear contenido pero mi voz me frena",
-      "Solo quiero que mi voz suene como quien soy"
+      "Sí — ya es momento",
+      "Sí — aunque me da un poco de miedo",
+      "Creo que sí — quiero verlo primero",
+      "No lo sé todavía — pero aquí estoy"
     ],
     votes: null,
-    microfeedback: "Perfecto. Tu diagnóstico está list@."
-  },
-  {
-    id: 7, type: 'textarea',
-    text: "¿Hay algo más que te gustaría que Mamselle supiera sobre tu voz?",
-    placeholder: "Puedes compartir lo que quieras — una situación particular, una pregunta, un contexto que consideres importante. Nada aquí es obligatorio.",
-    votes: null,
-    microfeedback: null
+    microfeedback: "Bien. Tu resultado te está esperando."
   }
 ];
 
@@ -743,8 +724,8 @@ function getMirrorAnswer(winningBlock, ans) {
 // BACKGROUND GRADIENT PROGRESSION
 // ================================================================
 const BG_PROGRESSION = [
-  '#2C2825', '#3D3632', '#524A45', '#1B4B3A',
-  '#2D7A5E', '#D8CDB5', '#EDE5D6', '#F5F0E8'
+  '#2C2825', '#3D3632', '#524A45',
+  '#2D7A5E', '#EDE5D6', '#F5F0E8'
 ];
 
 // ================================================================
@@ -788,10 +769,10 @@ function renderScoreArc(score) {
 // ================================================================
 // APP STATE
 // ================================================================
-let currentQ      = -1;   // -1 = lead screen, 0–7 = quiz questions, 'tiebreak' = tiebreak
-let answers = [null, null, [], [], null, null, null, ''];
-// index 0 = Q0 single, 1 = Q1 single, 2 = Q2 multi, 3 = Q3 multi,
-// 4 = Q4 single, 5 = Q5 single, 6 = Q6 single, 7 = Q7 textarea
+let currentQ      = -1;   // -1 = lead screen, 0–5 = quiz questions, 'tiebreak' = tiebreak
+let answers = [null, null, [], null, null, null];
+// index 0 = Q1 single (routing), 1 = Q2 single, 2 = Q3 multi,
+// 3 = Q4 single, 4 = Q5 single, 5 = Q6 single
 let tiebreakAnswer = null;
 let isTiebreakUsed = false;
 let isTiebreakActive = false;
@@ -812,16 +793,10 @@ function calculateResult() {
   const scores = { mandibulaire: 0, respiration: 0, nerveux: 0, identite: 0 };
   const BLOCKS = ['mandibulaire', 'respiration', 'nerveux', 'identite'];
 
-  // Q0 votes: ['nerveux','mandibulaire','respiration','identite']
+  // Q0 votes: ['nerveux','mandibulaire','respiration','identite'] — sole routing question
   if (answers[0] !== null) scores[['nerveux','mandibulaire','respiration','identite'][answers[0]]]++;
 
-  // Q1 votes: ['mandibulaire','respiration','nerveux','identite']
-  if (answers[1] !== null) scores[['mandibulaire','respiration','nerveux','identite'][answers[1]]]++;
-
-  // Q5 votes: ['mandibulaire','respiration','nerveux','identite']
-  if (answers[5] !== null) scores[['mandibulaire','respiration','nerveux','identite'][answers[5]]]++;
-
-  // Q2, Q3, Q4, Q6, Q7 — no block votes
+  // Q1–Q5 collect no block votes
 
   const maxScore = Math.max(...Object.values(scores));
   const tied = BLOCKS.filter(b => scores[b] === maxScore);
@@ -910,17 +885,17 @@ function renderQuiz() {
   quizCard.style.transition = 'background 400ms ease';
   // Dark/light theme classes
   quizCard.classList.remove('quiz-card--dark', 'quiz-card--light');
-  if (currentQ <= 4) {
+  if (currentQ <= 2) {
     quizCard.classList.add('quiz-card--dark');
   } else {
     quizCard.classList.add('quiz-card--light');
   }
 
   // Progress
-  document.getElementById('progress-fill').style.width = ((currentQ + 1) / 8 * 100) + '%';
+  document.getElementById('progress-fill').style.width = ((currentQ + 1) / 6 * 100) + '%';
 
   // Counter
-  document.getElementById('question-counter').textContent = 'Pregunta ' + (currentQ + 1) + ' / 8';
+  document.getElementById('question-counter').textContent = 'Pregunta ' + (currentQ + 1) + ' / 6';
 
   // Question text
   document.getElementById('question-text').textContent = q.text;
@@ -946,17 +921,10 @@ function renderQuiz() {
   const navRow = document.getElementById('nav-row');
   const nextBtn = document.getElementById('btn-next');
 
-  if (q.type === 'textarea') {
-    // Last question — show submit button
-    nextBtn.style.display   = 'block';
-    nextBtn.disabled        = false;
-    nextBtn.textContent     = 'Ver mi resultado →';
-    navRow.style.justifyContent = 'flex-end';
-  } else {
-    // single and multi — hide btn-next; Siguiente affordance handles navigation
-    nextBtn.style.display = 'none';
-    navRow.style.justifyContent = 'flex-start';
-  }
+  // Siguiente affordance handles all navigation; btn-next stays hidden
+  nextBtn.style.display = 'none';
+  nextBtn.textContent = currentQ === QUESTIONS.length - 1 ? 'Ver mi resultado →' : 'Continuar';
+  navRow.style.justifyContent = 'flex-start';
 
   // Swipe detection
   var swipeStartX = 0;
@@ -970,7 +938,6 @@ function renderQuiz() {
 function hasCurrentAnswer() {
   if (currentQ === 'tiebreak') return tiebreakAnswer !== null;
   const q = QUESTIONS[currentQ];
-  if (q.type === 'textarea') return true;
   return q.type === 'multi'
     ? answers[currentQ].length > 0
     : answers[currentQ] !== null;
@@ -981,23 +948,6 @@ const LETTERS = ['A', 'B', 'C', 'D', 'E'];
 function renderOptions(q) {
   const container = document.getElementById('options-container');
   container.innerHTML = '';
-
-  // Handle textarea type
-  if (q.type === 'textarea') {
-    const ta = document.createElement('textarea');
-    ta.id = 'q7-textarea';
-    ta.style.cssText = 'width:100%;min-height:100px;border:0.5px solid #D8CDB5;'
-      + 'border-radius:8px;padding:12px 14px;font-family:\'DM Sans\',sans-serif;'
-      + 'font-size:13px;font-weight:300;color:#2C2825;background:#FAF8F4;'
-      + 'resize:vertical;outline:none;box-sizing:border-box;';
-    ta.placeholder = q.placeholder || '';
-    ta.value = answers[q.id] || '';
-    ta.addEventListener('input', function() { answers[q.id] = ta.value; });
-    ta.addEventListener('focus', function() { ta.style.border = '1px solid #1B4B3A'; });
-    ta.addEventListener('blur',  function() { ta.style.border = '0.5px solid #D8CDB5'; });
-    container.appendChild(ta);
-    return;
-  }
 
   const opts = q.options;
 
@@ -1090,8 +1040,8 @@ function handleOptionClick(qId, idx, q) {
   var feedbackText = getMicrofeedback(qId, idx, answers[qId]);
   var quizScreen = document.getElementById('quiz-screen');
   if (feedbackText) {
-    // Q6 (index 5) and Q7 (index 6) have light backgrounds — use dark text
-    var isLightQ = (currentQ === 5 || currentQ === 6);
+    // Q5 (index 4) and Q6 (index 5) have light backgrounds — use dark text
+    var isLightQ = (currentQ === 4 || currentQ === 5);
     showMicrofeedback(feedbackText, quizScreen, isLightQ);
   } else if (q.type === 'single') {
     // Single with no feedback — advance immediately
@@ -1118,12 +1068,6 @@ function handleBack() {
 function advanceQuestion() {
   microfeedbackShown = false;
   if (currentQ === QUESTIONS.length - 1) {
-    // Last question — grab textarea value then go to transition
-    var ta = document.getElementById('q7-textarea');
-    if (ta) answers[7] = ta.value;
-    // Profile detection: Q6 (index 6) option 1 = pro
-    profile = (answers[6] === 1) ? 'pro' : 'stu';
-
     // Check for tie
     var calcRes = calculateResult();
     if (calcRes.isTie) {
@@ -1413,7 +1357,7 @@ function renderResult() {
 
 function handleRestart() {
   currentQ      = 0;
-  answers       = [null, null, [], [], null, null, null, ''];
+  answers       = [null, null, [], null, null, null];
   tiebreakAnswer = null;
   isTiebreakUsed = false;
   isTiebreakActive = false;
@@ -1484,11 +1428,9 @@ function submitLead(resultKey, vocalScore) {
       q1_memory:       answers[0],
       q2_physical:     answers[1],
       q3_tried:        answers[2],
-      q4_needs:        answers[3],
-      q5_lacked:       answers[4],
-      q6_dream:        answers[5],
-      q7_profile:      answers[6],
-      q8_freetext:     answers[7],
+      q4_dream:        answers[3],
+      q5_benefit:      answers[4],
+      q6_commitment:   answers[5],
       tiebreak_used:   isTiebreakUsed,
       tiebreak_answer: tiebreakAnswer
     };
@@ -1567,10 +1509,10 @@ function animateResultScreen(score) {
   var p = params.get('p');
   if (!r || !RESULT_KEYS.includes(r)) return;
   var presets = {
-    mandibulaire: [0, 0, [], [], null, 0, 0, ''],
-    respiration:  [2, 1, [], [], null, 1, 0, ''],
-    nerveux:      [0, 2, [], [], null, 2, 1, ''],
-    identite:     [3, 3, [], [], null, 3, 3, '']
+    mandibulaire: [1, 0, [], null, null, 0],
+    respiration:  [2, 1, [], null, null, 0],
+    nerveux:      [0, 2, [], null, null, 0],
+    identite:     [3, 3, [], null, null, 0]
   };
   answers = presets[r];
   profile = (r === 'nerveux' || r === 'respiration') ? 'pro' : 'stu';
