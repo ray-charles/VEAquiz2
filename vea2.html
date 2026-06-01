@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -37,22 +37,46 @@
 
   <style>
     :root {
-      --green-deep:  #1B4B3A;
-      --green-mid:   #2D7A5E;
-      --terra:       #C4845A;
-      --dark:        #2C2825;
-      --breath:      #F5F0E8;
-      --breath-mid:  #EDE5D6;
-      --green-ghost: #E1F5EE;
+      /* Core palette — Teal Ocean */
+      --teal-deep:   #146183;
+      --teal-mid:    #258ba1;
+      --teal-pale:   #53c1c2;
+      --gold:        #d4af37;
+      --gold-pale:   #fee1b6;
+      --burgundy:    #2f1525;
+      --burgundy-mid:#40172b;
+      --blush:       #FAEFF7;
+
+      /* Semantic assignments */
+      --bg:          #146183;
+      --card-bg:     rgba(255,255,255,0.07);
+      --card-border: rgba(255,255,255,0.12);
+      --text-main:   #FFFFFF;
+      --text-mid:    rgba(255,255,255,0.75);
+      --text-muted:  rgba(255,255,255,0.50);
+      --accent:      #d4af37;
+      --accent-pale: #fee1b6;
+      --cta-bg:      #d4af37;
+      --cta-text:    #2f1525;
+      --breath:      #FAEFF7;
+
+      /* Legacy aliases (keep for existing var() references) */
+      --green-deep:  #146183;
+      --green-mid:   #258ba1;
+      --terra:       #d4af37;
+      --dark:        #2f1525;
+      --breath-mid:  rgba(255,255,255,0.07);
+      --green-ghost: rgba(20,97,131,0.12);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--breath);
+      background: var(--bg);
       font-family: 'DM Sans', sans-serif;
-      color: var(--dark);
+      color: var(--text-main);
       min-height: 100vh;
+      transition: background 0.6s ease;
     }
 
     /* ── PAGE WRAPPER ── */
@@ -70,7 +94,7 @@
       font-size: 11px;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--terra);
+      color: var(--gold);
       margin-bottom: 12px;
     }
 
@@ -80,17 +104,16 @@
       font-size: clamp(2.6rem, 9vw, 3.5rem);
       text-transform: uppercase;
       letter-spacing: 0.02em;
-      color: var(--dark);
+      color: #FFFFFF;
       line-height: 1.15;
       margin-bottom: 14px;
     }
-    .main-headline em { font-style: italic; color: var(--green-deep); }
-
+    .main-headline em { font-style: italic; color: var(--teal-pale); }
 
     .subheadline {
       font-weight: 300;
       font-size: 14px;
-      color: #7A706A;
+      color: rgba(255,255,255,0.75);
       line-height: 1.65;
       max-width: 440px;
       margin: 0 auto;
@@ -98,25 +121,24 @@
 
     /* ── QUIZ CARD ── */
     .quiz-card {
-      background: #fff;
+      background: rgba(255,255,255,0.07);
       border-radius: 16px;
-      border: 0.5px solid #D8CDB5;
+      border: 0.5px solid rgba(255,255,255,0.12);
       padding: 32px 28px;
-      box-shadow: 0 4px 24px rgba(27,75,58,0.06);
     }
     @media (max-width: 480px) { .quiz-card { padding: 24px 20px; } }
 
-    .quiz-card--dark { color: var(--breath); }
-    .quiz-card--dark .question-text { color: var(--breath); }
-    .quiz-card--dark .question-hint { color: rgba(245,240,232,0.6); }
-    .quiz-card--dark .option-card { border-color: rgba(245,240,232,0.3); color: var(--breath); }
-    .quiz-card--dark .option-card.selected { background: var(--breath); color: var(--dark); }
-    .quiz-card--dark .btn-back { color: var(--breath); border-color: rgba(245,240,232,0.4); }
-    .quiz-card--dark .btn-back:hover { border-color: var(--breath); }
-    .quiz-card--dark #question-counter { color: rgba(245,240,232,0.5); }
-    .quiz-card--dark .microfeedback { color: rgba(245,240,232,0.8); }
-    .quiz-card--dark .siguiente-affordance { color: var(--breath); }
-    .quiz-card--light { color: var(--dark); }
+    .quiz-card--dark { color: #FFFFFF; }
+    .quiz-card--dark .question-text { color: #FFFFFF; }
+    .quiz-card--dark .question-hint { color: rgba(255,255,255,0.60); }
+    .quiz-card--dark .option-card { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.80); }
+    .quiz-card--dark .option-card.selected { background: rgba(212,175,55,0.18); border-color: #d4af37; color: #FFFFFF; }
+    .quiz-card--dark .btn-back { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.25); }
+    .quiz-card--dark .btn-back:hover { border-color: #FFFFFF; }
+    .quiz-card--dark #question-counter { color: rgba(255,255,255,0.50); }
+    .quiz-card--dark .microfeedback { color: #a8e6e7; }
+    .quiz-card--dark .siguiente-affordance { color: #2f1525; }
+    .quiz-card--light { color: #2f1525; }
 
     /* ── PROGRESS BAR ── */
     .progress-track {
@@ -128,7 +150,7 @@
     }
     .progress-fill {
       height: 100%;
-      background: var(--green-deep);
+      background: #d4af37;
       border-radius: 2px;
       transition: width 0.35s ease;
     }
@@ -138,20 +160,20 @@
       font-size: 11px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: #7A706A;
+      color: rgba(255,255,255,0.50);
       margin-bottom: 10px;
     }
     .question-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(18px, 3.5vw, 21px);
       font-weight: 500;
-      color: var(--dark);
+      color: #FFFFFF;
       line-height: 1.4;
     }
     .question-hint {
       font-size: 12px;
       font-style: italic;
-      color: #7A706A;
+      color: rgba(255,255,255,0.60);
       margin-top: 6px;
     }
 
@@ -168,16 +190,18 @@
       gap: 12px;
       padding: 13px 15px;
       border-radius: 10px;
-      border: 0.5px solid #D8CDB5;
-      background: #FAF8F4;
+      border: 0.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.80);
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
       user-select: none;
     }
-    .option-card:hover { border-color: var(--green-deep); }
+    .option-card:hover { border-color: rgba(255,255,255,0.35); }
     .option-card.selected {
-      border: 1.5px solid var(--green-deep);
-      background: var(--green-ghost);
+      background: rgba(212,175,55,0.18);
+      border: 1.5px solid #d4af37;
+      color: #FFFFFF;
     }
     .option-badge {
       width: 24px;
@@ -189,12 +213,12 @@
       font-size: 11px;
       font-weight: 500;
       flex-shrink: 0;
-      background: var(--breath-mid);
-      color: #7A706A;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.70);
       transition: background 0.15s, color 0.15s;
     }
-    .option-card.selected .option-badge { background: var(--green-deep); color: #fff; }
-    .option-text { font-size: 13px; color: var(--dark); line-height: 1.45; }
+    .option-card.selected .option-badge { background: #d4af37; color: #2f1525; }
+    .option-text { font-size: 13px; color: inherit; line-height: 1.45; }
 
 
     /* ── NAVIGATION ── */
@@ -207,43 +231,43 @@
     .btn-back {
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
-      color: var(--dark);
+      color: rgba(255,255,255,0.75);
       background: transparent;
-      border: 1px solid #D8CDB5;
+      border: 1px solid rgba(255,255,255,0.25);
       padding: 10px 18px;
       border-radius: 6px;
       cursor: pointer;
       transition: border-color 0.15s;
       margin-right: auto;
     }
-    .btn-back:hover { border-color: var(--green-deep); }
+    .btn-back:hover { border-color: rgba(255,255,255,0.60); }
 
     .btn-next {
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 500;
-      color: #fff;
-      background: var(--green-deep);
+      color: #2f1525;
+      background: #d4af37;
       border: none;
       padding: 11px 24px;
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.15s, opacity 0.15s;
     }
-    .btn-next:hover:not(:disabled) { background: var(--green-mid); }
-    .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-next:hover:not(:disabled) { background: #c9a22e; }
+    .btn-next:disabled { background: rgba(212,175,55,0.25); color: rgba(47,21,37,0.4); cursor: not-allowed; }
 
     /* ── RESULT SCREEN ── */
     .result-body {
       font-weight: 500;
       font-size: 15px;
-      color: #7A706A;
+      color: #2f1525;
       line-height: 1.7;
       margin-bottom: 20px;
     }
     #cost-block {
-      border-left: 3px solid #C4845A;
-      background: #FDF6F0;
+      border-left: 3px solid #d4af37;
+      background: rgba(20,97,131,0.06);
       border-radius: 0 8px 8px 0;
       padding: 14px 16px;
       margin-bottom: 20px;
@@ -254,14 +278,14 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #C4845A;
+      color: #146183;
       margin-bottom: 8px;
     }
     #cost-block .cost-body {
       font-family: 'DM Sans', sans-serif;
       font-size: 15px;
       font-weight: 500;
-      color: #7A706A;
+      color: #2f1525;
       line-height: 1.7;
     }
     .btn-next, .btn-back, .option-card {
@@ -273,13 +297,13 @@
       font-family: 'Cormorant Garamond', serif;
       font-weight: 400;
       font-size: 22px;
-      color: var(--dark);
+      color: #FFFFFF;
       margin-bottom: 8px;
     }
     .lead-subtext {
       font-size: 13px;
       font-weight: 300;
-      color: #7A706A;
+      color: rgba(255,255,255,0.75);
       line-height: 1.6;
       margin-bottom: 24px;
     }
@@ -291,7 +315,7 @@
       font-weight: 500;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--dark);
+      color: rgba(255,255,255,0.75);
       margin-bottom: 5px;
     }
     .optional {
@@ -299,28 +323,28 @@
       font-weight: 300;
       text-transform: none;
       letter-spacing: 0;
-      color: #A89E97;
+      color: rgba(255,255,255,0.45);
     }
     .field-input {
       width: 100%;
       font-family: 'DM Sans', sans-serif;
       font-size: 16px;
       font-weight: 300;
-      color: var(--dark);
-      background: #FAF8F4;
-      border: 0.5px solid #D8CDB5;
+      color: #2f1525;
+      background: rgba(255,255,255,0.92);
+      border: 0.5px solid rgba(255,255,255,0.30);
       border-radius: 8px;
       padding: 11px 14px;
       outline: none;
       transition: border-color 0.15s, border-width 0.15s;
       -webkit-appearance: none;
     }
-    .field-input:focus        { border-color: var(--green-deep); border-width: 1.5px; }
-    .field-input::placeholder { color: #C4BAB0; }
+    .field-input:focus        { border-color: #d4af37; border-width: 1.5px; }
+    .field-input::placeholder { color: rgba(47,21,37,0.35); }
     .lead-privacy {
       font-size: 11px;
       font-style: italic;
-      color: #A89E97;
+      color: rgba(255,255,255,0.50);
       text-align: center;
       margin-top: 16px;
     }
@@ -329,7 +353,7 @@
     .footer {
       text-align: center;
       font-size: 11px;
-      color: #A89E97;
+      color: rgba(255,255,255,0.40);
       padding: 24px 0 40px;
     }
 
@@ -354,8 +378,10 @@
       font-size: 13px;
       font-weight: 300;
       font-style: italic;
-      color: var(--green-mid);
-      text-align: center;
+      color: #a8e6e7;
+      background: rgba(83,193,194,0.12);
+      border-left: 2.5px solid #53c1c2;
+      text-align: left;
       margin-top: 20px;
       padding: 12px 16px;
       opacity: 0;
@@ -365,8 +391,8 @@
       display: block;
       margin: 24px auto 0;
       padding: 12px 32px;
-      background: var(--green-deep);
-      color: var(--breath);
+      background: #d4af37;
+      color: #2f1525;
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 500;
@@ -378,7 +404,7 @@
       transition: background 0.2s ease;
     }
     .siguiente-affordance:hover {
-      background: var(--green-mid);
+      background: #c9a22e;
     }
 
     /* ── SECONDARY CTA ── */
@@ -387,23 +413,23 @@
       margin: 20px auto 24px;
       padding: 11px 28px;
       background: transparent;
-      color: var(--green-deep);
+      color: #146183;
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      border: 1.5px solid var(--green-deep);
+      border: 1.5px solid #146183;
       border-radius: 6px;
       cursor: pointer;
       text-align: center;
       text-decoration: none;
       transition: background 0.2s ease, color 0.2s ease;
-      max-width: 280px;
+      max-width: 320px;
     }
     .btn-secondary-cta:hover {
-      background: var(--green-deep);
-      color: var(--breath);
+      background: #146183;
+      color: #FFFFFF;
     }
 
     /* ── BREATHE ANIMATION ── */
@@ -426,13 +452,13 @@
   <!-- Elfsight Google Reviews — hidden on result page -->
   <div id="elfsight-top" style="margin-bottom:24px;min-height:100px;">
     <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
-    <p id="widget-caption" style="text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#7A706A;margin-top:10px;">
+    <p id="widget-caption" style="text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:rgba(255,255,255,0.60);margin-top:10px;">
       Quiz 100% Gratuito — nos permite servirte mejor. 🙂
     </p>
   </div>
 
   <!-- 92% social proof — shown during quiz only -->
-  <div id="quiz-social-proof" style="display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;font-style:italic;color:#7A706A;margin-bottom:12px;line-height:1.6;">
+  <div id="quiz-social-proof" style="display:none;text-align:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.60);margin-bottom:12px;line-height:1.6;">
     92% de las personas que comenzaron este quiz lo terminaron y encontraron valor en los ejercicios.
   </div>
 
@@ -466,10 +492,10 @@
         font-size: 11px;
         font-weight: 300;
         font-style: italic;
-        color: #A89E97;
+        color: rgba(255,255,255,0.50);
         margin: 16px 0 0;
         line-height: 1.6;
-        border-top: 0.5px solid #EDE5D6;
+        border-top: 0.5px solid rgba(255,255,255,0.15);
         padding-top: 14px;
       ">
         Creado por Mamselle Ruiz Coach — 25 años de experiencia · más de 1 000 voces acompañadas · quiz construido con los principios de biomecánica vocal
@@ -493,21 +519,20 @@
 
     <!-- TRANSITION SCREEN -->
     <div id="transition-screen" style="display:none; text-align:center; padding: 40px 24px;">
-      <div style="width:12px;height:12px;border-radius:50%;background:var(--green-deep);
+      <div style="width:12px;height:12px;border-radius:50%;background:#d4af37;
         margin:0 auto 32px; animation: breathe 1.5s ease-in-out infinite;"></div>
-      <div style="background:rgba(123,94,167,0.06); border-left:4px solid #7B5EA7;
+      <div style="background:rgba(255,255,255,0.08); border-left:4px solid #53c1c2;
         border-radius:12px; padding:20px 24px; max-width:380px; margin:0 auto 24px; text-align:left;">
         <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
-          font-style:italic;color:#2C2825;line-height:1.65;margin:0 0 16px;">
+          font-style:italic;color:rgba(255,255,255,0.90);line-height:1.65;margin:0 0 16px;">
           «&nbsp;Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar.&nbsp;»
         </p>
         <div style="display:flex;align-items:center;gap:10px;">
-          <img src="https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png"
-            style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
-          <span style="font-family:'DM Sans',sans-serif;font-size:12px;color:#7A706A;">Justine Lafortune · Canada</span>
+          <div style="width:32px;height:32px;border-radius:50%;background:#258ba1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#fff;">JL</div>
+          <span style="font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,0.65);">Justine Lafortune · Canada</span>
         </div>
       </div>
-      <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:#7A706A;
+      <p style="font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(255,255,255,0.50);
         letter-spacing:2px;text-transform:uppercase;">Preparando tu diagnóstico...</p>
     </div>
 
@@ -529,7 +554,7 @@
       <div id="video-container"></div>
       <div id="conversion-section"></div>
       <!-- Elfsight Google Reviews — bottom of result page -->
-      <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid #D8CDB5;transform:scale(0.85);transform-origin:top center;">
+      <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid rgba(212,175,55,0.25);transform:scale(0.85);transform-origin:top center;">
         <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
       </div>
     </div>
@@ -721,12 +746,52 @@ function getMirrorAnswer(winningBlock, ans) {
 }
 
 // ================================================================
-// BACKGROUND GRADIENT PROGRESSION
+// BACKGROUND PROGRESSION — Teal Ocean 7-step fade
 // ================================================================
 const BG_PROGRESSION = [
-  '#2C2825', '#3D3632', '#524A45',
-  '#2D7A5E', '#EDE5D6', '#F5F0E8'
+  '#146183',  // step 0 — landing
+  '#1d7599',  // step 1 — Q1
+  '#2688ae',  // step 2 — Q2
+  '#539dba',  // step 3 — Q3
+  '#8ec4d6',  // step 4 — Q4
+  '#c8e4ef',  // step 5 — Q5
+  '#FAEFF7'   // step 6 — result
 ];
+
+function updateBackground(step) {
+  var bg = BG_PROGRESSION[step] || BG_PROGRESSION[0];
+  document.body.style.background = bg;
+  document.body.style.transition = 'background 0.6s ease';
+
+  var isDark = step < 6;
+  var card = document.getElementById('quiz-card-el');
+
+  if (!isDark) {
+    // Result page — light mode
+    document.body.style.color = '#2f1525';
+    if (card) {
+      card.style.background = '#FFFFFF';
+      card.style.border = '0.5px solid rgba(212,175,55,0.25)';
+    }
+    document.querySelectorAll('.option-card').forEach(function(btn) {
+      btn.style.background = 'rgba(20,97,131,0.05)';
+      btn.style.border = '0.5px solid rgba(20,97,131,0.2)';
+      btn.style.color = '#2f1525';
+    });
+  } else {
+    // Quiz — dark mode
+    document.body.style.color = '#FFFFFF';
+    if (card) {
+      card.style.background = 'rgba(255,255,255,0.07)';
+      card.style.border = '0.5px solid rgba(255,255,255,0.12)';
+    }
+    document.querySelectorAll('.option-card:not(.selected)').forEach(function(btn) {
+      btn.style.background = 'rgba(255,255,255,0.06)';
+      btn.style.border = '0.5px solid rgba(255,255,255,0.15)';
+      btn.style.color = 'rgba(255,255,255,0.80)';
+    });
+  }
+}
 
 // ================================================================
 // VOCAL HEALTH SCORE
@@ -749,19 +814,19 @@ function renderScoreArc(score) {
   var circumference = 2 * Math.PI * radius;
   return '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px;">'
     + '<svg width="96" height="96" viewBox="0 0 96 96">'
-    + '<circle cx="48" cy="48" r="' + radius + '" fill="none" stroke="#EDE5D6" stroke-width="6"/>'
-    + '<circle id="arc-progress-circle" cx="48" cy="48" r="' + radius + '" fill="none" stroke="#1B4B3A" stroke-width="6"'
+    + '<circle cx="48" cy="48" r="' + radius + '" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="6"/>'
+    + '<circle id="arc-progress-circle" cx="48" cy="48" r="' + radius + '" fill="none" stroke="#d4af37" stroke-width="6"'
     + ' stroke-dasharray="' + circumference.toFixed(1) + '"'
     + ' stroke-dashoffset="' + circumference.toFixed(1) + '"'
     + ' stroke-linecap="round"'
     + ' transform="rotate(-90 48 48)"/>'
     + '<text x="48" y="44" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif"'
-    + ' font-size="22" font-weight="400" fill="#2C2825" id="arc-score-number">0</text>'
+    + ' font-size="22" font-weight="400" fill="#2f1525" id="arc-score-number">0</text>'
     + '<text x="48" y="58" text-anchor="middle" font-family="DM Sans, sans-serif"'
-    + ' font-size="9" font-weight="400" fill="#A89E97">/100</text>'
+    + ' font-size="9" font-weight="400" fill="rgba(47,21,37,0.45)">/100</text>'
     + '</svg>'
     + '<span style="font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;'
-    + 'letter-spacing:0.05em;text-transform:uppercase;color:#7A706A;margin-top:4px;">'
+    + 'letter-spacing:0.05em;text-transform:uppercase;color:rgba(47,21,37,0.6);margin-top:4px;">'
     + 'Salud vocal actual</span>'
     + '</div>';
 }
@@ -820,7 +885,7 @@ function render() {
 
   var subEl = document.getElementById('subheadline');
   if (!showResult && currentQ === -1) {
-    subEl.innerHTML = '<span style="display:block;font-size:15px;font-weight:300;color:#7A706A;line-height:1.65;">En 2 minutos descubrimos exactamente qué la bloquea — y qué hacer al respecto.</span>';
+    subEl.innerHTML = '<span style="display:block;font-size:15px;font-weight:300;color:rgba(255,255,255,0.75);line-height:1.65;">En 2 minutos descubrimos exactamente qué la bloquea — y qué hacer al respecto.</span>';
   }
   subEl.style.display = (currentQ === -1 && !showResult) ? 'block' : 'none';
 
@@ -851,6 +916,7 @@ function render() {
     document.getElementById('result-screen').style.display     = 'none';
     renderTiebreak();
   } else if (currentQ === -1) {
+    updateBackground(0);
     document.getElementById('lead-screen').style.display       = 'block';
     document.getElementById('quiz-screen').style.display       = 'none';
     document.getElementById('tiebreak-screen').style.display   = 'none';
@@ -871,6 +937,9 @@ function renderQuiz() {
   const q = QUESTIONS[currentQ];
   microfeedbackShown = false;
 
+  // Per-question background fade
+  updateBackground(currentQ + 1);
+
   // Clear any microfeedback + Siguiente left over from the previous question
   var existingFeedback = document.getElementById('microfeedback-text');
   if (existingFeedback) existingFeedback.remove();
@@ -879,17 +948,10 @@ function renderQuiz() {
   // Also sweep by class in case old elements used class-only
   document.querySelectorAll('.microfeedback, .siguiente-affordance').forEach(function(el) { el.remove(); });
 
-  // Apply background progression
+  // Dark/light theme classes — all quiz steps are dark (steps 1–5)
   var quizCard = document.getElementById('quiz-card-el');
-  quizCard.style.background = BG_PROGRESSION[currentQ] || '#F5F0E8';
-  quizCard.style.transition = 'background 400ms ease';
-  // Dark/light theme classes
   quizCard.classList.remove('quiz-card--dark', 'quiz-card--light');
-  if (currentQ <= 2) {
-    quizCard.classList.add('quiz-card--dark');
-  } else {
-    quizCard.classList.add('quiz-card--light');
-  }
+  quizCard.classList.add('quiz-card--dark');
 
   // Progress
   document.getElementById('progress-fill').style.width = ((currentQ + 1) / 6 * 100) + '%';
@@ -1149,6 +1211,8 @@ function getResultKey() {
 // RESULT
 // ================================================================
 function renderResult() {
+  updateBackground(6);
+
   const resultKey = getResultKey();
   const d = BLOCK_DATA[resultKey];
   const score = calcVocalScore(answers);
@@ -1172,7 +1236,7 @@ function renderResult() {
       + '<iframe src="https://www.youtube.com/embed/' + vid + '?rel=0&modestbranding=1" '
       + 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>'
       + '</div>'
-    : '<div style="background:#F5F0E8;border-radius:12px;padding:24px;text-align:center;margin:20px 0;color:#7A706A;font-family:\'DM Sans\',sans-serif;font-size:13px;">[VIDEO — próximamente]</div>';
+    : '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:24px;text-align:center;margin:20px 0;color:#40172b;font-family:\'DM Sans\',sans-serif;font-size:13px;">[VIDEO — próximamente]</div>';
 
   // ── SCORE ARC ──
   document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
@@ -1188,16 +1252,16 @@ function renderResult() {
   document.getElementById('result-body').innerHTML =
     // Mirror headline — promoted to hero size
     '<p style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:400;'
-    + 'font-style:italic;color:#2C2825;line-height:1.35;margin:0 0 14px;">'
+    + 'font-style:italic;color:#2f1525;line-height:1.35;margin:0 0 14px;">'
     + headline + '</p>'
     // TU BLOQUEO PRINCIPAL + block name — demoted, small eyebrow
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
-    + 'letter-spacing:0.08em;text-transform:uppercase;color:#085041;'
-    + 'background:#E1F5EE;display:inline-block;padding:4px 12px;border-radius:20px;margin:0 0 16px;">'
+    + 'letter-spacing:0.08em;text-transform:uppercase;color:#146183;'
+    + 'background:rgba(20,97,131,0.10);display:inline-block;padding:4px 12px;border-radius:20px;margin:0 0 16px;">'
     + 'Tu bloqueo principal\u00a0— ' + d.title + '</p>'
     // Confirmation subtext
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:400;'
-    + 'letter-spacing:0.05em;color:#C4845A;line-height:1.6;margin:0 0 20px;">'
+    + 'letter-spacing:0.05em;color:#d4af37;line-height:1.6;margin:0 0 20px;">'
     + d.subtext + '</p>';
 
   // ── COST BLOCK → repurposed for possibility statement ──
@@ -1205,7 +1269,7 @@ function renderResult() {
   costEl.style.display = 'block';
   costEl.innerHTML =
     '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:300;'
-    + 'color:#2C2825;line-height:1.75;">' + possibilityLines + '</div>';
+    + 'color:#2f1525;line-height:1.75;">' + possibilityLines + '</div>';
 
   // ── VIDEO ──
   var videoContainer = document.getElementById('video-container');
@@ -1213,22 +1277,22 @@ function renderResult() {
 
   // ── CONVERSION SECTION ──
   document.getElementById('conversion-section').innerHTML =
-    '<hr style="border:none;border-top:0.5px solid #D8CDB5;margin:24px 0;">'
+    '<hr style="border:none;border-top:0.5px solid rgba(212,175,55,0.25);margin:24px 0;">'
 
     // Bridge
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
-    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 16px;">'
+    + 'font-style:italic;color:#40172b;text-align:center;line-height:1.65;margin:0 0 16px;">'
     + d.bridge + '</p>'
 
     // Explicit connection
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
-    + 'color:#1B4B3A;text-align:center;line-height:1.6;margin:0 0 20px;">'
+    + 'color:#146183;text-align:center;line-height:1.6;margin:0 0 20px;">'
     + 'El Protocolo Voz Esencia™ fue construido exactamente para esto.' + '</p>'
 
     // Block-specific outcome
-    + '<div style="background:#F5F0E8;border-radius:12px;padding:20px 22px;margin-bottom:20px;">'
+    + '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:20px 22px;margin-bottom:20px;">'
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
-    + 'color:#2C2825;line-height:1.75;">' + outcomeLines + '</div>'
+    + 'color:#2f1525;line-height:1.75;">' + outcomeLines + '</div>'
     + '</div>'
 
     // Secondary CTA — outlined, after outcome block
@@ -1236,45 +1300,45 @@ function renderResult() {
 
     // Authority line
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'font-style:italic;color:#7A706A;text-align:center;line-height:1.65;margin:0 0 20px;">'
+    + 'font-style:italic;color:#40172b;text-align:center;line-height:1.65;margin:0 0 20px;">'
     + 'Desde hace 25 años acompaño a personas a cantar en escenario,<br>'
     + 'hablar en público, y vivir como si hubieran nacido de nuevo.<br>'
     + '<strong style="font-weight:500;">— Mamselle Ruiz Coach</strong></p>'
 
     // Testimonial
-    + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;padding:16px;margin-bottom:20px;">'
+    + '<div style="background:#FFFFFF;border:0.5px solid rgba(212,175,55,0.25);border-radius:12px;padding:16px;margin-bottom:20px;">'
     + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
-    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
-    + '<div><div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;color:#7A706A;margin-top:2px;">' + TESTI_META + '</div>'
+    + '<div style="width:48px;height:48px;border-radius:50%;background:#258ba1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:600;color:#fff;">JL</div>'
+    + '<div><div style="color:#d4af37;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;color:#7A6070;margin-top:2px;">' + TESTI_META + '</div>'
     + '</div></div>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2C2825;line-height:1.65;margin:0;font-style:italic;">' + TESTI_TEXT + '</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2f1525;line-height:1.65;margin:0;font-style:italic;">' + TESTI_TEXT + '</p>'
     + '</div>'
 
     // Social proof line
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
-    + 'letter-spacing:3px;text-transform:uppercase;color:var(--green-deep);text-align:center;margin:0 0 20px;">'
+    + 'letter-spacing:3px;text-transform:uppercase;color:#146183;text-align:center;margin:0 0 20px;">'
     + 'Más de 1,000 voces liberadas con el Protocolo Voz Esencia™</p>'
 
     // Readiness widget
     + '<div id="readiness-widget" style="text-align:center;margin:28px 0 20px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;color:#7A706A;margin-bottom:14px;letter-spacing:0.02em;">¿Qué tan list@ te sientes para trabajar en esto?</p>'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;color:#40172b;margin-bottom:14px;letter-spacing:0.02em;">¿Qué tan list@ te sientes para trabajar en esto?</p>'
     + '<div id="readiness-options" style="display:flex;justify-content:center;gap:10px;"></div>'
     + '</div>'
 
     // Offer block
-    + '<div style="background:#F5F0E8;border-radius:12px;padding:18px 20px;margin-bottom:16px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:18px 20px;margin-bottom:16px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;color:#146183;line-height:1.7;margin:0 0 10px;">'
     + 'Tu primera semana es completamente gratuita.</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;color:#1B4B3A;line-height:1.7;margin:0 0 10px;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;color:#146183;line-height:1.7;margin:0 0 10px;">'
     + d.offerMiddle + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2C2825;line-height:1.65;margin:0;text-decoration:underline;">'
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2f1525;line-height:1.65;margin:0;text-decoration:underline;">'
     + 'Luego $7/mes — menos de lo que cuesta una clase. Cancela cuando quieras, sin preguntas.</p>'
     + '</div>'
 
     // Primary CTA button
     + '<a href="' + MEMBERSHIP_URL + '" id="main-cta-btn" '
-    + 'style="display:block;width:100%;background:#1B4B3A;color:#F5F0E8;'
+    + 'style="display:block;width:100%;background:#146183;color:#FFFFFF;'
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
     + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;" id="main-cta-btn">'
@@ -1282,7 +1346,7 @@ function renderResult() {
 
     // Below CTA line
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;'
-    + 'color:#7A706A;text-align:center;margin:0 0 20px;line-height:1.55;">'
+    + 'color:#40172b;text-align:center;margin:0 0 20px;line-height:1.55;">'
     + 'El primer paso es gratis. Lo que descubras en 7 días lo decides tú.</p>'
 
     ;
@@ -1295,17 +1359,17 @@ function renderResult() {
       (function(score) {
         var btn = document.createElement('button');
         btn.textContent = score;
-        btn.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid var(--green-deep);'
-          + 'background:transparent;color:var(--green-deep);font-family:"DM Sans",sans-serif;'
+        btn.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid #146183;'
+          + 'background:transparent;color:#146183;font-family:"DM Sans",sans-serif;'
           + 'font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;';
         btn.addEventListener('click', function() {
           // Update all circles
           roEl.querySelectorAll('button').forEach(function(b) {
             b.style.background = 'transparent';
-            b.style.color = 'var(--green-deep)';
+            b.style.color = '#146183';
           });
-          btn.style.background = 'var(--green-deep)';
-          btn.style.color = '#F5F0E8';
+          btn.style.background = '#146183';
+          btn.style.color = '#FFFFFF';
           // Update CTA text
           var mainBtn = document.getElementById('main-cta-btn');
           if (!mainBtn) return;
@@ -1365,6 +1429,7 @@ function handleRestart() {
   showResult    = false;
   pixelFired    = false;
   sessionStorage.removeItem('veaQuizState');
+  updateBackground(0);
   render();
 }
 
@@ -1543,3 +1608,7 @@ render();
 </script>
 </body>
 </html>
+
+
+
+
