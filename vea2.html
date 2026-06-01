@@ -1511,26 +1511,69 @@ function handleLeadSubmit(e) {
 
 function submitLead(resultKey, vocalScore) {
   try {
+    var Q1_OPTIONS = [
+      'Me puse nervios@ y mi voz se cortó, tembló o se cerró',
+      'Sentí tensión en la garganta o mandíbula y no pude cantar o hablar como quería',
+      'Mi voz se fue apagando — me quedé sin aire o sin fuerza antes de terminar',
+      'Escuché mi voz y no me reconocí — no sonaba como yo'
+    ];
+    var Q2_OPTIONS = [
+      'En la mandíbula o la garganta — hay algo apretado que no se suelta',
+      'En el aire — se me acaba antes de terminar lo que quiero decir',
+      'En todo el cuerpo — los nervios toman el control',
+      'En ningún lugar físico — es más como que mi voz no es mía'
+    ];
+    var Q3_OPTIONS = [
+      'Videos de YouTube o ejercicios gratuitos',
+      'Ejercicios de respiración o diafragma',
+      'Clases con un profe o coach vocal',
+      'Todavía no intenté nada — no sé por dónde empezar'
+    ];
+    var Q4_OPTIONS = [
+      'Una voz segura y poderosa — que cuando hablo, la gente me escucha y me toma en serio',
+      'Una voz libre que fluye sin esfuerzo — que canta sin miedo a quebrarse',
+      'Una voz que dure — que al final del día suene igual que al principio, sin dolor',
+      'Una voz que me represente — que cuando la escuche grabada, piense: eso soy yo'
+    ];
+    var Q5_OPTIONS = [
+      'Convenzo más — en mis ventas, mis presentaciones, mis conversaciones que importan',
+      'Me atrevo más — subo al escenario, enciendo la cámara, dejo de posponer',
+      'Enseño mejor — mis alumnos me escuchan distinto, mi voz llega sin esfuerzo',
+      'Me presento diferente — con presencia, con calma, como la persona que ya soy'
+    ];
+    var Q6_OPTIONS = [
+      'Sí — ya es momento',
+      'Sí — aunque me da un poco de miedo',
+      'Creo que sí — quiero verlo primero',
+      'No lo sé todavía — pero aquí estoy'
+    ];
+    function resolveAnswer(options, index) {
+      if (Array.isArray(index)) {
+        return index.map(function(i) {
+          return options[i] || String(i);
+        }).join(' / ');
+      }
+      return options[index] !== undefined ? options[index] : String(index);
+    }
+    var today = new Date();
+    var fecha = today.getFullYear() + '-' +
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
     var data = {
-      nombre:              leadData.name,
-      email:               leadData.email,
-      telefono:            leadData.phone,
-      bloqueo_vocal:       resultKey,
-      puntuacion_vocal:    vocalScore,
-      perfil_usuario:      profile,
-      fuente_quiz:         'vea2',
-      idioma:              lang,
-      origen:              'meta-ads',
-      url_completa:        window.location.href,
-      facebook_click_id:   fbclid,
-      Q1_momento_voz:      answers[0],
-      Q2_sensacion_cuerpo: answers[1],
-      Q3_metodos_probados: answers[2],
-      Q4_sueno_vocal:      answers[3],
-      Q5_beneficio_deseado: answers[4],
-      Q6_compromiso:       answers[5],
-      desempate_usado:     isTiebreakUsed,
-      desempate_respuesta: tiebreakAnswer
+      nombre:               leadData.name,
+      email:                leadData.email,
+      telefono:             leadData.phone || '',
+      bloqueo_vocal:        resultKey,
+      'Lo que pasó':        resolveAnswer(Q1_OPTIONS, answers[0]),
+      'Lo que siente':      resolveAnswer(Q2_OPTIONS, answers[1]),
+      'Lo que no funcionó': resolveAnswer(Q3_OPTIONS, answers[2]),
+      'Su voz ideal':       resolveAnswer(Q4_OPTIONS, answers[3]),
+      'Lo que cambia':      resolveAnswer(Q5_OPTIONS, answers[4]),
+      'Su compromiso':      resolveAnswer(Q6_OPTIONS, answers[5]),
+      origen:               (window.location.search.indexOf('fbclid') !== -1)
+                              ? 'meta-ads'
+                              : 'directo',
+      fecha:                fecha
     };
     fetch(FORMSPREE_ENDPOINT_V2, {
       method:  'POST',
