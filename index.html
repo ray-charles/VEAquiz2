@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<!-- v2.1 -->
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -929,44 +928,6 @@ let lang          = 'fr';
   if (urlLang === 'es' || urlLang === 'fr') lang = urlLang;
 })();
 
-var quizVariant = (function() {
-  var p = new URLSearchParams(window.location.search).get('v');
-  return (p === 'v2' || p === 'v3' || p === 'v4') ? p : 'v1';
-})();
-
-var VARIANTS = {
-  fr: {
-    v1: { headline: null, sub: null },
-    v2: {
-      headline: 'Ta voix ne te représente pas encore\u00a0?<br><em>Découvre ce qui la bloque.</em>',
-      sub: 'Découvre ton blocage vocal en 10 questions. Moins d\'1 minute. Exercice personnalisé inclus — gratuit.'
-    },
-    v3: {
-      headline: 'Pas un manque de talent.<br><em>Un blocage.</em>',
-      sub: 'Découvre ton blocage vocal en 10 questions. Moins d\'1 minute. Exercice personnalisé inclus — gratuit.'
-    },
-    v4: {
-      headline: '1\u202f000+ voix libérées.<br><em>Qu\'est-ce qui bloque la tienne\u00a0?</em>',
-      sub: 'Découvre ton blocage vocal en 10 questions. Moins d\'1 minute. Exercice personnalisé inclus — gratuit.'
-    }
-  },
-  es: {
-    v1: { headline: null, sub: null },
-    v2: {
-      headline: '¿Tu voz no te representa todavía?<br><em>Descubre lo que la bloquea.</em>',
-      sub: 'Descubre tu bloqueo vocal en 10 preguntas. Menos de 1 minuto. Ejercicio personalizado incluido — gratis.'
-    },
-    v3: {
-      headline: 'No es falta de talento.<br><em>Es un bloqueo.</em>',
-      sub: 'Descubre tu bloqueo vocal en 10 preguntas. Menos de 1 minuto. Ejercicio personalizado incluido — gratis.'
-    },
-    v4: {
-      headline: '1,000+ voces liberadas.<br><em>¿Qué bloquea la tuya?</em>',
-      sub: 'Descubre tu bloqueo vocal en 10 preguntas. Menos de 1 minuto. Ejercicio personalizado incluido — gratis.'
-    }
-  }
-};
-
 let currentQ      = -1;   // -1 = lead screen, 0–9 = quiz questions
 let answers       = [null, [], [], [], [], [], [], [], null, '']; // Q0 single; Q1-Q7 multi; Q8 single; Q9 textarea
 let profile       = null;   // 'pro' | 'stu'
@@ -1010,12 +971,9 @@ function render() {
   document.getElementById('logo-outside-es').style.display = (lang === 'es') ? 'block' : 'none';
 
   var hlEl = document.getElementById('main-headline');
-  var vData = VARIANTS[lang] && VARIANTS[lang][quizVariant];
-  hlEl.innerHTML = (vData && vData.headline)
-    ? vData.headline
-    : (lang === 'fr'
-        ? 'Frustré de perdre<br><em>contrôle de ta voix ?</em>'
-        : '¿Frustrado/a de perder<br><em>el control de tu voz?</em>');
+  hlEl.innerHTML = lang === 'fr'
+    ? 'Frustré de perdre<br><em>contrôle de ta voix ?</em>'
+    : '¿Frustrado/a de perder<br><em>el control de tu voz?</em>';
   // Hide headline on result screen and during quiz questions (shown on lead page only)
   hlEl.style.display = (!showResult && currentQ === -1) ? 'block' : 'none';
 
@@ -1507,12 +1465,6 @@ function handleRestart() {
   render();
 }
 
-function handleLangToggle(newLang) {
-  if (lang === newLang) return;
-  lang = newLang;
-  render();
-}
-
 // ================================================================
 // LEAD SCREEN
 // ================================================================
@@ -1578,7 +1530,7 @@ function submitLead(resultKey, score, routeKey) {
       email:          leadData.email,
       phone:          leadData.phone || '—',
       language:       l === 'fr' ? 'Français' : 'Español',
-      variant:        quizVariant,
+      variant:        'v1',
       profile:        profile === 'pro'
                         ? (l === 'fr' ? 'Professionnel' : 'Profesional')
                         : (l === 'fr' ? 'Apprenant'     : 'Estudiante'),
@@ -1608,8 +1560,6 @@ function submitLead(resultKey, score, routeKey) {
         res.text().then(function(txt) {
           console.error('[Formspree] Submission failed — status:', res.status, '— response:', txt);
         });
-      } else {
-        console.log('[Formspree] Submission OK — status:', res.status);
       }
     })
     .catch(function(err) {

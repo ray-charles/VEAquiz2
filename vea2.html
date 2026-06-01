@@ -548,20 +548,43 @@
 
     <!-- RESULT SCREEN -->
     <div id="result-screen" style="display:none">
-      <div id="score-arc-container" style="margin-bottom:16px;"></div>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div id="score-arc-container" style="display:inline-block;"></div>
+      </div>
       <div class="result-body" id="result-body"></div>
-      <div id="cost-block" style="display:none;"></div>
+      <div id="result-badge-label"
+        style="display:inline-block;font-size:11px;font-weight:500;
+        letter-spacing:0.07em;text-transform:uppercase;color:#146183;
+        background:rgba(20,97,131,0.10);padding:4px 12px;border-radius:20px;
+        margin-bottom:20px;"></div>
       <div id="video-container"></div>
+      <div id="cost-block" style="display:none;"></div>
       <div id="conversion-section"></div>
       <!-- Elfsight Google Reviews — bottom of result page -->
       <div id="elfsight-result" style="margin-top:16px;padding-top:16px;border-top:0.5px solid rgba(212,175,55,0.25);transform:scale(0.85);transform-origin:top center;">
         <div class="elfsight-app-a2033325-ad8d-4b3e-a377-0415fc2e43eb" data-elfsight-app-lazy></div>
       </div>
+      <div id="second-cta-block" style="display:none;margin-top:24px;padding-top:20px;border-top:0.5px solid rgba(212,175,55,0.25);">
+        <a id="second-cta-btn" href="#"
+          style="display:block;width:100%;background:#146183;color:#FFFFFF;
+          font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;
+          text-align:center;padding:17px 20px;border-radius:8px;
+          text-decoration:none;letter-spacing:0.01em;margin-bottom:8px;
+          box-sizing:border-box;">
+          Tomo mi acceso gratuito de 7 días →
+        </a>
+        <p id="second-cta-urgency"
+          style="font-family:'DM Sans',sans-serif;font-size:12px;
+          font-weight:500;color:#9B1C1C;text-align:center;margin:0;">
+          Es tu oportunidad única para resolver tu bloqueo, totalmente gratis.
+        </p>
+      </div>
     </div>
 
   </div><!-- /quiz-card -->
 
-  <!-- Logo outside quiz card — ES only -->
+  <!-- Logos outside quiz card — shown per language -->
+  <div id="logo-outside-fr" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-fr.png" alt="Voix Essence™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
   <div id="logo-outside-es" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-es.png" alt="Voz Esencia™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
 
   <div class="footer" id="site-footer"></div>
@@ -571,11 +594,16 @@
 // ================================================================
 // CONFIGURATION
 // ================================================================
-const lang = 'es';
+let lang = 'es';
+(function() {
+  var urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (urlLang === 'es' || urlLang === 'fr') lang = urlLang;
+})();
 
-const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+const MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+const MEMBERSHIP_URL_FR = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voix-essence-academytm';
 
-const FORMSPREE_ENDPOINT_V2 = 'PLACEHOLDER_INSERT_ENDPOINT';
+const FORMSPREE_ENDPOINT_V2 = 'https://formspree.io/f/xdawrzrj';
 
 // ================================================================
 // QUESTIONS
@@ -850,6 +878,71 @@ let pixelFired    = false;
 let microfeedbackShown = false;
 
 const RESULT_KEYS = ['mandibulaire', 'respiration', 'nerveux', 'identite'];
+const BLOCK_LETTER = { mandibulaire: 'M', nerveux: 'N', respiration: 'R', identite: 'I' };
+const LETTER_BLOCK = { M: 'mandibulaire', N: 'nerveux', R: 'respiration', I: 'identite' };
+
+// ================================================================
+// URL ROUTING
+// ================================================================
+function getStatePath() {
+  var base = '/vea2.html';
+  if (showResult) {
+    var key = getResultKey();
+    return base + '/' + (BLOCK_LETTER[key] || key);
+  }
+  if (currentQ === 'tiebreak') return base + '/T';
+  if (currentQ === -1) return base;
+  return base + '/' + (currentQ + 1);
+}
+
+function captureState() {
+  return JSON.parse(JSON.stringify({
+    currentQ: currentQ,
+    showResult: showResult,
+    answers: answers,
+    tiebreakAnswer: tiebreakAnswer,
+    isTiebreakActive: isTiebreakActive,
+    isTiebreakUsed: isTiebreakUsed,
+    profile: profile,
+    leadData: leadData,
+    leadSubmitted: leadSubmitted,
+    pixelFired: pixelFired
+  }));
+}
+
+function restoreFromState(s) {
+  if (!s) return false;
+  currentQ         = s.currentQ !== undefined ? s.currentQ : -1;
+  showResult       = !!s.showResult;
+  answers          = s.answers || [null, null, [], null, null, null];
+  tiebreakAnswer   = s.tiebreakAnswer || null;
+  isTiebreakActive = !!s.isTiebreakActive;
+  isTiebreakUsed   = !!s.isTiebreakUsed;
+  profile          = s.profile || null;
+  leadData         = s.leadData || { name: '', email: '', phone: '' };
+  leadSubmitted    = !!s.leadSubmitted;
+  pixelFired       = !!s.pixelFired;
+  return true;
+}
+
+function pushURL() {
+  history.pushState(captureState(), '', getStatePath());
+}
+
+function replaceURL() {
+  history.replaceState(captureState(), '', getStatePath());
+}
+
+window.addEventListener('popstate', function(e) {
+  microfeedbackShown = false;
+  if (e.state && restoreFromState(e.state)) {
+    render();
+  } else {
+    currentQ = -1;
+    showResult = false;
+    render();
+  }
+});
 
 // ================================================================
 // SCORING
@@ -874,10 +967,11 @@ function calculateResult() {
 // RENDER
 // ================================================================
 function render() {
-  document.documentElement.lang = 'es';
+  document.documentElement.lang = lang;
 
   // Logo placement
-  document.getElementById('logo-outside-es').style.display = 'block';
+  document.getElementById('logo-outside-fr').style.display = (lang === 'fr') ? 'block' : 'none';
+  document.getElementById('logo-outside-es').style.display = (lang === 'es') ? 'block' : 'none';
 
   var hlEl = document.getElementById('main-headline');
   hlEl.innerHTML = '¿Tu voz te falla cuando más la necesitas?';
@@ -1113,18 +1207,7 @@ function handleOptionClick(qId, idx, q) {
 }
 
 function handleBack() {
-  if (currentQ === 'tiebreak') {
-    // go back to last quiz question
-    currentQ = QUESTIONS.length - 1;
-    isTiebreakActive = false;
-    render();
-  } else if (currentQ > 0) {
-    currentQ--;
-    render();
-  } else if (currentQ === 0) {
-    currentQ = -1;
-    render();
-  }
+  history.back();
 }
 
 function advanceQuestion() {
@@ -1135,6 +1218,7 @@ function advanceQuestion() {
     if (calcRes.isTie) {
       isTiebreakActive = true;
       currentQ = 'tiebreak';
+      pushURL();
       render();
     } else {
       showTransitionThenResult();
@@ -1142,6 +1226,7 @@ function advanceQuestion() {
     return;
   }
   currentQ++;
+  pushURL();
   render();
 }
 
@@ -1162,6 +1247,7 @@ function showTransitionThenResult() {
   setTimeout(function() {
     showResult = true;
     sessionStorage.setItem('veaQuizState', JSON.stringify({ answers: answers, profile: profile, leadData: leadData, tiebreakAnswer: tiebreakAnswer }));
+    pushURL();
     render();
   }, 3000);
 }
@@ -1219,10 +1305,9 @@ function renderResult() {
   const mirrorKey = getMirrorAnswer(resultKey, answers);
   const headline = d.mirrorHeadlines[mirrorKey];
 
-  const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
-  const JUSTINE_PHOTO  = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
-  const TESTI_TEXT     = '«\u00a0Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar.\u00a0»';
-  const TESTI_META     = 'Justine Lafortune · Canada';
+  const membershipUrl = lang === 'fr' ? MEMBERSHIP_URL_FR : MEMBERSHIP_URL_ES;
+  const TESTI_TEXT = '« Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar. »';
+  const TESTI_META = 'Justine Lafortune · Canada';
 
   const videoIds = {
     mandibulaire: 'VfoYECa3lnE',
@@ -1231,81 +1316,50 @@ function renderResult() {
     identite:     'dbkzQoZaiJA'
   };
   const vid = videoIds[resultKey] || '';
-  const videoHTML = vid
-    ? '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:20px 0;">'
-      + '<iframe src="https://www.youtube.com/embed/' + vid + '?rel=0&modestbranding=1" '
-      + 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>'
-      + '</div>'
-    : '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:24px;text-align:center;margin:20px 0;color:#40172b;font-family:\'DM Sans\',sans-serif;font-size:13px;">[VIDEO — próximamente]</div>';
 
-  // ── SCORE ARC ──
+  // -- SCORE ARC --
   document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
 
-  // ── RESULT BODY — mirror headline (hero) + eyebrow badge + subtext ──
-  var possibilityLines = d.possibility.split('\n').map(function(l) {
-    return l.trim() === '' ? '<br>' : '<span>' + l + '</span><br>';
-  }).join('');
-  var outcomeLines = d.outcome.split('\n').map(function(l) {
-    return l.trim() === '' ? '<br>' : '<span>' + l + '</span><br>';
-  }).join('');
-
+  // -- RESULT BODY -- mirror headline --
   document.getElementById('result-body').innerHTML =
-    // Mirror headline — promoted to hero size
     '<p style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:400;'
     + 'font-style:italic;color:#2f1525;line-height:1.35;margin:0 0 14px;">'
-    + headline + '</p>'
-    // TU BLOQUEO PRINCIPAL + block name — demoted, small eyebrow
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
-    + 'letter-spacing:0.08em;text-transform:uppercase;color:#146183;'
-    + 'background:rgba(20,97,131,0.10);display:inline-block;padding:4px 12px;border-radius:20px;margin:0 0 16px;">'
-    + 'Tu bloqueo principal\u00a0— ' + d.title + '</p>'
-    // Confirmation subtext
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:400;'
-    + 'letter-spacing:0.05em;color:#d4af37;line-height:1.6;margin:0 0 20px;">'
-    + d.subtext + '</p>';
+    + headline + '</p>';
 
-  // ── COST BLOCK → repurposed for possibility statement ──
+  // -- BADGE --
+  document.getElementById('result-badge-label').textContent = 'Tu bloqueo principal — ' + d.title;
+
+  // -- VIDEO --
+  var videoContainer = document.getElementById('video-container');
+  if (videoContainer) {
+    videoContainer.innerHTML = vid
+      ? '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:20px 0 6px;">'
+        + '<iframe src="https://www.youtube.com/embed/' + vid + '?rel=0&modestbranding=1" '
+        + 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>'
+        + '</div>'
+        + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;'
+        + 'color:rgba(47,21,37,0.45);text-align:center;margin:0 0 20px;">Mamselle — ' + d.title + '</p>'
+      : '';
+  }
+
+  // -- COST BLOCK -- body + promo sentence --
+  var possibilityLines = d.possibility.split('\n').map(function(line) {
+    return line.trim() === '' ? '<br>' : '<span>' + line + '</span><br>';
+  }).join('');
+
   var costEl = document.getElementById('cost-block');
   costEl.style.display = 'block';
   costEl.innerHTML =
-    '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:300;'
-    + 'color:#2f1525;line-height:1.75;">' + possibilityLines + '</div>';
+    '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
+    + 'color:#2f1525;line-height:1.75;margin:0;">' + possibilityLines
+    + '<span style="color:#146183;font-weight:500;">' + d.subtext + '</span>'
+    + '</p>';
 
-  // ── VIDEO ──
-  var videoContainer = document.getElementById('video-container');
-  if (videoContainer) videoContainer.innerHTML = videoHTML;
-
-  // ── CONVERSION SECTION ──
+  // -- CONVERSION SECTION --
   document.getElementById('conversion-section').innerHTML =
     '<hr style="border:none;border-top:0.5px solid rgba(212,175,55,0.25);margin:24px 0;">'
 
-    // Bridge
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
-    + 'font-style:italic;color:#40172b;text-align:center;line-height:1.65;margin:0 0 16px;">'
-    + d.bridge + '</p>'
-
-    // Explicit connection
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;'
-    + 'color:#146183;text-align:center;line-height:1.6;margin:0 0 20px;">'
-    + 'El Protocolo Voz Esencia™ fue construido exactamente para esto.' + '</p>'
-
-    // Block-specific outcome
-    + '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:20px 22px;margin-bottom:20px;">'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
-    + 'color:#2f1525;line-height:1.75;">' + outcomeLines + '</div>'
-    + '</div>'
-
-    // Secondary CTA — outlined, after outcome block
-    + '<a href="' + MEMBERSHIP_URL + '" class="btn-secondary-cta">Quiero empezar mi semana gratis →</a>'
-
-    // Authority line
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;'
-    + 'font-style:italic;color:#40172b;text-align:center;line-height:1.65;margin:0 0 20px;">'
-    + 'Desde hace 25 años acompaño a personas a cantar en escenario,<br>'
-    + 'hablar en público, y vivir como si hubieran nacido de nuevo.<br>'
-    + '<strong style="font-weight:500;">— Mamselle Ruiz Coach</strong></p>'
-
-    // Testimonial
+    // Testimonial card
     + '<div style="background:#FFFFFF;border:0.5px solid rgba(212,175,55,0.25);border-radius:12px;padding:16px;margin-bottom:20px;">'
     + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
     + '<div style="width:48px;height:48px;border-radius:50%;background:#258ba1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:600;color:#fff;">JL</div>'
@@ -1315,78 +1369,38 @@ function renderResult() {
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2f1525;line-height:1.65;margin:0;font-style:italic;">' + TESTI_TEXT + '</p>'
     + '</div>'
 
-    // Social proof line
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;'
-    + 'letter-spacing:3px;text-transform:uppercase;color:#146183;text-align:center;margin:0 0 20px;">'
-    + 'Más de 1,000 voces liberadas con el Protocolo Voz Esencia™</p>'
+    // Social proof sentence
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:300;color:#2f1525;line-height:1.65;text-align:center;margin:0 0 6px;">La mayoría de las personas que se unen a nuestra comunidad <strong style="font-weight:500;">resuelven su bloqueo.</strong></p>'
 
-    // Readiness widget
-    + '<div id="readiness-widget" style="text-align:center;margin:28px 0 20px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;color:#40172b;margin-bottom:14px;letter-spacing:0.02em;">¿Qué tan list@ te sientes para trabajar en esto?</p>'
-    + '<div id="readiness-options" style="display:flex;justify-content:center;gap:10px;"></div>'
-    + '</div>'
+    // Social count
+    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#146183;text-align:center;margin:0 0 20px;">Más de 1.000 voces liberadas con el Protocolo Voz Esencia™</p>'
 
-    // Offer block
-    + '<div style="background:rgba(20,97,131,0.06);border-radius:12px;padding:18px 20px;margin-bottom:16px;">'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;color:#146183;line-height:1.7;margin:0 0 10px;">'
-    + 'Tu primera semana es completamente gratuita.</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:400;color:#146183;line-height:1.7;margin:0 0 10px;">'
-    + d.offerMiddle + '</p>'
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:#2f1525;line-height:1.65;margin:0;text-decoration:underline;">'
-    + 'Luego $7/mes — menos de lo que cuesta una clase. Cancela cuando quieras, sin preguntas.</p>'
-    + '</div>'
+    // Pre-CTA question
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:400;font-style:italic;color:#2f1525;text-align:center;margin:0 0 14px;line-height:1.4;">¿Quieres resolver tu bloqueo de una vez por todas?</p>'
 
     // Primary CTA button
-    + '<a href="' + MEMBERSHIP_URL + '" id="main-cta-btn" '
+    + '<a href="' + membershipUrl + '" id="main-cta-btn" '
     + 'style="display:block;width:100%;background:#146183;color:#FFFFFF;'
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
-    + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;" id="main-cta-btn">'
-    + d.ctaPrimary + '</a>'
+    + 'letter-spacing:0.01em;margin-bottom:20px;box-sizing:border-box;">'
+    + d.ctaPrimary + '</a>';
 
-    // Below CTA line
-    + '<p style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:400;'
-    + 'color:#40172b;text-align:center;margin:0 0 20px;line-height:1.55;">'
-    + 'El primer paso es gratis. Lo que descubras en 7 días lo decides tú.</p>'
-
-    ;
-
-  // ── READINESS WIDGET CIRCLES ──
-  var roEl = document.getElementById('readiness-options');
-  if (roEl) {
-    roEl.innerHTML = '';
-    for (var i = 1; i <= 5; i++) {
-      (function(score) {
-        var btn = document.createElement('button');
-        btn.textContent = score;
-        btn.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1.5px solid #146183;'
-          + 'background:transparent;color:#146183;font-family:"DM Sans",sans-serif;'
-          + 'font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;';
-        btn.addEventListener('click', function() {
-          // Update all circles
-          roEl.querySelectorAll('button').forEach(function(b) {
-            b.style.background = 'transparent';
-            b.style.color = '#146183';
-          });
-          btn.style.background = '#146183';
-          btn.style.color = '#FFFFFF';
-          // Update CTA text
-          var mainBtn = document.getElementById('main-cta-btn');
-          if (!mainBtn) return;
-          if (score <= 2) {
-            mainBtn.textContent = 'Empezar gratis — sin compromiso, cancela cuando quieras →';
-          } else if (score === 3) {
-            mainBtn.textContent = d.ctaPrimary;
-          } else {
-            mainBtn.textContent = 'Estoy list@ — empezar ahora →';
-          }
-        });
-        roEl.appendChild(btn);
-      })(i);
-    }
+  // -- SECOND CTA BLOCK --
+  var secondCtaBlock = document.getElementById('second-cta-block');
+  var secondCtaBtn   = document.getElementById('second-cta-btn');
+  if (secondCtaBlock && secondCtaBtn) {
+    secondCtaBtn.href = membershipUrl;
+    secondCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
+      if (typeof fbq !== 'undefined') fbq('trackCustom', 'Quiz_CTAClick');
+      setTimeout(function() { window.location.href = dest; }, 300);
+    });
+    secondCtaBlock.style.display = 'none';
   }
 
-  // ── CTA CLICK TRACKING ──
+  // -- CTA CLICK TRACKING --
   var mainCtaBtn = document.getElementById('main-cta-btn');
   if (mainCtaBtn) {
     mainCtaBtn.addEventListener('click', function(e) {
@@ -1403,22 +1417,21 @@ function renderResult() {
     submitLead(resultKey, score);
   }
 
-  // ── META PIXEL ──
+  // -- META PIXEL --
   if (!pixelFired && typeof fbq !== 'undefined') {
     pixelFired = true;
-    fbq('track', 'CompleteRegistration', { content_name: resultKey, status: 'es' });
+    fbq('track', 'CompleteRegistration', { content_name: resultKey, status: lang });
     fbq('trackCustom', 'Quiz_ResultViewed', {
-      vocal_block: resultKey, vocal_score: score, language: 'es'
+      vocal_block: resultKey, vocal_score: score, language: lang
     });
   }
 
-  // ── ANIMATIONS ──
+  // -- ANIMATIONS --
   setTimeout(function() { animateResultScreen(score); }, 20);
   setTimeout(function() {
     if (window.eapps && window.eapps.Platform) window.eapps.Platform.initApps();
   }, 600);
 }
-
 function handleRestart() {
   currentQ      = 0;
   answers       = [null, null, [], null, null, null];
@@ -1471,15 +1484,15 @@ function handleLeadSubmit(e) {
     });
     fbq('trackCustom', 'Quiz_LeadCapture', {
       content_name: 'Vocal Block Quiz',
-      language:     'es'
+      language:     lang
     });
   }
   currentQ = 0;
+  pushURL();
   render();
 }
 
 function submitLead(resultKey, vocalScore) {
-  if (!FORMSPREE_ENDPOINT_V2 || FORMSPREE_ENDPOINT_V2 === 'PLACEHOLDER_INSERT_ENDPOINT') return;
   try {
     var data = {
       name:            leadData.name,
@@ -1488,8 +1501,8 @@ function submitLead(resultKey, vocalScore) {
       vocal_block:     resultKey,
       vocal_score:     vocalScore,
       profile:         profile,
-      variant:         'v2',
-      language:        'es',
+      variant:         'vea2',
+      language:        lang,
       q1_memory:       answers[0],
       q2_physical:     answers[1],
       q3_tried:        answers[2],
@@ -1509,8 +1522,6 @@ function submitLead(resultKey, vocalScore) {
         res.text().then(function(txt) {
           console.error('[Formspree] Submission failed — status:', res.status, '— response:', txt);
         });
-      } else {
-        console.log('[Formspree] Submission OK — status:', res.status);
       }
     })
     .catch(function(err) {
@@ -1603,8 +1614,32 @@ function animateResultScreen(score) {
   }
 })();
 
+// URL-based direct navigation (e.g. /vea2.html/M)
+(function() {
+  if (showResult) return; // already handled by preview mode or session restore
+  var path = window.location.pathname;
+  var match = path.match(/\/vea2\.html\/(.+)$/i);
+  if (!match) return;
+  var segment = match[1].toUpperCase();
+  if (LETTER_BLOCK[segment]) {
+    var block = LETTER_BLOCK[segment];
+    var presets = {
+      mandibulaire: [1, 0, [], null, null, 0],
+      respiration:  [2, 1, [], null, null, 0],
+      nerveux:      [0, 2, [], null, null, 0],
+      identite:     [3, 3, [], null, null, 0]
+    };
+    answers = presets[block];
+    showResult = true;
+  } else {
+    // Numbered or unknown segment — redirect to landing
+    history.replaceState(null, '', '/vea2.html');
+  }
+})();
+
 // Init
 render();
+replaceURL();
 </script>
 </body>
 </html>

@@ -5,5 +5,7 @@ Thumbs.db
 .env
 .env.*
 dist/
-serve-quiz.js
+serve-quiz*.js
+favicon_io.zip
+favicon_io/
 .claude/
