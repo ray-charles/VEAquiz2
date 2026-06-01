@@ -477,20 +477,15 @@
 
     <!-- RESULT SCREEN -->
     <div id="result-screen" style="display:none">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-        <div style="flex-shrink:0;" id="score-arc-container"></div>
-        <div style="flex:1;min-width:0;">
-          <div id="result-badge-label"
-            style="display:inline-block;font-size:11px;font-weight:500;
-            letter-spacing:0.07em;text-transform:uppercase;color:#085041;
-            background:#E1F5EE;padding:4px 12px;border-radius:20px;
-            margin-bottom:8px;"></div>
-          <div id="result-title"
-            style="font-family:'Cormorant Garamond',serif;font-size:30px;
-            font-weight:500;color:#2C2825;line-height:1.15;margin:0;"></div>
-        </div>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div id="score-arc-container" style="display:inline-block;"></div>
       </div>
-      <div class="result-body"  id="result-body"></div>
+      <div id="result-body"></div>
+      <div id="result-badge-label"
+        style="display:inline-block;font-size:11px;font-weight:500;
+        letter-spacing:0.07em;text-transform:uppercase;color:#085041;
+        background:#E1F5EE;padding:4px 12px;border-radius:20px;
+        margin-bottom:20px;"></div>
       <div id="video-container"></div>
       <div id="cost-block" style="display:none;"></div>
       <div id="conversion-section"></div>
@@ -783,37 +778,45 @@ const RESULTS = {
     pro: {
       mandibulaire: {
         title: "Blocage Mandibulaire",
-        body: "Ta mâchoire accumule la tension de chaque session, chaque présentation, chaque moment chargé. Quand elle se serre — souvent inconsciemment — elle réduit ta résonance, force ta gorge à compenser, et crée une fatigue qui n'a rien à voir avec ton endurance. Ce n'est pas une fragilité. C'est un pattern biomécanique précis, et il se libère.",
+        mirrorLine: "Tu as senti la tension dans ta gorge ou ta mâchoire — et tu n'as pas pu chanter ni parler comme tu le voulais.",
+        body: "Ta mâchoire accumule la tension sans que tu t'en aperçoives. En se contractant, elle réduit ta résonance et oblige ta gorge à compenser. C'est pour ça que ta voix se fatigue et s'éteint exactement quand tu en as le plus besoin.",
       },
       respiration: {
         title: "Blocage Respiratoire",
-        body: "Tu utilises une respiration compensatoire depuis longtemps — et ton corps s'y est adapté. Résultat : ta voix perd en puissance après 20-30 minutes, tu manques d'air au mauvais moment, et tu forces là où tu devrais avoir du flux. Ce n'est pas un manque d'endurance. C'est un pattern respiratoire qui se recalibre.",
+        mirrorLine: "Ta voix s'est éteinte — tu t'es retrouvé·e sans air ni force avant la fin.",
+        body: "Ton pattern respiratoire compense quelque chose depuis longtemps — et ton corps s'y est adapté. Résultat : ta voix perd en puissance, tu manques d'air au mauvais moment, et tu forces là où tu aurais besoin de flux.",
       },
       nerveux: {
         title: "Blocage du Système Nerveux",
-        body: "Ta voix change sous pression non pas par manque de confiance, mais parce que ton système nerveux déclenche une réponse automatique de protection. Cette réponse encode une tension dans ton tissu vocal. Comprendre le mécanisme neurologique, c'est la première étape pour le neutraliser — pas le « gérer ».",
+        mirrorLine: "Ta voix t'a lâché exactement quand tu en avais le plus besoin — et tu n'en comprends pas la raison.",
+        body: "Ta voix ne change pas sous pression par manque de confiance. C'est ton système nerveux qui déclenche une réponse automatique de protection — qui encode une tension dans ton tissu vocal avant même que tu commences.",
       },
       identite: {
         title: "Blocage d'Identité Vocale",
-        body: "Ta voix ne projette pas l'autorité que tu as intérieurement. Ce décalage n'est pas psychologique — il est physique. Des années de messages sur « comment tu devrais sonner » ont façonné la façon dont tu tiens ta gorge, dont tu places ta voix. Ce blocage se libère, et quand il le fait, les gens autour de toi le remarquent avant toi.",
+        mirrorLine: "Tu as entendu ta voix et tu ne t'es pas reconnu·e — ce n'était pas toi.",
+        body: "Ta voix ne projette pas la présence que tu as intérieurement. Ce décalage n'est pas psychologique — il est physique. Des années de messages sur comment tu devrais sonner ont façonné la façon dont tu tiens ta gorge.",
       }
     },
     stu: {
       mandibulaire: {
         title: "Blocage Mandibulaire",
-        body: "La mâchoire est le saboteur le plus sous-estimé de la voix. Quand elle est chroniquement tendue — souvent sans que tu le sentes — elle bloque la résonance, empêche les harmoniques de se déployer et rend certaines notes inaccessibles. Ce n'est pas un manque de talent. C'est un pattern biomécanique qui se libère.",
+        mirrorLine: "Tu as senti la tension dans ta gorge ou ta mâchoire — et tu n'as pas pu chanter ni parler comme tu le voulais.",
+        body: "Ta mâchoire accumule la tension sans que tu t'en aperçoives. En se contractant, elle réduit ta résonance et oblige ta gorge à compenser. C'est pour ça que ta voix se fatigue et s'éteint exactement quand tu en as le plus besoin.",
       },
       respiration: {
         title: "Blocage Respiratoire",
-        body: "Ton pattern respiratoire compense quelque chose — et tu t'y es habitué·e. Le résultat : fatigue vocale rapide, notes aiguës difficiles à soutenir, voix qui perd de la couleur sur la durée. Recalibrer ce pattern change plus de choses dans ta voix que n'importe quel exercice de chant.",
+        mirrorLine: "Ta voix s'est éteinte — tu t'es retrouvé·e sans air ni force avant la fin.",
+        body: "Ton pattern respiratoire compense quelque chose depuis longtemps — et ton corps s'y est adapté. Résultat : fatigue vocale rapide, notes aiguës difficiles à soutenir, voix qui perd de la couleur sur la durée.",
       },
       nerveux: {
         title: "Blocage du Système Nerveux",
-        body: "Quand ta voix tremble, se ferme ou perd de la fluidité sous le regard des autres ou devant un micro, ton système nerveux est en mode protection. Ce n'est pas de la timidité. C'est physiologique. Et c'est exactement le type de blocage qui répond le mieux à une approche qui combine biomécanique et régulation nerveuse.",
+        mirrorLine: "Ta voix t'a lâché exactement quand tu en avais le plus besoin — et tu n'en comprends pas la raison.",
+        body: "Quand ta voix tremble, se ferme ou perd de la fluidité sous le regard des autres ou devant un micro, ton système nerveux est en mode protection. Ce n'est pas de la timidité. C'est physiologique.",
       },
       identite: {
         title: "Blocage d'Identité Vocale",
-        body: "Ta voix ne sonne pas comme toi — et tu le sens. Il y a un écart entre qui tu es et ce que ta voix exprime. Ce n'est pas abstrait : c'est la façon dont tu places ta voix, dont tu gères ton souffle, influencée par des années d'écoute et de comparaison. Ce blocage se libère quand on identifie exactement ce qui crée le décalage.",
+        mirrorLine: "Tu as entendu ta voix et tu ne t'es pas reconnu·e — ce n'était pas toi.",
+        body: "Ta voix ne sonne pas comme toi — et tu le sens. Il y a un écart entre qui tu es et ce que ta voix exprime. Ce n'est pas abstrait : c'est la façon dont tu places ta voix, influencée par des années d'écoute et de comparaison.",
       }
     }
   },
@@ -821,37 +824,45 @@ const RESULTS = {
     pro: {
       mandibulaire: {
         title: "Bloqueo Mandibular",
-        body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+        mirrorLine: "Sentiste tensión en la garganta o la mandíbula — y no pudiste cantar ni hablar como querías.",
+        body: "Tu mandíbula acumula tensión sin que lo notes. Al apretarse, reduce tu resonancia y obliga a la garganta a compensar. Por eso la voz se cansa y se apaga justo cuando más la necesitas.",
       },
       respiration: {
         title: "Bloqueo de Respiración",
-        body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
+        mirrorLine: "Tu voz se fue apagando — te quedaste sin aire o sin fuerza antes de terminar.",
+        body: "Tu patrón respiratorio lleva tiempo compensando — y tu cuerpo se adaptó. Resultado: tu voz pierde potencia, te quedas sin aire en el peor momento, y fuerzas donde deberías tener flujo.",
       },
       nerveux: {
         title: "Bloqueo del Sistema Nervioso",
-        body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
+        mirrorLine: "Te pusiste nervios@ y tu voz se cortó, tembló o se cerró cuando más la necesitabas.",
+        body: "Tu voz no cambia bajo presión por falta de confianza. Es tu sistema nervioso disparando una respuesta automática de protección — que codifica tensión en tu tejido vocal antes de que empieces a hablar.",
       },
       identite: {
         title: "Bloqueo de Identidad Vocal",
-        body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
+        mirrorLine: "Escuchaste tu voz y no te reconociste — no sonaba como tú.",
+        body: "Tu voz no proyecta la presencia que tienes por dentro. Ese desfase no es psicológico — es físico. Años de mensajes sobre cómo deberías sonar cambiaron la forma en que tensas la garganta y colocas la voz.",
       }
     },
     stu: {
       mandibulaire: {
         title: "Bloqueo Mandibular",
-        body: "Tu mandíbula se aprieta. Tu voz se apaga.\nNo es debilidad — es un patrón físico. Y los patrones se cambian.",
+        mirrorLine: "Sentiste tensión en la garganta o la mandíbula — y no pudiste cantar ni hablar como querías.",
+        body: "Tu mandíbula acumula tensión sin que lo notes. Al apretarse, reduce tu resonancia y obliga a la garganta a compensar. Por eso la voz se cansa y se apaga justo cuando más la necesitas.",
       },
       respiration: {
         title: "Bloqueo de Respiración",
-        body: "A los 20 minutos, tu voz pierde fuerza. No es tu culpa — es tu respiración.\nTu cuerpo aprendió un hábito equivocado. Hoy puedes aprender uno nuevo.",
+        mirrorLine: "Tu voz se fue apagando — te quedaste sin aire o sin fuerza antes de terminar.",
+        body: "Tu patrón respiratorio lleva tiempo compensando — y tu cuerpo se adaptó. Resultado: tu voz pierde potencia, te quedas sin aire en el peor momento, y fuerzas donde deberías tener flujo.",
       },
       nerveux: {
         title: "Bloqueo del Sistema Nervioso",
-        body: "Bajo presión, tu voz cambia sola. No lo decides tú — lo decide tu cuerpo.\nNo se arregla respirando hondo. Se arregla entendiendo qué dispara la respuesta.",
+        mirrorLine: "Te pusiste nervios@ y tu voz se cortó, tembló o se cerró cuando más la necesitabas.",
+        body: "Tu voz no cambia bajo presión por falta de confianza. Es tu sistema nervioso disparando una respuesta automática de protección — que codifica tensión en tu tejido vocal antes de que empieces a hablar.",
       },
       identite: {
         title: "Bloqueo de Identidad Vocal",
-        body: "Tu voz no suena como tú. Eso no es psicológico — es físico.\nAños de mensajes sobre cómo deberías sonar cambiaron tu mecánica. Se puede revertir.",
+        mirrorLine: "Escuchaste tu voz y no te reconociste — no sonaba como tú.",
+        body: "Tu voz no proyecta la presencia que tienes por dentro. Ese desfase no es psicológico — es físico. Años de mensajes sobre cómo deberías sonar cambiaron la forma en que tensas la garganta y colocas la voz.",
       }
     }
   }
@@ -967,7 +978,10 @@ let pixelFired    = false;
 // ================================================================
 // SCORING
 // ================================================================
+var _resultKeyOverride = null;
+
 function calculateResult() {
+  if (_resultKeyOverride) return _resultKeyOverride;
   const scores = [0, 0, 0, 0]; // mandibulaire, respiration, nerveux, identite
 
   // Multi-select (Q1, Q2, Q3, Q4, Q5 all vote by each selected option)
@@ -1234,12 +1248,9 @@ function renderResult() {
 
   document.getElementById('score-arc-container').innerHTML = renderScoreArc(score);
 
-  // Badges
+  // Badge — "TU BLOQUEO PRINCIPAL — [Block title]"
   document.getElementById('result-badge-label').textContent =
-    lang === 'fr' ? 'Ton blocage principal' : 'Tu bloqueo principal';
-
-  // Title
-  document.getElementById('result-title').textContent = d.title;
+    (lang === 'fr' ? 'Ton blocage principal — ' : 'Tu bloqueo principal — ') + d.title;
 
   // Three-insight result body
   var q2idx  = Array.isArray(answers[3]) ? answers[3][0] : answers[3];
@@ -1275,31 +1286,24 @@ function renderResult() {
   var q4idx  = Array.isArray(answers[5]) ? answers[5][0] : answers[5];
   var q4text = (q4idx !== null && q4idx !== undefined) ? Q4_COST_DATA[lang][q4idx] : '';
 
-  // Display helpers: set correct visibility at creation time (class toggle already ran before renderResult)
-  var dFr = lang === 'es' ? ' style="display:none;"' : '';
-  var dEs = lang === 'fr' ? ' style="display:none;"' : '';
+  document.getElementById('result-body').innerHTML = '';
 
-  var bodyHTML =
-    '<div style="margin-bottom:14px;">'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#1B4B3A;margin-bottom:8px;">'
-    + '<span class="ins1-fr"' + dFr + '>Ce qui se passe</span>'
-    + '<span class="ins1-es"' + dEs + '>Lo que ocurre</span>'
-    + '</div>'
-    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;color:#7A706A;line-height:1.7;">' + d.body + '</div>'
-    + '</div>';
-
-
-  document.getElementById('result-body').innerHTML = bodyHTML;
-
-  // Cost-of-inaction block
+  // ── BLOCKQUOTE (body + promo sentence) ──────────────────────────
+  var PROMO_SENTENCE = {
+    fr: 'Le Protocole Voz Esencia™ travaille exactement ce pattern — exercices spécifiques à ton blocage, en 7 jours, sans technique complexe.',
+    es: 'El Protocolo Voz Esencia™ trabaja exactamente este patrón — ejercicios específicos para tu bloqueo, en 7 días, sin técnica compleja.'
+  };
   var costEl = document.getElementById('cost-block');
-  var costText = (COST_DATA[lang] && COST_DATA[lang][resultKey]) ? COST_DATA[lang][resultKey] : '';
-  var costTitle = lang === 'fr' ? "Ce que ça coûte sans rien changer" : "Lo que cuesta no hacer nada";
-  if (costText) {
-    costEl.innerHTML = '<div class="cost-title">' + costTitle + '</div><div class="cost-body">' + costText + '</div>';
+  if (costEl) {
+    costEl.innerHTML =
+      '<div style="border-left:3px solid #D8CDB5;padding:14px 16px;margin:0 0 20px;">'
+      + '<p style="font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:300;'
+      + 'color:#2C2825;line-height:1.7;margin:0;">'
+      + d.body + ' '
+      + '<span style="color:#1B4B3A;font-weight:500;">' + PROMO_SENTENCE[lang] + '</span>'
+      + '</p>'
+      + '</div>';
     costEl.style.display = 'block';
-  } else {
-    costEl.style.display = 'none';
   }
 
   // ── CONVERSION SECTION ──────────────────────────────────────────
@@ -1333,8 +1337,6 @@ function renderResult() {
     + 'Yo que no creía que podía cantar.\u00a0»';
   var TESTI_META_ES = 'Justine Lafortune · Canada';
 
-  var JUSTINE_PHOTO = 'https://raw.githubusercontent.com/ray-charles/VEAquiz/main/Justine.png';
-
   var videoIds = {
     mandibulaire: (lang === 'es') ? 'VfoYECa3lnE' : '',
     respiration:  (lang === 'es') ? 'uAlIEAIVxgM' : '',
@@ -1343,21 +1345,22 @@ function renderResult() {
   };
 
   var vid = videoIds[resultKey] || '';
-  if (vid && vid.length > 0) {
-    var videoContainer = document.getElementById('video-container');
-    if (videoContainer) {
+  var videoContainer = document.getElementById('video-container');
+  if (videoContainer) {
+    if (vid) {
       videoContainer.innerHTML =
         '<div style="position:relative;padding-bottom:56.25%;height:0;'
-        + 'overflow:hidden;border-radius:12px;margin:20px 0;">'
+        + 'overflow:hidden;border-radius:12px;margin:20px 0 6px;">'
         + '<iframe src="https://www.youtube.com/embed/' + vid
         + '?rel=0&modestbranding=1" '
         + 'style="position:absolute;top:0;left:0;width:100%;height:100%;'
         + 'border:none;" allowfullscreen loading="lazy"></iframe>'
-        + '</div>';
+        + '</div>'
+        + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;'
+        + 'color:#A89E97;text-align:center;margin:0 0 20px;">Mamselle — ' + d.title + '</p>';
+    } else {
+      videoContainer.innerHTML = '';
     }
-  } else {
-    var videoContainer = document.getElementById('video-container');
-    if (videoContainer) videoContainer.innerHTML = '';
   }
 
   var ctaLabel     = (CTA_LABEL[lang] && CTA_LABEL[lang][resultKey]) ? CTA_LABEL[lang][resultKey] : CTA_LABEL[lang]['mandibulaire'];
@@ -1371,8 +1374,10 @@ function renderResult() {
     + '<div style="background:#fff;border:0.5px solid #D8CDB5;border-radius:12px;'
     + 'padding:16px;margin-bottom:20px;">'
     + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
-    + '<img src="' + JUSTINE_PHOTO + '" alt="Justine Lafortune" '
-    + 'style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+    + '<div style="width:48px;height:48px;border-radius:50%;background:#2D7A5E;'
+    + 'display:flex;align-items:center;justify-content:center;flex-shrink:0;'
+    + 'font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:600;color:#fff;">'
+    + 'JL</div>'
     + '<div>'
     + '<div style="color:#C4845A;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;'
