@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -583,7 +583,8 @@
 
   </div><!-- /quiz-card -->
 
-  <!-- Logo outside quiz card — ES only -->
+  <!-- Logos outside quiz card — shown per language -->
+  <div id="logo-outside-fr" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-fr.png" alt="Voix Essence™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
   <div id="logo-outside-es" style="text-align:center;margin-top:20px;display:none;"><img src="Logo-es.png" alt="Voz Esencia™ Academy" width="192" height="48" style="height:48px;width:auto;"></div>
 
   <div class="footer" id="site-footer"></div>
@@ -593,11 +594,16 @@
 // ================================================================
 // CONFIGURATION
 // ================================================================
-const lang = 'es';
+let lang = 'es';
+(function() {
+  var urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (urlLang === 'es' || urlLang === 'fr') lang = urlLang;
+})();
 
-const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+const MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+const MEMBERSHIP_URL_FR = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voix-essence-academytm';
 
-const FORMSPREE_ENDPOINT_V2 = 'PLACEHOLDER_INSERT_ENDPOINT';
+const FORMSPREE_ENDPOINT_V2 = 'https://formspree.io/f/xdawrzrj';
 
 // ================================================================
 // QUESTIONS
@@ -961,10 +967,11 @@ function calculateResult() {
 // RENDER
 // ================================================================
 function render() {
-  document.documentElement.lang = 'es';
+  document.documentElement.lang = lang;
 
   // Logo placement
-  document.getElementById('logo-outside-es').style.display = 'block';
+  document.getElementById('logo-outside-fr').style.display = (lang === 'fr') ? 'block' : 'none';
+  document.getElementById('logo-outside-es').style.display = (lang === 'es') ? 'block' : 'none';
 
   var hlEl = document.getElementById('main-headline');
   hlEl.innerHTML = '¿Tu voz te falla cuando más la necesitas?';
@@ -1298,7 +1305,7 @@ function renderResult() {
   const mirrorKey = getMirrorAnswer(resultKey, answers);
   const headline = d.mirrorHeadlines[mirrorKey];
 
-  const MEMBERSHIP_URL = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
+  const membershipUrl = lang === 'fr' ? MEMBERSHIP_URL_FR : MEMBERSHIP_URL_ES;
   const TESTI_TEXT = '« Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar. »';
   const TESTI_META = 'Justine Lafortune · Canada';
 
@@ -1372,7 +1379,7 @@ function renderResult() {
     + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:400;font-style:italic;color:#2f1525;text-align:center;margin:0 0 14px;line-height:1.4;">¿Quieres resolver tu bloqueo de una vez por todas?</p>'
 
     // Primary CTA button
-    + '<a href="' + MEMBERSHIP_URL + '" id="main-cta-btn" '
+    + '<a href="' + membershipUrl + '" id="main-cta-btn" '
     + 'style="display:block;width:100%;background:#146183;color:#FFFFFF;'
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
@@ -1383,7 +1390,7 @@ function renderResult() {
   var secondCtaBlock = document.getElementById('second-cta-block');
   var secondCtaBtn   = document.getElementById('second-cta-btn');
   if (secondCtaBlock && secondCtaBtn) {
-    secondCtaBtn.href = MEMBERSHIP_URL;
+    secondCtaBtn.href = membershipUrl;
     secondCtaBtn.addEventListener('click', function(e) {
       e.preventDefault();
       var dest = this.href;
@@ -1413,9 +1420,9 @@ function renderResult() {
   // -- META PIXEL --
   if (!pixelFired && typeof fbq !== 'undefined') {
     pixelFired = true;
-    fbq('track', 'CompleteRegistration', { content_name: resultKey, status: 'es' });
+    fbq('track', 'CompleteRegistration', { content_name: resultKey, status: lang });
     fbq('trackCustom', 'Quiz_ResultViewed', {
-      vocal_block: resultKey, vocal_score: score, language: 'es'
+      vocal_block: resultKey, vocal_score: score, language: lang
     });
   }
 
@@ -1477,7 +1484,7 @@ function handleLeadSubmit(e) {
     });
     fbq('trackCustom', 'Quiz_LeadCapture', {
       content_name: 'Vocal Block Quiz',
-      language:     'es'
+      language:     lang
     });
   }
   currentQ = 0;
@@ -1486,7 +1493,6 @@ function handleLeadSubmit(e) {
 }
 
 function submitLead(resultKey, vocalScore) {
-  if (!FORMSPREE_ENDPOINT_V2 || FORMSPREE_ENDPOINT_V2 === 'PLACEHOLDER_INSERT_ENDPOINT') return;
   try {
     var data = {
       name:            leadData.name,
@@ -1495,8 +1501,8 @@ function submitLead(resultKey, vocalScore) {
       vocal_block:     resultKey,
       vocal_score:     vocalScore,
       profile:         profile,
-      variant:         'v2',
-      language:        'es',
+      variant:         'vea2',
+      language:        lang,
       q1_memory:       answers[0],
       q2_physical:     answers[1],
       q3_tried:        answers[2],
@@ -1516,8 +1522,6 @@ function submitLead(resultKey, vocalScore) {
         res.text().then(function(txt) {
           console.error('[Formspree] Submission failed — status:', res.status, '— response:', txt);
         });
-      } else {
-        console.log('[Formspree] Submission OK — status:', res.status);
       }
     })
     .catch(function(err) {
