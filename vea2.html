@@ -792,13 +792,13 @@ function getMirrorAnswer(winningBlock, ans) {
 // BACKGROUND PROGRESSION — Teal Ocean 7-step fade
 // ================================================================
 const BG_PROGRESSION = [
-  '#146183',  // step 0 — landing
-  '#1d7599',  // step 1 — Q1
-  '#2688ae',  // step 2 — Q2
-  '#539dba',  // step 3 — Q3
-  '#8ec4d6',  // step 4 — Q4
-  '#c8e4ef',  // step 5 — Q5
-  '#FAEFF7'   // step 6 — result
+  '#146183',  // step 0 — landing (unchanged)
+  '#8ec4d6',  // step 1 — Q1 (pale teal)
+  '#a8d5e4',  // step 2 — Q2
+  '#c0e0ed',  // step 3 — Q3
+  '#d8eef5',  // step 4 — Q4
+  '#ecf7fb',  // step 5 — Q5 (near white)
+  '#FAEFF7'   // step 6 — result (unchanged)
 ];
 
 function updateBackground(step) {
@@ -825,7 +825,7 @@ function updateBackground(step) {
     // Quiz — dark mode
     document.body.style.color = '#FFFFFF';
     if (card) {
-      card.style.background = 'rgba(255,255,255,0.07)';
+      card.style.background = '#146183';
       card.style.border = '0.5px solid rgba(255,255,255,0.12)';
     }
     document.querySelectorAll('.option-card:not(.selected)').forEach(function(btn) {
