@@ -2,23 +2,33 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://connect.facebook.net">
+  <link rel="dns-prefetch" href="https://formspree.io">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>¿Qué bloquea tu voz? — Voz Esencia Academy</title>
   <meta name="description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
-  <meta property="og:title" content="¿Qué bloquea tu voz? — Voz Esencia Academy">
-  <meta property="og:description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
+  <link rel="canonical" href="https://quiz.veacademy.studio/vea2.html">
+  <meta property="og:title" content="¿Cuál es tu bloqueo vocal? — Voz Esencia Academy">
+  <meta property="og:description" content="6 preguntas. Tu bloqueo exacto. Tu primera semana gratis.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://quiz.veacademy.studio">
+  <meta property="og:url" content="https://quiz.veacademy.studio/vea2.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="¿Qué bloquea tu voz? — Voz Esencia Academy">
   <meta name="twitter:description" content="Quiz vocal gratis — descubre tu bloqueo y recibe un ejercicio personalizado. Creado por Mamselle Ruiz Coach.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  </noscript>
 
   <!-- Elfsight -->
-  <script src="https://elfsightcdn.com/platform.js" async></script>
+  <script src="https://elfsightcdn.com/platform.js" defer></script>
 
   <!-- Meta Pixel -->
   <script>
@@ -598,6 +608,11 @@ let lang = 'es';
 (function() {
   var urlLang = new URLSearchParams(window.location.search).get('lang');
   if (urlLang === 'es' || urlLang === 'fr') lang = urlLang;
+})();
+
+var fbclid = (function() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('fbclid') || '';
 })();
 
 const MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voz-essencia-academytm';
@@ -1297,6 +1312,8 @@ function getResultKey() {
 // RESULT
 // ================================================================
 function renderResult() {
+  if (typeof fbq !== 'undefined') fbq('trackCustom', 'ResultViewed');
+
   updateBackground(6);
 
   const resultKey = getResultKey();
@@ -1495,22 +1512,25 @@ function handleLeadSubmit(e) {
 function submitLead(resultKey, vocalScore) {
   try {
     var data = {
-      name:            leadData.name,
-      email:           leadData.email,
-      phone:           leadData.phone,
-      vocal_block:     resultKey,
-      vocal_score:     vocalScore,
-      profile:         profile,
-      variant:         'vea2',
-      language:        lang,
-      q1_memory:       answers[0],
-      q2_physical:     answers[1],
-      q3_tried:        answers[2],
-      q4_dream:        answers[3],
-      q5_benefit:      answers[4],
-      q6_commitment:   answers[5],
-      tiebreak_used:   isTiebreakUsed,
-      tiebreak_answer: tiebreakAnswer
+      nombre:              leadData.name,
+      email:               leadData.email,
+      telefono:            leadData.phone,
+      bloqueo_vocal:       resultKey,
+      puntuacion_vocal:    vocalScore,
+      perfil_usuario:      profile,
+      fuente_quiz:         'vea2',
+      idioma:              lang,
+      origen:              'meta-ads',
+      url_completa:        window.location.href,
+      facebook_click_id:   fbclid,
+      Q1_momento_voz:      answers[0],
+      Q2_sensacion_cuerpo: answers[1],
+      Q3_metodos_probados: answers[2],
+      Q4_sueno_vocal:      answers[3],
+      Q5_beneficio_deseado: answers[4],
+      Q6_compromiso:       answers[5],
+      desempate_usado:     isTiebreakUsed,
+      desempate_respuesta: tiebreakAnswer
     };
     fetch(FORMSPREE_ENDPOINT_V2, {
       method:  'POST',
