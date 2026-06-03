@@ -538,7 +538,7 @@
           «&nbsp;Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar.&nbsp;»
         </p>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:50%;background:#258ba1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#fff;">JL</div>
+          <img src="/Justine.png" alt="Justine Lafortune" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;">
           <span style="font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,0.65);">Justine Lafortune · Canada</span>
         </div>
       </div>
@@ -792,13 +792,14 @@ function getMirrorAnswer(winningBlock, ans) {
 // BACKGROUND PROGRESSION — Teal Ocean 7-step fade
 // ================================================================
 const BG_PROGRESSION = [
-  '#146183',  // step 0 — landing (unchanged)
-  '#0a2e45',  // step 1 — Q1 (almost black, darker than card)
+  '#d9f1f7',  // step 0 — landing (light blue)
+  '#0a2e45',  // step 1 — Q1 (almost black)
   '#2a5570',  // step 2 — Q2
   '#4a7c9b',  // step 3 — Q3
   '#7aaabe',  // step 4 — Q4
   '#bad8e4',  // step 5 — Q5
-  '#FAEFF7'   // step 6 — result (unchanged)
+  '#d4ecf5',  // step 6 — Q6
+  '#FAEFF7'   // step 7 — result
 ];
 
 function updateBackground(step) {
@@ -806,10 +807,9 @@ function updateBackground(step) {
   document.body.style.background = bg;
   document.body.style.transition = 'background 0.6s ease';
 
-  var isDark = step < 6;
   var card = document.getElementById('quiz-card-el');
 
-  if (!isDark) {
+  if (step >= 7) {
     // Result page — light mode
     document.body.style.color = '#2f1525';
     if (card) {
@@ -821,8 +821,21 @@ function updateBackground(step) {
       btn.style.border = '0.5px solid rgba(20,97,131,0.2)';
       btn.style.color = '#2f1525';
     });
+  } else if (step === 0) {
+    // Landing — light blue background, dark text outside card, dark teal card
+    document.body.style.color = '#2f1525';
+    if (card) {
+      card.style.background = '#146183';
+      card.style.border = '0.5px solid rgba(255,255,255,0.12)';
+    }
+    var mainHL = document.getElementById('main-headline');
+    var subHL  = document.getElementById('subheadline');
+    var cap    = document.getElementById('widget-caption');
+    if (mainHL) mainHL.style.color = '#146183';
+    if (subHL)  subHL.style.color  = 'rgba(47,21,37,0.70)';
+    if (cap)    cap.style.color    = 'rgba(47,21,37,0.55)';
   } else {
-    // Quiz — dark mode
+    // Quiz questions (steps 1–6) — dark card on varying background
     document.body.style.color = '#FFFFFF';
     if (card) {
       card.style.background = '#146183';
@@ -1314,7 +1327,7 @@ function getResultKey() {
 function renderResult() {
   if (typeof fbq !== 'undefined') fbq('trackCustom', 'ResultViewed');
 
-  updateBackground(6);
+  updateBackground(7);
 
   const resultKey = getResultKey();
   const d = BLOCK_DATA[resultKey];
@@ -1379,7 +1392,7 @@ function renderResult() {
     // Testimonial card
     + '<div style="background:#FFFFFF;border:0.5px solid rgba(212,175,55,0.25);border-radius:12px;padding:16px;margin-bottom:20px;">'
     + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
-    + '<div style="width:48px;height:48px;border-radius:50%;background:#258ba1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:600;color:#fff;">JL</div>'
+    + '<img src="/Justine.png" alt="Justine Lafortune" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
     + '<div><div style="color:#d4af37;font-size:12px;letter-spacing:2px;">★ ★ ★ ★ ★</div>'
     + '<div style="font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:500;color:#7A6070;margin-top:2px;">' + TESTI_META + '</div>'
     + '</div></div>'
