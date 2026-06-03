@@ -792,14 +792,14 @@ function getMirrorAnswer(winningBlock, ans) {
 // BACKGROUND PROGRESSION — Teal Ocean 7-step fade
 // ================================================================
 const BG_PROGRESSION = [
-  '#d9f1f7',  // step 0 — landing (light blue)
+  '#146183',  // step 0 — landing
   '#0a2e45',  // step 1 — Q1 (almost black)
   '#2a5570',  // step 2 — Q2
   '#4a7c9b',  // step 3 — Q3
   '#7aaabe',  // step 4 — Q4
   '#bad8e4',  // step 5 — Q5
   '#d4ecf5',  // step 6 — Q6
-  '#FAEFF7'   // step 7 — result
+  '#d9f1f7'   // step 7 — result (light blue)
 ];
 
 function updateBackground(step) {
@@ -821,21 +821,8 @@ function updateBackground(step) {
       btn.style.border = '0.5px solid rgba(20,97,131,0.2)';
       btn.style.color = '#2f1525';
     });
-  } else if (step === 0) {
-    // Landing — light blue background, dark text outside card, dark teal card
-    document.body.style.color = '#2f1525';
-    if (card) {
-      card.style.background = '#146183';
-      card.style.border = '0.5px solid rgba(255,255,255,0.12)';
-    }
-    var mainHL = document.getElementById('main-headline');
-    var subHL  = document.getElementById('subheadline');
-    var cap    = document.getElementById('widget-caption');
-    if (mainHL) mainHL.style.color = '#146183';
-    if (subHL)  subHL.style.color  = 'rgba(47,21,37,0.70)';
-    if (cap)    cap.style.color    = 'rgba(47,21,37,0.55)';
   } else {
-    // Quiz questions (steps 1–6) — dark card on varying background
+    // Landing + quiz questions (steps 0–6) — dark card
     document.body.style.color = '#FFFFFF';
     if (card) {
       card.style.background = '#146183';
