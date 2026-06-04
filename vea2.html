@@ -903,11 +903,11 @@ function getStatePath() {
   var base = '/vea2.html';
   if (showResult) {
     var key = getResultKey();
-    return base + '/' + (BLOCK_LETTER[key] || key);
+    return base + '?r=' + (BLOCK_LETTER[key] || key);
   }
-  if (currentQ === 'tiebreak') return base + '/T';
+  if (currentQ === 'tiebreak') return base + '?q=T';
   if (currentQ === -1) return base;
-  return base + '/' + (currentQ + 1);
+  return base + '?q=' + (currentQ + 1);
 }
 
 function captureState() {
@@ -1677,27 +1677,21 @@ function animateResultScreen(score) {
   }
 })();
 
-// URL-based direct navigation (e.g. /vea2.html/M)
+// URL-based direct navigation (e.g. /vea2.html?r=M)
 (function() {
-  if (showResult) return; // already handled by preview mode or session restore
-  var path = window.location.pathname;
-  var match = path.match(/\/vea2\.html\/(.+)$/i);
-  if (!match) return;
-  var segment = match[1].toUpperCase();
-  if (LETTER_BLOCK[segment]) {
-    var block = LETTER_BLOCK[segment];
-    var presets = {
-      mandibulaire: [1, 0, [], null, null, 0],
-      respiration:  [2, 1, [], null, null, 0],
-      nerveux:      [0, 2, [], null, null, 0],
-      identite:     [3, 3, [], null, null, 0]
-    };
-    answers = presets[block];
-    showResult = true;
-  } else {
-    // Numbered or unknown segment — redirect to landing
-    history.replaceState(null, '', '/vea2.html');
-  }
+  if (showResult) return;
+  var params = new URLSearchParams(window.location.search);
+  var segment = (params.get('r') || '').toUpperCase();
+  if (!segment || !LETTER_BLOCK[segment]) return;
+  var block = LETTER_BLOCK[segment];
+  var presets = {
+    mandibulaire: [1, 0, [], null, null, 0],
+    respiration:  [2, 1, [], null, null, 0],
+    nerveux:      [0, 2, [], null, null, 0],
+    identite:     [3, 3, [], null, null, 0]
+  };
+  answers = presets[block];
+  showResult = true;
 })();
 
 // Init
