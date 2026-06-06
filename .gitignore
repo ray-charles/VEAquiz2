@@ -7,5 +7,4 @@ Thumbs.db
 dist/
 serve-quiz*.js
 favicon_io.zip
-favicon_io/
 .claude/
