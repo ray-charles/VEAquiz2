@@ -776,6 +776,13 @@ const BLOCK_DATA = {
   }
 };
 
+const Q4_CTA_LABELS = [
+  'Quiero una voz segura y poderosa →',
+  'Quiero una voz libre que fluye sin esfuerzo →',
+  'Quiero una voz que dure →',
+  'Quiero una voz que me represente →'
+];
+
 function getMirrorAnswer(winningBlock, ans) {
   // Q0 votes map: [nerveux, mandibulaire, respiration, identite]
   const q0map = ['nerveux', 'mandibulaire', 'respiration', 'identite'];
@@ -1329,6 +1336,7 @@ function renderResult() {
   const headline = d.mirrorHeadlines[mirrorKey];
 
   const membershipUrl = lang === 'fr' ? MEMBERSHIP_URL_FR : MEMBERSHIP_URL_ES;
+  const ctaLabel = (answers[3] !== null && Q4_CTA_LABELS[answers[3]]) ? Q4_CTA_LABELS[answers[3]] : d.ctaPrimary;
   const TESTI_TEXT = '« Mamselle guía los grupos maravillosamente bien. ¡Cambió mi vida (no es broma!) Yo que no creía que podía cantar. »';
   const TESTI_META = 'Justine Lafortune · Canada';
 
@@ -1361,7 +1369,13 @@ function renderResult() {
         + 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>'
         + '</div>'
         + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:300;'
-        + 'color:rgba(47,21,37,0.45);text-align:center;margin:0 0 20px;">Mamselle — ' + d.title + '</p>'
+        + 'color:rgba(47,21,37,0.45);text-align:center;margin:0 0 16px;">Mamselle — ' + d.title + '</p>'
+        + '<a href="' + membershipUrl + '" id="video-cta-btn" '
+        + 'style="display:block;width:100%;background:#146183;color:#FFFFFF;'
+        + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
+        + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
+        + 'letter-spacing:0.01em;margin-bottom:20px;box-sizing:border-box;">'
+        + ctaLabel + '</a>'
       : '';
   }
 
@@ -1404,7 +1418,7 @@ function renderResult() {
     + 'font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:500;'
     + 'text-align:center;padding:17px 20px;border-radius:8px;text-decoration:none;'
     + 'letter-spacing:0.01em;margin-bottom:10px;box-sizing:border-box;">'
-    + d.ctaPrimary + '</a>'
+    + ctaLabel + '</a>'
 
     // Social count — below button
     + '<p style="font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#146183;text-align:center;margin:0 0 20px;">Más de 1.000 voces liberadas con el Protocolo Voz Esencia™</p>';
@@ -1424,6 +1438,15 @@ function renderResult() {
   }
 
   // -- CTA CLICK TRACKING --
+  var videoCtaBtn = document.getElementById('video-cta-btn');
+  if (videoCtaBtn) {
+    videoCtaBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var dest = this.href;
+      if (typeof fbq !== 'undefined') fbq('trackCustom', 'Quiz_CTAClick');
+      setTimeout(function() { window.location.href = dest; }, 300);
+    });
+  }
   var mainCtaBtn = document.getElementById('main-cta-btn');
   if (mainCtaBtn) {
     mainCtaBtn.addEventListener('click', function(e) {
