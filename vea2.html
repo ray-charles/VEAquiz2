@@ -620,6 +620,12 @@ var fbclid = (function() {
   return params.get('fbclid') || '';
 })();
 
+// ManyChat subscriber id passed via the quiz link (?mc_id={{contact_id}})
+var mcId = (function() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('mc_id') || '';
+})();
+
 const MEMBERSHIP_URL_ES = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/tu-voz-autentica-en-7-diastm-kit-vocal-esencial';
 const MEMBERSHIP_URL_FR = 'https://voz-essencia-academy-cbf28a.circle.so/checkout/voix-essence-academytm';
 
@@ -1599,6 +1605,7 @@ function submitLead(resultKey, vocalScore) {
       nombre:               leadData.name,
       email:                leadData.email,
       telefono:             leadData.phone || '',
+      mc_id:                mcId,
       bloqueo_vocal:        resultKey,
       'Lo que pasó':        resolveAnswer(Q1_OPTIONS, answers[0]),
       'Lo que siente':      resolveAnswer(Q2_OPTIONS, answers[1]),
