@@ -37,11 +37,23 @@ const BLOCK_PROFILE_MAP = {
 // Each ManyChat field listed here must already exist (created by name).
 // The BLOCK_PROFILE_SOURCE field is written as its friendly mapped value.
 const FIELD_MAP = {
-  bloqueo_vocal: 'Block Profile',
+  bloqueo_vocal:   'Block Profile',
+  objetivo_code:   'Voz ideal',
+  compromiso_code: 'Compromiso',
 };
 
 // Tag added to the contact: this prefix + the friendly profile slug.
 const TAG_PREFIX = 'quiz-';
+
+// Extra segmentation tags from compact quiz codes: Formspree field -> tag prefix.
+const CODE_TAGS = {
+  compromiso_code: 'commit-',
+  objetivo_code:   'goal-',
+};
+
+// Anchor tag added on every quiz sync. Use this as your single ManyChat
+// automation trigger, then branch on the block / commit- / goal- tags.
+const COMPLETED_TAG = 'quiz-completed';
 
 // Contact profile fields pushed into ManyChat so the Email/SMS channels can
 // reach the lead. These name the incoming Formspree fields.
@@ -91,7 +103,7 @@ export default {
     const rawBlock = firstValue(payload, BLOCK_PROFILE_SOURCE);
     const profile  = (rawBlock && BLOCK_PROFILE_MAP[rawBlock]) || rawBlock || '';
 
-    const results = { profile: null, fields: [], tag: null, errors: [] };
+    const results = { profile: null, fields: [], tags: [], errors: [] };
 
     // 4b. Push the contact's email / name / phone so the Email & SMS channels
     //     can reach the lead. has_opt_in_email asserts consent (quiz privacy note).
@@ -115,12 +127,18 @@ export default {
       }
     }
 
-    // 6. Add the block-profile tag.
-    if (profile) {
-      const tagName = TAG_PREFIX + profile;
+    // 6. Add tags: block profile, the quiz-answer codes, and the anchor.
+    const tagsToAdd = [];
+    if (profile) tagsToAdd.push(TAG_PREFIX + profile);
+    for (const [field, prefix] of Object.entries(CODE_TAGS)) {
+      const code = firstValue(payload, field);
+      if (code) tagsToAdd.push(prefix + code);
+    }
+    if (COMPLETED_TAG) tagsToAdd.push(COMPLETED_TAG);
+    for (const tagName of tagsToAdd) {
       try {
         await addTag(subscriberId, tagName, env);
-        results.tag = tagName;
+        results.tags.push(tagName);
       } catch (err) {
         results.errors.push(`tag:${tagName}:${err.message}`);
       }
@@ -194,8 +212,22 @@ async function updateProfile(subscriberId, payload, env) {
   if (phone) { body.phone = String(phone); body.has_opt_in_sms = SMS_OPT_IN; }
 
   if (Object.keys(body).length <= 1) return null; // only subscriber_id -> nothing to do
-  await manychat('/fb/subscriber/updateSubscriber', body, env);
-  return Object.keys(body).filter(k => k !== 'subscriber_id');
+
+  try {
+    await manychat('/fb/subscriber/updateSubscriber', body, env);
+    return Object.keys(body).filter(k => k !== 'subscriber_id');
+  } catch (err) {
+    // "email already exists" just means the contact already has this email (the
+    // desired state). Drop the email and retry so name/phone still update.
+    if (/already exists/i.test(err.message) && body.email) {
+      delete body.email;
+      delete body.has_opt_in_email;
+      if (Object.keys(body).length <= 1) return ['email(already set)'];
+      await manychat('/fb/subscriber/updateSubscriber', body, env);
+      return Object.keys(body).filter(k => k !== 'subscriber_id').concat('email(already set)');
+    }
+    throw err;
+  }
 }
 
 // ManyChat's updateSubscriber wants subscriber_id as an integer.

@@ -1589,6 +1589,9 @@ function submitLead(resultKey, vocalScore) {
       'Creo que sí — quiero verlo primero',
       'No lo sé todavía — pero aquí estoy'
     ];
+    // Stable segmentation codes — keep in sync with the option order above.
+    var GOAL_CODES   = ['poder', 'libre', 'dura', 'representa'];      // Q4 (Su voz ideal)
+    var COMMIT_CODES = ['ready', 'scared_yes', 'curious', 'unsure'];  // Q6 (Su compromiso)
     function resolveAnswer(options, index) {
       if (Array.isArray(index)) {
         return index.map(function(i) {
@@ -1607,6 +1610,8 @@ function submitLead(resultKey, vocalScore) {
       telefono:             leadData.phone || '',
       mc_id:                mcId,
       bloqueo_vocal:        resultKey,
+      objetivo_code:        GOAL_CODES[answers[3]]   || '',
+      compromiso_code:      COMMIT_CODES[answers[5]] || '',
       'Lo que pasó':        resolveAnswer(Q1_OPTIONS, answers[0]),
       'Lo que siente':      resolveAnswer(Q2_OPTIONS, answers[1]),
       'Lo que no funcionó': resolveAnswer(Q3_OPTIONS, answers[2]),
