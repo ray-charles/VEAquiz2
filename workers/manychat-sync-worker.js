@@ -11,8 +11,10 @@
  *   6. Adds a quiz-<profile> tag.
  *
  * Secrets (set via `wrangler secret put`, never committed):
- *   - MANYCHAT_API_KEY : ManyChat API token (sent as Bearer)
- *   - WEBHOOK_SECRET   : shared token Formspree appends as ?token=...
+ *   - MANYCHAT_API_KEY      : ManyChat API token (sent as Bearer)
+ *   - WEBHOOK_SECRET        : shared token Formspree appends as ?token=...
+ *   - STRIPE_WEBHOOK_SECRET : Stripe signing secret (whsec_...) for POST /stripe,
+ *                             which tags buyers `compro-academia` matched by email.
  */
 
 const MANYCHAT_API = 'https://api.manychat.com';
@@ -55,6 +57,19 @@ const CODE_TAGS = {
 // automation trigger, then branch on the bloqueo- / compromiso- / objetivo- tags.
 const COMPLETED_TAG = 'quiz-completado';
 
+// Tag applied (contact matched by email) when Stripe reports a paid purchase at
+// POST /stripe. Lets your retargeting suppress buyers. (Already created in ManyChat.)
+const PURCHASE_TAG = 'compro-academia';
+
+// Stripe events that mean "money received" (covers one-time + subscription).
+const STRIPE_PURCHASE_EVENTS = new Set([
+  'checkout.session.completed',
+  'invoice.paid',
+  'invoice.payment_succeeded',
+  'charge.succeeded',
+  'payment_intent.succeeded',
+]);
+
 // Contact profile fields pushed into ManyChat so the Email/SMS channels can
 // reach the lead. These name the incoming Formspree fields.
 const PROFILE_EMAIL_FIELD = 'email';     // Formspree field carrying the email
@@ -72,6 +87,11 @@ export default {
   async fetch(request, env) {
     if (request.method !== 'POST') {
       return json({ error: 'method_not_allowed' }, 405);
+    }
+
+    // Stripe purchase webhook lives at POST /stripe (signature auth, not ?token=).
+    if (new URL(request.url).pathname === '/stripe') {
+      return handleStripe(request, env);
     }
 
     // 1. Verify the shared webhook token.
@@ -246,6 +266,75 @@ async function findSubscriberByEmail(email, env) {
   if (Array.isArray(data)) return (data[0] && (data[0].id || data[0].subscriber_id)) || null;
   if (data && (data.id || data.subscriber_id)) return data.id || data.subscriber_id;
   return null;
+}
+
+// ---------------------------------------------------------------- Stripe
+
+// POST /stripe : verify Stripe's signature, then on a paid-purchase event tag the
+// matching ManyChat contact (by email) so retargeting can suppress buyers.
+async function handleStripe(request, env) {
+  if (!env.STRIPE_WEBHOOK_SECRET) return json({ error: 'stripe_not_configured' }, 503);
+
+  const raw = await request.text();
+  const ok = await verifyStripeSignature(raw, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET);
+  if (!ok) return json({ error: 'bad_signature' }, 400);
+
+  let event;
+  try { event = JSON.parse(raw); } catch { return json({ error: 'bad_json' }, 400); }
+
+  // Acknowledge (200) non-purchase events so Stripe doesn't retry them.
+  if (!STRIPE_PURCHASE_EVENTS.has(event.type)) return json({ ok: true, ignored: event.type }, 200);
+
+  const email = extractStripeEmail(event);
+  if (!email) return json({ ok: false, reason: 'no_email_in_event', type: event.type }, 200);
+
+  const subscriberId = await findSubscriberByEmail(email, env);
+  if (!subscriberId) return json({ ok: false, reason: 'no_manychat_contact', email }, 200);
+
+  try {
+    await addTag(subscriberId, PURCHASE_TAG, env);
+    return json({ ok: true, tagged: PURCHASE_TAG, subscriber_id: subscriberId }, 200);
+  } catch (err) {
+    return json({ ok: false, error: err.message }, 502);
+  }
+}
+
+// Pull the buyer's email from whichever Stripe object the event carries.
+function extractStripeEmail(event) {
+  const o = (event && event.data && event.data.object) || {};
+  return (o.customer_details && o.customer_details.email)
+    || o.customer_email
+    || (o.billing_details && o.billing_details.email)
+    || o.receipt_email
+    || (o.charges && o.charges.data && o.charges.data[0] && o.charges.data[0].billing_details && o.charges.data[0].billing_details.email)
+    || null;
+}
+
+// Verify the Stripe-Signature header (scheme: "t=<ts>,v1=<hmac>") with HMAC-SHA256
+// over `${t}.${rawBody}`, plus a 5-minute timestamp tolerance to block replays.
+async function verifyStripeSignature(rawBody, sigHeader, secret) {
+  if (!sigHeader) return false;
+  const parts = {};
+  for (const kv of sigHeader.split(',')) {
+    const i = kv.indexOf('=');
+    if (i > 0) parts[kv.slice(0, i).trim()] = kv.slice(i + 1).trim();
+  }
+  const t = parts.t, v1 = parts.v1;
+  if (!t || !v1) return false;
+  // Replay guard: reject signatures whose timestamp is more than 5 minutes old.
+  if (Math.abs(Date.now() / 1000 - Number(t)) > 300) return false;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const mac = await crypto.subtle.sign('HMAC', key, enc.encode(`${t}.${rawBody}`));
+  const expected = [...new Uint8Array(mac)].map(b => b.toString(16).padStart(2, '0')).join('');
+  return timingSafeEqual(expected, v1);
+}
+
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let r = 0;
+  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return r === 0;
 }
 
 async function manychat(path, body, env) {
