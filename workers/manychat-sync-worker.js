@@ -37,23 +37,23 @@ const BLOCK_PROFILE_MAP = {
 // Each ManyChat field listed here must already exist (created by name).
 // The BLOCK_PROFILE_SOURCE field is written as its friendly mapped value.
 const FIELD_MAP = {
-  bloqueo_vocal:   'Block Profile',
+  bloqueo_vocal:   'Bloqueo',
   objetivo_code:   'Voz ideal',
   compromiso_code: 'Compromiso',
 };
 
 // Tag added to the contact: this prefix + the friendly profile slug.
-const TAG_PREFIX = 'quiz-';
+const TAG_PREFIX = 'bloqueo-';
 
 // Extra segmentation tags from compact quiz codes: Formspree field -> tag prefix.
 const CODE_TAGS = {
-  compromiso_code: 'commit-',
-  objetivo_code:   'goal-',
+  compromiso_code: 'compromiso-',
+  objetivo_code:   'objetivo-',
 };
 
 // Anchor tag added on every quiz sync. Use this as your single ManyChat
-// automation trigger, then branch on the block / commit- / goal- tags.
-const COMPLETED_TAG = 'quiz-completed';
+// automation trigger, then branch on the bloqueo- / compromiso- / objetivo- tags.
+const COMPLETED_TAG = 'quiz-completado';
 
 // Contact profile fields pushed into ManyChat so the Email/SMS channels can
 // reach the lead. These name the incoming Formspree fields.
