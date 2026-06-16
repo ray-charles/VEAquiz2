@@ -6,8 +6,9 @@
  *   1. Verifies the shared webhook token (?token=<WEBHOOK_SECRET>).
  *   2. Parses the quiz submission (JSON or form-encoded).
  *   3. Resolves the target ManyChat subscriber (mc_id, email fallback).
- *   4. Writes the block-profile custom field on that contact.
- *   5. Adds a quiz-<profile> tag.
+ *   4. Writes the contact's email / name / phone (enables Email & SMS channels).
+ *   5. Writes the block-profile custom field on that contact.
+ *   6. Adds a quiz-<profile> tag.
  *
  * Secrets (set via `wrangler secret put`, never committed):
  *   - MANYCHAT_API_KEY : ManyChat API token (sent as Bearer)
@@ -41,6 +42,19 @@ const FIELD_MAP = {
 
 // Tag added to the contact: this prefix + the friendly profile slug.
 const TAG_PREFIX = 'quiz-';
+
+// Contact profile fields pushed into ManyChat so the Email/SMS channels can
+// reach the lead. These name the incoming Formspree fields.
+const PROFILE_EMAIL_FIELD = 'email';     // Formspree field carrying the email
+const PROFILE_NAME_FIELD  = 'nombre';    // Formspree field carrying the full name
+const PROFILE_PHONE_FIELD = 'telefono';  // Formspree field carrying the phone
+
+// Set the email opt-in flag when an email is present. Keep this true only while
+// the quiz lead form genuinely collects email consent (it shows a privacy note).
+const EMAIL_OPT_IN = true;
+// SMS opt-in stays false: ManyChat requires an explicit consent phrase for SMS,
+// which the quiz does not capture. The phone is still stored for reference.
+const SMS_OPT_IN = false;
 
 export default {
   async fetch(request, env) {
@@ -77,7 +91,16 @@ export default {
     const rawBlock = firstValue(payload, BLOCK_PROFILE_SOURCE);
     const profile  = (rawBlock && BLOCK_PROFILE_MAP[rawBlock]) || rawBlock || '';
 
-    const results = { fields: [], tag: null, errors: [] };
+    const results = { profile: null, fields: [], tag: null, errors: [] };
+
+    // 4b. Push the contact's email / name / phone so the Email & SMS channels
+    //     can reach the lead. has_opt_in_email asserts consent (quiz privacy note).
+    try {
+      const updated = await updateProfile(subscriberId, payload, env);
+      if (updated) results.profile = updated;
+    } catch (err) {
+      results.errors.push(`profile:${err.message}`);
+    }
 
     // 5. Write mapped custom fields.
     for (const [formField, mcField] of Object.entries(FIELD_MAP)) {
@@ -151,6 +174,33 @@ async function addTag(subscriberId, tagName, env) {
     subscriber_id: subscriberId,
     tag_name: tagName,
   }, env);
+}
+
+// Set email / name / phone on the contact via updateSubscriber so ManyChat's
+// Email (and SMS) channels can reach them. Returns the list of fields written,
+// or null if the submission carried nothing to write.
+async function updateProfile(subscriberId, payload, env) {
+  const body = { subscriber_id: toId(subscriberId) };
+
+  const name = firstValue(payload, PROFILE_NAME_FIELD);
+  if (name) {
+    const parts = String(name).trim().split(/\s+/);
+    body.first_name = parts.shift() || String(name);
+    if (parts.length) body.last_name = parts.join(' ');
+  }
+  const email = firstValue(payload, PROFILE_EMAIL_FIELD);
+  if (email) { body.email = String(email); body.has_opt_in_email = EMAIL_OPT_IN; }
+  const phone = firstValue(payload, PROFILE_PHONE_FIELD);
+  if (phone) { body.phone = String(phone); body.has_opt_in_sms = SMS_OPT_IN; }
+
+  if (Object.keys(body).length <= 1) return null; // only subscriber_id -> nothing to do
+  await manychat('/fb/subscriber/updateSubscriber', body, env);
+  return Object.keys(body).filter(k => k !== 'subscriber_id');
+}
+
+// ManyChat's updateSubscriber wants subscriber_id as an integer.
+function toId(v) {
+  return /^\d+$/.test(String(v)) ? Number(v) : v;
 }
 
 async function findSubscriberByEmail(email, env) {
