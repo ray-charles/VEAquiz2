@@ -139,7 +139,7 @@ function firstValue(payload, key) {
 }
 
 async function setCustomField(subscriberId, fieldName, fieldValue, env) {
-  return manychat('/fp/subscriber/setCustomFieldByName', {
+  return manychat('/fb/subscriber/setCustomFieldByName', {
     subscriber_id: subscriberId,
     field_name: fieldName,
     field_value: fieldValue,
@@ -147,14 +147,14 @@ async function setCustomField(subscriberId, fieldName, fieldValue, env) {
 }
 
 async function addTag(subscriberId, tagName, env) {
-  return manychat('/fp/subscriber/addTagByName', {
+  return manychat('/fb/subscriber/addTagByName', {
     subscriber_id: subscriberId,
     tag_name: tagName,
   }, env);
 }
 
 async function findSubscriberByEmail(email, env) {
-  const url = `${MANYCHAT_API}/fp/subscriber/findBySystemField?email=${encodeURIComponent(email)}`;
+  const url = `${MANYCHAT_API}/fb/subscriber/findBySystemField?email=${encodeURIComponent(email)}`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${env.MANYCHAT_API_KEY}`, Accept: 'application/json' },
   });
