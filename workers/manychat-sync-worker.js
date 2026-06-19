@@ -61,13 +61,16 @@ const COMPLETED_TAG = 'quiz-completado';
 // POST /stripe. Lets your retargeting suppress buyers. (Already created in ManyChat.)
 const PURCHASE_TAG = 'compro-academia';
 
-// Stripe events that mean "money received" (covers one-time + subscription).
+// Product-specific buyer tags, added alongside PURCHASE_TAG.
+const PRODUCT_TAG_KIT = 'compro-kit';              // $47 one-time (Tu Voz Auténtica)
+const PRODUCT_TAG_MEMBERSHIP = 'compro-membresia'; // $27/mo recurring membership
+
+// Stripe events that mean "money received" (one-time checkout + subscription invoices).
+// Narrowed to these so a single purchase isn't double-counted via charge/payment_intent.
 const STRIPE_PURCHASE_EVENTS = new Set([
   'checkout.session.completed',
   'invoice.paid',
   'invoice.payment_succeeded',
-  'charge.succeeded',
-  'payment_intent.succeeded',
 ]);
 
 // Contact profile fields pushed into ManyChat so the Email/SMS channels can
@@ -291,12 +294,35 @@ async function handleStripe(request, env) {
   const subscriberId = await findSubscriberByEmail(email, env);
   if (!subscriberId) return json({ ok: false, reason: 'no_manychat_contact', email }, 200);
 
-  try {
-    await addTag(subscriberId, PURCHASE_TAG, env);
-    return json({ ok: true, tagged: PURCHASE_TAG, subscriber_id: subscriberId }, 200);
-  } catch (err) {
-    return json({ ok: false, error: err.message }, 502);
+  // Always add the universal buyer tag (drives suppression + Purchase Welcome),
+  // plus the product-specific tag when the event tells us which product it was.
+  const tags = [PURCHASE_TAG];
+  const productTag = stripeProductTag(event);
+  if (productTag) tags.push(productTag);
+
+  const applied = [];
+  for (const tag of tags) {
+    try {
+      await addTag(subscriberId, tag, env);
+      applied.push(tag);
+    } catch (err) {
+      return json({ ok: false, error: err.message, applied }, 502);
+    }
   }
+  return json({ ok: true, tagged: applied, subscriber_id: subscriberId }, 200);
+}
+
+// Map a Stripe purchase event to its product-specific tag (null if undetermined).
+// Uses checkout mode (payment = one-time kit, subscription = membership) and treats
+// recurring invoices as membership. Amount-agnostic, so coupons don't break it.
+function stripeProductTag(event) {
+  const o = (event.data && event.data.object) || {};
+  if (event.type === 'checkout.session.completed') {
+    if (o.mode === 'subscription') return PRODUCT_TAG_MEMBERSHIP;
+    if (o.mode === 'payment') return PRODUCT_TAG_KIT;
+    return null;
+  }
+  return PRODUCT_TAG_MEMBERSHIP; // invoice.paid / invoice.payment_succeeded
 }
 
 // Pull the buyer's email from whichever Stripe object the event carries.
