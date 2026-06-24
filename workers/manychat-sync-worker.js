@@ -15,6 +15,8 @@
  *   - WEBHOOK_SECRET        : shared token Formspree appends as ?token=...
  *   - STRIPE_WEBHOOK_SECRET : Stripe signing secret (whsec_...) for POST /stripe,
  *                             which tags buyers `compro-academia` matched by email.
+ *                             Membership/annual purchases also get `membership_active`,
+ *                             the suppression key for the weekly-webinar funnel.
  */
 
 const MANYCHAT_API = 'https://api.manychat.com';
@@ -63,7 +65,13 @@ const PURCHASE_TAG = 'compro-academia';
 
 // Product-specific buyer tags, added alongside PURCHASE_TAG.
 const PRODUCT_TAG_KIT = 'compro-kit';              // $47 one-time (Tu Voz Auténtica)
-const PRODUCT_TAG_MEMBERSHIP = 'compro-membresia'; // $27/mo recurring membership
+const PRODUCT_TAG_MEMBERSHIP = 'compro-membresia'; // recurring membership ($27/mo or $444/yr annual)
+
+// Suppression key for the weekly-webinar funnel: applied to anyone with an active
+// (recurring) membership so the webinar's sales sends skip current members. Added
+// alongside PRODUCT_TAG_MEMBERSHIP — i.e. whenever a subscription/invoice purchase
+// fires, never on the one-time kit. (Create this tag in ManyChat: `membership_active`.)
+const MEMBERSHIP_ACTIVE_TAG = 'membership_active';
 
 // Stripe events that mean "money received" (one-time checkout + subscription invoices).
 // Narrowed to these so a single purchase isn't double-counted via charge/payment_intent.
@@ -97,6 +105,11 @@ export default {
       return handleStripe(request, env);
     }
 
+    // One-time webinar tag/field provisioning (guarded by ?token=ADMIN_SECRET).
+    if (new URL(request.url).pathname === '/admin/webinar-setup') {
+      return handleWebinarSetup(request, env);
+    }
+
     // 1. Verify the shared webhook token.
     const token = new URL(request.url).searchParams.get('token');
     if (!env.WEBHOOK_SECRET || token !== env.WEBHOOK_SECRET) {
@@ -112,14 +125,26 @@ export default {
     }
 
     // 3. Resolve the ManyChat subscriber id.
-    let subscriberId = firstValue(payload, SUBSCRIBER_ID_FIELD);
+    //    mc_id must be a numeric ManyChat id. An unresolved merge field
+    //    ("{{Contact Id}}"), empty, or any non-numeric value is treated as "no id".
+    const rawId = String(firstValue(payload, SUBSCRIBER_ID_FIELD) || '').trim();
+    let subscriberId = /^\d+$/.test(rawId) ? rawId : null;
+    let createdContact = false;
+
     if (!subscriberId) {
-      // Fallback: look the contact up by email if mc_id was not passed.
+      // No usable mc_id: identify by email, creating an email contact if new,
+      // so every quiz-taker still lands in ManyChat for (email) retargeting.
       const email = firstValue(payload, 'email');
-      if (email) subscriberId = await findSubscriberByEmail(email, env);
+      if (email) {
+        subscriberId = await findSubscriberByEmail(email, env);
+        if (!subscriberId) {
+          subscriberId = await createEmailSubscriber(payload, env);
+          createdContact = !!subscriberId;
+        }
+      }
     }
     if (!subscriberId) {
-      return json({ error: 'no_subscriber', detail: 'mc_id missing and email lookup failed' }, 422);
+      return json({ error: 'no_subscriber', detail: 'no valid mc_id and no email to match/create' }, 422);
     }
 
     // 4. Compute the friendly block profile.
@@ -168,7 +193,7 @@ export default {
     }
 
     const status = results.errors.length ? 502 : 200;
-    return json({ ok: status === 200, subscriber_id: subscriberId, ...results }, status);
+    return json({ ok: status === 200, subscriber_id: subscriberId, created: createdContact, ...results }, status);
   },
 };
 
@@ -271,6 +296,35 @@ async function findSubscriberByEmail(email, env) {
   return null;
 }
 
+// Create a ManyChat email subscriber from the quiz payload (used when there is
+// no usable mc_id and no existing contact). Returns the new subscriber id or null.
+async function createEmailSubscriber(payload, env) {
+  const email = firstValue(payload, PROFILE_EMAIL_FIELD);
+  if (!email) return null;
+  const parts = String(firstValue(payload, PROFILE_NAME_FIELD) || '').trim().split(/\s+/).filter(Boolean);
+  const body = {
+    first_name: parts.shift() || String(email).split('@')[0],
+    last_name: parts.join(' ') || '-',
+    email: String(email),
+    has_opt_in_email: EMAIL_OPT_IN,
+  };
+  const phone = firstValue(payload, PROFILE_PHONE_FIELD);
+  if (phone) { body.phone = String(phone); body.has_opt_in_sms = SMS_OPT_IN; }
+  try {
+    const res = await manychat('/fb/subscriber/createSubscriber', body, env);
+    const d = res && res.data;
+    return (d && (d.id || d.subscriber_id)) || null;
+  } catch (err) {
+    // Existing contact -> use it. Any other error (notably ManyChat's
+    // "Permission denied to import email" gate) -> give up gracefully so the
+    // request never 500s. Enable email import in ManyChat to turn this on.
+    if (/exists/i.test(err.message)) {
+      try { return await findSubscriberByEmail(email, env); } catch (_) { return null; }
+    }
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------- Stripe
 
 // POST /stripe : verify Stripe's signature, then on a paid-purchase event tag the
@@ -299,6 +353,8 @@ async function handleStripe(request, env) {
   const tags = [PURCHASE_TAG];
   const productTag = stripeProductTag(event);
   if (productTag) tags.push(productTag);
+  // Membership purchases also carry the webinar-funnel suppression key.
+  if (productTag === PRODUCT_TAG_MEMBERSHIP) tags.push(MEMBERSHIP_ACTIVE_TAG);
 
   const applied = [];
   for (const tag of tags) {
@@ -361,6 +417,47 @@ function timingSafeEqual(a, b) {
   let r = 0;
   for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return r === 0;
+}
+
+// ---------------------------------------------------------------- Webinar setup
+
+// POST /admin/webinar-setup?token=<ADMIN_SECRET>&cohort=W1
+// One-time, idempotent provisioning of the weekly-webinar tags + custom fields via
+// the ManyChat page API. Uses the Worker's own MANYCHAT_API_KEY, so the token never
+// leaves Cloudflare. Re-run with &cohort=W2 (etc.) to add each new cohort's tags.
+async function handleWebinarSetup(request, env) {
+  const url = new URL(request.url);
+  const token = url.searchParams.get('token') || '';
+  if (!env.ADMIN_SECRET || !timingSafeEqual(token, env.ADMIN_SECRET)) {
+    return json({ error: 'unauthorized' }, 401);
+  }
+  const cohort = (url.searchParams.get('cohort') || 'W1').trim();
+  if (!/^W\d+$/.test(cohort)) return json({ error: 'bad_cohort', detail: 'use W<n>, e.g. W1' }, 400);
+
+  const tags = [
+    'membership_active', 'webinar_nobuy', 'long_nurture',
+    'webinar_cycle_1', 'webinar_cycle_2', 'webinar_cycle_3', 'webinar_cycle_4',
+    `webinar_registered_${cohort}`, `webinar_attended_${cohort}`, `webinar_noshow_${cohort}`,
+  ];
+  const fields = [
+    { caption: 'webinar_date', type: 'text' },
+    { caption: 'registration_source', type: 'text' },
+    { caption: 'committed_yes', type: 'boolean' },
+  ];
+
+  const out = { ok: true, cohort, tags: {}, fields: {} };
+  for (const name of tags) out.tags[name] = await createOne('/fb/page/createTag', { name }, env);
+  for (const f of fields) {
+    out.fields[f.caption] = await createOne('/fb/page/createCustomField',
+      { caption: f.caption, type: f.type, description: 'webinar funnel' }, env);
+  }
+  return json(out, 200);
+}
+
+// Create a tag/field; treat an "already exists" response as success (idempotent).
+async function createOne(path, body, env) {
+  try { await manychat(path, body, env); return 'created'; }
+  catch (err) { return /exist/i.test(err.message) ? 'exists' : `error:${err.message}`; }
 }
 
 async function manychat(path, body, env) {
