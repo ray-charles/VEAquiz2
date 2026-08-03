@@ -1,0 +1,12 @@
+name = "cercle-seats"
+main = "workers/cercle-seats.js"
+compatibility_date = "2026-08-01"
+
+# Created by:  npx wrangler kv namespace create SEATS
+# then paste the returned id below.
+[[kv_namespaces]]
+binding = "SEATS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# Set with:  npx wrangler secret put SEATS_SECRET --config wrangler.seats.toml
+# Never commit the value.
