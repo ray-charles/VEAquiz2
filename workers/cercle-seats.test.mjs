@@ -16,9 +16,11 @@ const charge = (o) => ({
   ...o,
 });
 
+let lastQuery = null;
 function fakeStripe(charges) {
   globalThis.fetch = async (url) => {
     assert.ok(String(url).startsWith('https://api.stripe.com/v1/charges?'), url);
+    lastQuery = new URL(url).searchParams;
     return new Response(JSON.stringify({ data: charges, has_more: false }), {
       headers: { 'content-type': 'application/json' },
     });
@@ -126,5 +128,31 @@ fakeStripe([
 ]);
 r = await call();
 assert.strictEqual(r.body.mardi, 0, 'one refunded instalment means they left');
+
+/* --- the lookback must reach the season's first sale --------------------
+ * The real one was 16 May 2026 and the window started 1 June, so Stripe was
+ * never asked for that charge: five people had paid, four were counted, and
+ * the page sold the same Tuesday seat twice over. The window is the only
+ * thing standing between a real buyer and a seat advertised as free, so it
+ * gets asserted rather than trusted. */
+fakeStripe([]);
+await call();
+const FIRST_SALE = Date.parse('2026-05-16T00:00:00Z') / 1000;
+assert.ok(
+  Number(lastQuery.get('created[gte]')) <= FIRST_SALE,
+  'lookback window must include the 16 May 2026 sale, asked from ' +
+    new Date(Number(lastQuery.get('created[gte]')) * 1000).toISOString(),
+);
+
+/* --- a real, in-window charge that no cohort claims must be reported ----
+ * Silently discarding it is what let the May buyer vanish; explain has to
+ * show the leftovers so the next mismatch is one request away from an answer. */
+fakeStripe([
+  charge({ description: 'Cercle de Voix, saison été-automne, mardi.', customer: 'cus_A' }),
+  charge({ description: 'Atelier ponctuel du jeudi', customer: 'cus_Y' }),
+]);
+r = await call('?explain=1');
+assert.strictEqual(r.body.mardi, 1);
+assert.deepStrictEqual(r.body.ignored, ['Atelier ponctuel du jeudi'], 'discards are surfaced');
 
 console.log('cercle-seats: all checks passed');

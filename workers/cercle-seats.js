@@ -31,8 +31,15 @@ const SLOTS = {
   mercredi: /mercredi/i,
 };
 
-/* Charges before the season opened belong to other products. */
-const SINCE = Date.parse('2026-06-01T00:00:00Z') / 1000;
+/* Charges before the season opened belong to other products.
+ *
+ * This was 2026-06-01 and it was wrong: the first seat sold on 16 May 2026, so
+ * that buyer sat outside the window and the page advertised their seat as free
+ * for months. The cutoff is only here to keep older "mardi"/"mercredi" charges
+ * from the regular classes out of the count, so it needs to sit just before the
+ * season's first sale, not after it. If an earlier sale ever turns up, move
+ * this back and check /counts?explain=1 for anything it drags in. */
+const SINCE = Date.parse('2026-05-01T00:00:00Z') / 1000;
 
 const cors = {
   'access-control-allow-origin': '*',
@@ -76,6 +83,11 @@ async function countSeats(key) {
    * a runaway loop if the account is busier than expected. */
   let starting_after = null;
   const labels = new Set();
+  /* Everything succeeded, in-window and NOT claimed by a cohort. A seat that
+   * goes missing looks identical to a seat that was never sold, so the only way
+   * to tell them apart is to see what got thrown away. The 16 May buyer was
+   * invisible for months precisely because nothing reported the discards. */
+  const ignored = new Set();
   for (let page = 0; page < 5; page++) {
     const qs = new URLSearchParams({ limit: '100', 'created[gte]': String(SINCE) });
     if (starting_after) qs.set('starting_after', starting_after);
@@ -86,8 +98,10 @@ async function countSeats(key) {
       /* Descriptions carry the paywall name; metadata carries whatever Circle
        * chose to attach. Search both — Circle has moved this before. */
       const hay = [c.description, ...Object.values(c.metadata || {})].join(' ');
+      let claimed = false;
       for (const [slot, re] of Object.entries(SLOTS)) {
         if (!re.test(hay)) continue;
+        claimed = true;
         charges[slot]++;
         /* One person, one seat, even if Circle splits the fee into
          * instalments and files each one as its own charge. Falling back to
@@ -108,6 +122,7 @@ async function countSeats(key) {
          * which is the direction that lies to the buyer. */
         if (c.refunded || c.amount_refunded > 0) left[slot].add(id);
       }
+      if (!claimed && c.description) ignored.add(c.description);
     }
 
     if (!res.has_more || !res.data.length) break;
@@ -120,7 +135,7 @@ async function countSeats(key) {
   }
 
   for (const slot of Object.keys(counts)) counts[slot] = Math.min(CAP, counts[slot]);
-  return { counts, labels: [...labels], charges, anon };
+  return { counts, labels: [...labels], charges, anon, ignored: [...ignored] };
 }
 
 export default {
@@ -157,7 +172,13 @@ export default {
     }
 
     const out = url.searchParams.get('explain')
-      ? { ...body.counts, matched: body.labels, charges: body.charges, unidentified: body.anon }
+      ? {
+          ...body.counts,
+          matched: body.labels,
+          charges: body.charges,
+          unidentified: body.anon,
+          ignored: body.ignored,
+        }
       : body.counts;
     return json(out, 200, { 'cache-control': 'public, max-age=60' });
   },
