@@ -83,4 +83,11 @@ globalThis.fetch = async () => new Response('down', { status: 500 });
 r = await call();
 assert.strictEqual(r.status, 502, 'a failed lookup errors instead of returning 0');
 
+/* --- and must not quote the key back over a public endpoint --- */
+globalThis.fetch = async () =>
+  new Response('{"error":{"message":"Invalid API Key provided: rk_live_abc123"}}', { status: 401 });
+r = await call();
+assert.strictEqual(r.status, 502);
+assert.ok(!JSON.stringify(r.body).includes('rk_live'), 'Stripe body must not reach the caller');
+
 console.log('cercle-seats: all checks passed');

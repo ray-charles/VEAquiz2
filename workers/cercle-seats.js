@@ -49,7 +49,13 @@ async function stripe(path, key) {
   const r = await fetch('https://api.stripe.com/v1/' + path, {
     headers: { authorization: 'Bearer ' + key },
   });
-  if (!r.ok) throw new Error('stripe ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  if (!r.ok) {
+    /* Stripe quotes the offending key back in its 401 body. /counts is public,
+     * so the detail goes to the log where `wrangler tail` can read it and the
+     * caller gets the status and nothing else. */
+    console.error('stripe ' + r.status + ' ' + (await r.text()).slice(0, 300));
+    throw new Error('stripe ' + r.status);
+  }
   return r.json();
 }
 
