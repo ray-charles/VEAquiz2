@@ -2,11 +2,12 @@ name = "cercle-seats"
 main = "workers/cercle-seats.js"
 compatibility_date = "2026-08-01"
 
-# Created by:  npx wrangler kv namespace create SEATS
-# then paste the returned id below.
-[[kv_namespaces]]
-binding = "SEATS"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-
-# Set with:  npx wrangler secret put SEATS_SECRET --config wrangler.seats.toml
-# Never commit the value.
+# No KV binding: the counter derives every number from Stripe on each cache
+# miss, so there is no state to store and nothing to seed.
+#
+# One secret, set with:
+#   npx wrangler secret put STRIPE_KEY --config wrangler.seats.toml
+#
+# It must be a RESTRICTED key (Stripe → Developers → API keys → Create
+# restricted key) with Charges = Read and everything else None. A live secret
+# key must never go in here — /counts is a public endpoint.
