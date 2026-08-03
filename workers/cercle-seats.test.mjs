@@ -110,4 +110,21 @@ r = await call('?explain=1');
 assert.strictEqual(r.body.mardi, 2, 'nothing to join on, so they count separately');
 assert.strictEqual(r.body.unidentified.mardi, 2, 'and that is reported, not hidden');
 
+/* --- the guarantee is a PARTIAL refund and must free the seat --- */
+fakeStripe([
+  charge({ description: 'Mardi', customer: 'cus_A', amount: 13200, amount_refunded: 0 }),
+  charge({ description: 'Mardi', customer: 'cus_B', amount: 39600, amount_refunded: 35100 }), // kept 45 $
+]);
+r = await call();
+assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0 }, 'a part refund releases the seat');
+
+/* --- and it frees the seat even when their other instalments were clean --- */
+fakeStripe([
+  charge({ description: 'Mardi', customer: 'cus_C', amount_refunded: 0 }),
+  charge({ description: 'Mardi', customer: 'cus_C', amount_refunded: 0 }),
+  charge({ description: 'Mardi', customer: 'cus_C', amount_refunded: 8700 }),
+]);
+r = await call();
+assert.strictEqual(r.body.mardi, 0, 'one refunded instalment means they left');
+
 console.log('cercle-seats: all checks passed');

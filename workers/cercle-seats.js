@@ -60,13 +60,13 @@ async function stripe(path, key) {
 }
 
 async function countSeats(key) {
-  const counts = {};
-  const seen = {};
+  const paid = {};      // people with at least one good charge
+  const left = {};      // ...of whom these have been refunded anything
   const charges = {};   // how many charges backed those seats
   const anon = {};      // ...and how many carried no way to tell people apart
   for (const slot of Object.keys(SLOTS)) {
-    counts[slot] = 0;
-    seen[slot] = new Set();
+    paid[slot] = new Set();
+    left[slot] = new Set();
     charges[slot] = 0;
     anon[slot] = 0;
   }
@@ -82,7 +82,7 @@ async function countSeats(key) {
     const res = await stripe('charges?' + qs, key);
 
     for (const c of res.data) {
-      if (c.status !== 'succeeded' || c.refunded) continue;
+      if (c.status !== 'succeeded') continue;
       /* Descriptions carry the paywall name; metadata carries whatever Circle
        * chose to attach. Search both — Circle has moved this before. */
       const hay = [c.description, ...Object.values(c.metadata || {})].join(' ');
@@ -97,15 +97,26 @@ async function countSeats(key) {
         const who = c.customer || c.billing_details?.email;
         if (!who) anon[slot]++;
         const id = who || c.id;
-        if (seen[slot].has(id)) continue;
-        seen[slot].add(id);
-        counts[slot]++;
+        paid[slot].add(id);
         if (c.description) labels.add(c.description);
+
+        /* `refunded` is only true when the whole charge went back, but the
+         * guarantee is a PART refund — first session kept, balance returned.
+         * Someone who took it has left the cohort and their seat is free, so
+         * any refunded amount releases it. Erring this way frees a seat that
+         * might still be held; the other way advertises a seat that is gone,
+         * which is the direction that lies to the buyer. */
+        if (c.refunded || c.amount_refunded > 0) left[slot].add(id);
       }
     }
 
     if (!res.has_more || !res.data.length) break;
     starting_after = res.data[res.data.length - 1].id;
+  }
+
+  const counts = {};
+  for (const slot of Object.keys(SLOTS)) {
+    counts[slot] = [...paid[slot]].filter((id) => !left[slot].has(id)).length;
   }
 
   for (const slot of Object.keys(counts)) counts[slot] = Math.min(CAP, counts[slot]);
