@@ -62,9 +62,13 @@ async function stripe(path, key) {
 async function countSeats(key) {
   const counts = {};
   const seen = {};
+  const charges = {};   // how many charges backed those seats
+  const anon = {};      // ...and how many carried no way to tell people apart
   for (const slot of Object.keys(SLOTS)) {
     counts[slot] = 0;
     seen[slot] = new Set();
+    charges[slot] = 0;
+    anon[slot] = 0;
   }
 
   /* 100 per page, 5 pages max. A cohort caps at 12 and the season sells a few
@@ -84,11 +88,17 @@ async function countSeats(key) {
       const hay = [c.description, ...Object.values(c.metadata || {})].join(' ');
       for (const [slot, re] of Object.entries(SLOTS)) {
         if (!re.test(hay)) continue;
+        charges[slot]++;
         /* One person, one seat, even if Circle splits the fee into
-         * instalments and files each one as its own charge. */
-        const who = c.customer || c.billing_details?.email || c.id;
-        if (seen[slot].has(who)) continue;
-        seen[slot].add(who);
+         * instalments and files each one as its own charge. Falling back to
+         * the charge id means no dedupe at all, so count how often that
+         * happens — three instalments with nothing to join them on would
+         * quietly sell the same seat three times. */
+        const who = c.customer || c.billing_details?.email;
+        if (!who) anon[slot]++;
+        const id = who || c.id;
+        if (seen[slot].has(id)) continue;
+        seen[slot].add(id);
         counts[slot]++;
         if (c.description) labels.add(c.description);
       }
@@ -99,7 +109,7 @@ async function countSeats(key) {
   }
 
   for (const slot of Object.keys(counts)) counts[slot] = Math.min(CAP, counts[slot]);
-  return { counts, labels: [...labels] };
+  return { counts, labels: [...labels], charges, anon };
 }
 
 export default {
@@ -136,7 +146,7 @@ export default {
     }
 
     const out = url.searchParams.get('explain')
-      ? { ...body.counts, matched: body.labels }
+      ? { ...body.counts, matched: body.labels, charges: body.charges, unidentified: body.anon }
       : body.counts;
     return json(out, 200, { 'cache-control': 'public, max-age=60' });
   },

@@ -90,4 +90,24 @@ r = await call();
 assert.strictEqual(r.status, 502);
 assert.ok(!JSON.stringify(r.body).includes('rk_live'), 'Stripe body must not reach the caller');
 
+/* --- explain reports charges vs seats, so instalment dedupe is checkable --- */
+fakeStripe([
+  charge({ description: 'Mardi', customer: 'cus_A' }),
+  charge({ description: 'Mardi', customer: 'cus_A' }),
+  charge({ description: 'Mardi', customer: 'cus_A' }),
+]);
+r = await call('?explain=1');
+assert.strictEqual(r.body.mardi, 1);
+assert.strictEqual(r.body.charges.mardi, 3, 'three charges behind one seat');
+assert.strictEqual(r.body.unidentified.mardi, 0);
+
+/* --- a charge with no customer and no email cannot be deduped: say so --- */
+fakeStripe([
+  charge({ description: 'Mardi' }),
+  charge({ description: 'Mardi' }),
+]);
+r = await call('?explain=1');
+assert.strictEqual(r.body.mardi, 2, 'nothing to join on, so they count separately');
+assert.strictEqual(r.body.unidentified.mardi, 2, 'and that is reported, not hidden');
+
 console.log('cercle-seats: all checks passed');
