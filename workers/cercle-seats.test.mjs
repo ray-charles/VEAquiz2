@@ -170,4 +170,17 @@ assert.strictEqual(r.body['mercredi-1730'], 1);
 assert.deepStrictEqual(r.body.matched['mardi'], ['Cercle de Voix, saison été-automne, mardi.'],
   'explain shows which description landed in which cohort');
 
+/* --- the real Circle slugs, both spellings, exactly as Charles created them.
+       The afternoon paywalls are named after their URL, and the two were not
+       created to the same convention: 1730 on the Tuesday, 17h30 on the
+       Wednesday. Either must land in the afternoon cohort. --- */
+fakeStripe([
+  charge({ description: 'cercle-de-voix-mardi-1730',     customer: 'cus_a' }),
+  charge({ description: 'cercle-de-voix-mercredi-17h30', customer: 'cus_b' }),
+]);
+r = await call();
+assert.deepStrictEqual(r.body,
+  { mardi: 0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1 },
+  'both slug spellings route to the afternoon cohorts, and nothing leaks into the evening');
+
 console.log('cercle-seats: all checks passed');
