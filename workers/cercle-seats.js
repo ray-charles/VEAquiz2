@@ -26,9 +26,21 @@ const CAP = 12;
  * "mercredi" shows up in the charge description. Matching on the word rather
  * than on a product id means a rebuilt paywall doesn't silently zero the page.
  * If Circle ever changes its wording, /counts?explain=1 shows what it sends. */
+const DAY = { mardi: /mardi/i, mercredi: /mercredi/i };
+
+/* Both Tuesday paywalls say "mardi", so the day alone puts afternoon sales
+ * into the evening cohort and can stamp it full on seats it never sold.
+ * The afternoon ones are told apart by their start time, spelled however
+ * Circle happens to spell it. The evening pair carry no time at all today
+ * ("...saison été-automne, mardi."), so they are defined as the day
+ * WITHOUT an afternoon marker rather than by a time of their own. */
+const AFTERNOON = /17\s*[h:.]?\s*30|(?:^|\D)5\s*[h:.]\s*30/i;
+
 const SLOTS = {
-  mardi: /mardi/i,
-  mercredi: /mercredi/i,
+  'mardi':         (h) => DAY.mardi.test(h)    && !AFTERNOON.test(h),
+  'mercredi':      (h) => DAY.mercredi.test(h) && !AFTERNOON.test(h),
+  'mardi-1730':    (h) => DAY.mardi.test(h)    &&  AFTERNOON.test(h),
+  'mercredi-1730': (h) => DAY.mercredi.test(h) &&  AFTERNOON.test(h),
 };
 
 /* Charges before the season opened belong to other products.
@@ -82,7 +94,7 @@ async function countSeats(key) {
    * dozen seats, so this never gets near the ceiling — the ceiling only stops
    * a runaway loop if the account is busier than expected. */
   let starting_after = null;
-  const labels = new Set();
+  const labels = {};   // slot -> the descriptions that landed in it
   /* Everything succeeded, in-window and NOT claimed by a cohort. A seat that
    * goes missing looks identical to a seat that was never sold, so the only way
    * to tell them apart is to see what got thrown away. The 16 May buyer was
@@ -99,8 +111,8 @@ async function countSeats(key) {
        * chose to attach. Search both — Circle has moved this before. */
       const hay = [c.description, ...Object.values(c.metadata || {})].join(' ');
       let claimed = false;
-      for (const [slot, re] of Object.entries(SLOTS)) {
-        if (!re.test(hay)) continue;
+      for (const [slot, matches] of Object.entries(SLOTS)) {
+        if (!matches(hay)) continue;
         claimed = true;
         charges[slot]++;
         /* One person, one seat, even if Circle splits the fee into
@@ -112,7 +124,7 @@ async function countSeats(key) {
         if (!who) anon[slot]++;
         const id = who || c.id;
         paid[slot].add(id);
-        if (c.description) labels.add(c.description);
+        if (c.description) (labels[slot] = labels[slot] || new Set()).add(c.description);
 
         /* `refunded` is only true when the whole charge went back, but the
          * guarantee is a PART refund — first session kept, balance returned.
@@ -135,7 +147,9 @@ async function countSeats(key) {
   }
 
   for (const slot of Object.keys(counts)) counts[slot] = Math.min(CAP, counts[slot]);
-  return { counts, labels: [...labels], charges, anon, ignored: [...ignored] };
+  const matched = {};
+  for (const k of Object.keys(labels)) matched[k] = [...labels[k]];
+  return { counts, labels: matched, charges, anon, ignored: [...ignored] };
 }
 
 export default {
