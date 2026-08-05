@@ -183,4 +183,19 @@ assert.deepStrictEqual(r.body,
   { mardi: 0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1 },
   'both slug spellings route to the afternoon cohorts, and nothing leaks into the evening');
 
+/* --- the evening paywalls were renamed on 2026-08-03 to match the afternoon
+       pair (…-mardi-19h15 rather than …-saison-ete-automne-mardi). New charges
+       carry the new wording, every charge already taken carries the old one,
+       and both must land in the same cohort or the seats sold so far vanish. --- */
+fakeStripe([
+  charge({ description: 'cercle-de-voix-mardi-19h15',                customer: 'cus_new_ma' }),
+  charge({ description: 'cercle-de-voix-mercredi-19h15',             customer: 'cus_new_me' }),
+  charge({ description: 'Cercle de Voix, saison été-automne, mardi.', customer: 'cus_old_ma' }),
+  charge({ description: 'Cercle de Voix, saison été-automne, mercredi', customer: 'cus_old_me' }),
+]);
+r = await call();
+assert.deepStrictEqual(r.body,
+  { mardi: 2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0 },
+  'old and new paywall names count into the same evening cohorts');
+
 console.log('cercle-seats: all checks passed');
