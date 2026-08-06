@@ -22,6 +22,15 @@
 
 const CAP = 12;
 
+/* Seats paid for outside Stripe — Interac e-transfer, cash at the door.
+ * Stripe cannot see them, so without this the page would advertise a seat
+ * that is already sold. Bump the number when one comes in; drop it back if
+ * that person is refunded, because nothing else will.
+ *
+ *   mardi +1 — Interac e-transfer, 5 Aug 2026
+ */
+export const MANUAL = { 'mardi': 1, 'mercredi': 0, 'mardi-1730': 0, 'mercredi-1730': 0 };
+
 /* Circle names each paywall charge after the paywall itself, so "mardi" or
  * "mercredi" shows up in the charge description. Matching on the word rather
  * than on a product id means a rebuilt paywall doesn't silently zero the page.
@@ -146,10 +155,12 @@ async function countSeats(key) {
     counts[slot] = [...paid[slot]].filter((id) => !left[slot].has(id)).length;
   }
 
-  for (const slot of Object.keys(counts)) counts[slot] = Math.min(CAP, counts[slot]);
+  for (const slot of Object.keys(counts)) {
+    counts[slot] = Math.min(CAP, counts[slot] + (MANUAL[slot] || 0));
+  }
   const matched = {};
   for (const k of Object.keys(labels)) matched[k] = [...labels[k]];
-  return { counts, labels: matched, charges, anon, ignored: [...ignored] };
+  return { counts, labels: matched, charges, anon, manual: MANUAL, ignored: [...ignored] };
 }
 
 export default {
@@ -191,6 +202,7 @@ export default {
           matched: body.labels,
           charges: body.charges,
           unidentified: body.anon,
+          manual: body.manual,
           ignored: body.ignored,
         }
       : body.counts;

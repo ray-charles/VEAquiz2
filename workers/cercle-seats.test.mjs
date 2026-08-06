@@ -5,7 +5,13 @@
  * refunds counted at all, and a cohort overflowing its own cap.
  */
 import assert from 'node:assert';
-import worker from './cercle-seats.js';
+import worker, { MANUAL } from './cercle-seats.js';
+
+/* Seats sold off-Stripe are a live business number that moves whenever
+   someone e-transfers. Every case below asserts an exact count, so start
+   from zero and let the one test that cares set it. */
+const clearManual = () => Object.keys(MANUAL).forEach((k) => { MANUAL[k] = 0; });
+clearManual();
 
 const charge = (o) => ({
   id: 'ch_' + Math.random().toString(36).slice(2),
@@ -197,5 +203,21 @@ r = await call();
 assert.deepStrictEqual(r.body,
   { mardi: 2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0 },
   'old and new paywall names count into the same evening cohorts');
+
+/* --- a seat paid by e-transfer is invisible to Stripe, so MANUAL adds it --- */
+MANUAL.mardi = 1;
+fakeStripe([
+  charge({ description: 'cercle-de-voix-mardi-19h15', customer: 'cus_stripe' }),
+]);
+r = await call('?explain=1');
+assert.strictEqual(r.body.mardi, 2, 'one Stripe sale plus the manual e-transfer seat');
+assert.strictEqual(r.body.charges.mardi, 1, 'the manual seat is not a charge');
+assert.strictEqual(r.body.manual.mardi, 1, 'and explain says where the extra seat came from');
+
+/* --- and it can never push a cohort past the cap --- */
+fakeStripe(Array.from({ length: 12 }, (_, i) =>
+  charge({ description: 'cercle-de-voix-mardi-19h15', customer: 'cus_' + i })));
+r = await call();
+assert.strictEqual(r.body.mardi, 12, 'manual seats are still capped at 12');
 
 console.log('cercle-seats: all checks passed');
