@@ -220,4 +220,22 @@ fakeStripe(Array.from({ length: 12 }, (_, i) =>
 r = await call();
 assert.strictEqual(r.body.mardi, 12, 'manual seats are still capped at 12');
 
+/* --- moving someone between cohorts: minus one side, plus the other, and a
+       negative adjustment must never take a cohort below zero and advertise
+       more seats than exist --- */
+clearManual();
+MANUAL['mercredi'] = 1;
+MANUAL['mercredi-1730'] = -1;
+fakeStripe([
+  charge({ description: 'Cercle de Voix mercredi 17h30', customer: 'cus_moved' }),
+]);
+r = await call();
+assert.strictEqual(r.body.mercredi, 1, 'the seat lands in the cohort they attend');
+assert.strictEqual(r.body['mercredi-1730'], 0, 'and leaves the one Stripe recorded');
+
+fakeStripe([]);
+r = await call();
+assert.strictEqual(r.body['mercredi-1730'], 0, 'a negative adjustment floors at zero');
+clearManual();
+
 console.log('cercle-seats: all checks passed');

@@ -27,9 +27,14 @@ const CAP = 12;
  * that is already sold. Bump the number when one comes in; drop it back if
  * that person is refunded, because nothing else will.
  *
- *   mardi +1 — Interac e-transfer, 5 Aug 2026
+ * Also used to move someone between cohorts after they have paid: subtract
+ * from the one Stripe recorded, add to the one they are actually attending.
+ *
+ *   mardi         +1  Interac e-transfer, 5 Aug 2026
+ *   mercredi      +1  paid on the 17 h 30 paywall, attending 19 h 15
+ *   mercredi-1730 -1  the other half of that move
  */
-export const MANUAL = { 'mardi': 1, 'mercredi': 0, 'mardi-1730': 0, 'mercredi-1730': 0 };
+export const MANUAL = { 'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-1730': -1 };
 
 /* Circle names each paywall charge after the paywall itself, so "mardi" or
  * "mercredi" shows up in the charge description. Matching on the word rather
@@ -156,7 +161,7 @@ async function countSeats(key) {
   }
 
   for (const slot of Object.keys(counts)) {
-    counts[slot] = Math.min(CAP, counts[slot] + (MANUAL[slot] || 0));
+    counts[slot] = Math.max(0, Math.min(CAP, counts[slot] + (MANUAL[slot] || 0)));
   }
   const matched = {};
   for (const k of Object.keys(labels)) matched[k] = [...labels[k]];
