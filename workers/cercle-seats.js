@@ -179,15 +179,47 @@ export default {
     }
     if (!env.STRIPE_KEY) return json({ error: 'not configured' }, 500);
 
-    /* One Stripe call a minute at most, however hard the page is hit. The
-     * page is read thousands of times for every seat that sells, so a minute
-     * of staleness costs nothing and a cache miss storm would cost a lot. */
+    /* Serve the cached answer and refresh behind the visitor.
+     *
+     * Before this, a request landing after the cache expired waited on
+     * Stripe — 280 ms on a good day, 2.2 s when there were enough charges to
+     * page through. The picker paints "12 places restantes" until that
+     * returns, so a full cohort read as open for two seconds.
+     *
+     * Now the only person who ever waits is the first one after a deploy or
+     * an eviction. Everyone else gets the last answer immediately, and a
+     * background refresh keeps it current. The cost is that a number can be
+     * up to FRESH_MS old — the page is read thousands of times per seat
+     * sold, so a minute of staleness is nothing next to a two-second lie. */
+    const FRESH_MS = 60 * 1000;
     const cache = caches.default;
     const ck = new Request(new URL('/counts', url).toString(), { method: 'GET' });
+
+    const store = (b) =>
+      cache.put(
+        ck,
+        new Response(JSON.stringify(b), {
+          headers: {
+            'content-type': 'application/json',
+            'cache-control': 'public, max-age=600',
+            'x-fetched-at': String(Date.now()),
+          },
+        }),
+      );
+
     const hit = await cache.match(ck);
     let body;
     if (hit) {
       body = await hit.json();
+      const age = Date.now() - Number(hit.headers.get('x-fetched-at') || 0);
+      if (age > FRESH_MS) {
+        /* Stale: hand back what we have, go and get the new one after. A
+         * failure here leaves the old entry in place, which is correct —
+         * an outage should not blank the bars. */
+        ctx.waitUntil(
+          countSeats(env.STRIPE_KEY).then(store).catch(() => {}),
+        );
+      }
     } else {
       try {
         body = await countSeats(env.STRIPE_KEY);
@@ -196,9 +228,7 @@ export default {
          * the fetch fails, which is the honest outcome. */
         return json({ error: String(e.message || e) }, 502, { 'cache-control': 'no-store' });
       }
-      ctx.waitUntil(
-        cache.put(ck, json(body, 200, { 'cache-control': 'public, max-age=60' }).clone()),
-      );
+      ctx.waitUntil(store(body));
     }
 
     const out = url.searchParams.get('explain')
@@ -211,6 +241,8 @@ export default {
           ignored: body.ignored,
         }
       : body.counts;
-    return json(out, 200, { 'cache-control': 'public, max-age=60' });
+    /* 30 s at the browser: the visitor's own reload should show a sale
+     * that landed a moment ago, and the edge absorbs the traffic anyway. */
+    return json(out, 200, { 'cache-control': 'public, max-age=30' });
   },
 };
