@@ -238,4 +238,83 @@ r = await call();
 assert.strictEqual(r.body['mercredi-1730'], 0, 'a negative adjustment floors at zero');
 clearManual();
 
+/* ================================================================
+   WAITLIST -> KIT
+   ================================================================ */
+let kitCalls = [];
+function fakeKit({ fail = false } = {}) {
+  kitCalls = [];
+  globalThis.fetch = async (url, opts) => {
+    kitCalls.push({ url: String(url), body: JSON.parse(opts.body) });
+    if (fail) return new Response('kit is down', { status: 500 });
+    return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
+  };
+}
+
+const postWaitlist = async (lead, env = { KIT_API_KEY: 'kit_test' }) => {
+  const res = await worker.fetch(
+    new Request('https://x.dev/waitlist', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(lead),
+    }),
+    env,
+    { waitUntil: () => {} },
+  );
+  return { status: res.status, body: await res.json() };
+};
+
+const LEAD = {
+  prenom: 'Camille', nom: 'Roy', telephone: '5145551234',
+  email: 'camille@example.com',
+  creneau: 'Mardi 19 h 15 à 20 h 45', cohorte: 'mardi',
+};
+
+/* --- the happy path: subscriber, sequence, then every tag --- */
+fakeKit();
+let w = await postWaitlist(LEAD);
+assert.strictEqual(w.status, 200);
+assert.ok(w.body.ok);
+assert.deepStrictEqual(kitCalls.map(c => c.url.replace('https://api.kit.com/v4', '')), [
+  '/subscribers',
+  '/sequences/2846692/subscribers',
+  '/tags/21782116/subscribers',   // cercle-liste-attente
+  '/tags/20683832/subscribers',   // idioma-fr
+  '/tags/22821184/subscribers',   // cercle-attente-mardi-1915
+], 'subscribe, enrol, then tag — in that order');
+assert.strictEqual(kitCalls[0].body.first_name, 'Camille');
+assert.strictEqual(kitCalls[0].body.fields.telefono, '5145551234');
+assert.strictEqual(kitCalls[0].body.fields.creneau, 'Mardi 19 h 15 à 20 h 45');
+
+/* --- each cohort gets its own tag, so spring can invite the right people --- */
+for (const [cohorte, tag] of Object.entries({
+  'mercredi': 22821185, 'mardi-1730': 21754675, 'mercredi-1730': 21754676,
+})) {
+  fakeKit();
+  await postWaitlist({ ...LEAD, cohorte });
+  assert.ok(kitCalls.some(c => c.url.endsWith(`/tags/${tag}/subscribers`)),
+    `${cohorte} must tag ${tag}`);
+}
+
+/* --- an unknown cohort still lands on the list, just without a night --- */
+fakeKit();
+await postWaitlist({ ...LEAD, cohorte: 'jeudi-midi' });
+assert.strictEqual(kitCalls.filter(c => c.url.includes('/tags/')).length, 2,
+  'only the two always-tags when the cohort is unrecognised');
+
+/* --- Kit being down must never fail the visitor: Formspree already has them --- */
+fakeKit({ fail: true });
+w = await postWaitlist(LEAD);
+assert.ok(w.status < 400, 'a Kit outage must not surface as an error, got ' + w.status);
+
+/* --- rubbish never reaches Kit --- */
+fakeKit();
+w = await postWaitlist({ ...LEAD, email: 'not-an-address' });
+assert.strictEqual(w.status, 400);
+assert.strictEqual(kitCalls.length, 0, 'a bad address must not spend a Kit call');
+
+/* --- and without the secret it says so rather than failing silently --- */
+w = await postWaitlist(LEAD, {});
+assert.strictEqual(w.status, 500);
+
 console.log('cercle-seats: all checks passed');

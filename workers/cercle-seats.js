@@ -69,7 +69,8 @@ const SINCE = Date.parse('2026-05-01T00:00:00Z') / 1000;
 
 const cors = {
   'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET,OPTIONS',
+  'access-control-allow-methods': 'GET,POST,OPTIONS',
+  'access-control-allow-headers': 'content-type',
 };
 
 const json = (body, status = 200, extra = {}) =>
@@ -168,12 +169,110 @@ async function countSeats(key) {
   return { counts, labels: matched, charges, anon, manual: MANUAL, ignored: [...ignored] };
 }
 
+
+/* ================================================================
+   WAITLIST -> KIT
+   Formspree tells Charles a lead arrived; it does not put them in Kit.
+   Until now that hand-off was manual, so a waitlist signup got the
+   inbox notification and nothing else — no sequence, no tag.
+
+   The page posts here as well as to Formspree. Formspree stays the
+   record and the notification; this is the automation. If Kit is down
+   the visitor still succeeds, because their name is already safe in
+   Formspree — a failure here must never show them an error.
+
+   Needs KIT_API_KEY (Kit -> Settings -> Advanced -> API keys, V4 key):
+     npx wrangler secret put KIT_API_KEY --config wrangler.seats.toml
+   ================================================================ */
+const KIT = 'https://api.kit.com/v4';
+const KIT_SEQUENCE = 2846692;          // Cercle de Voix — liste d'attente (FR)
+
+/* Applied to everyone on the waitlist. idioma-fr keeps them out of the
+ * Spanish automations, which share this Kit account. */
+const KIT_TAGS_ALWAYS = [
+  21782116,   // cercle-liste-attente
+  20683832,   // idioma-fr
+];
+
+/* One tag per cohort, so the spring invitation can go to the people who
+ * wanted that night rather than to the whole list. */
+const KIT_TAG_BY_COHORT = {
+  'mardi':         22821184,   // cercle-attente-mardi-1915
+  'mercredi':      22821185,   // cercle-attente-mercredi-1915
+  'mardi-1730':    21754675,   // cercle-attente-mardi-1730
+  'mercredi-1730': 21754676,   // cercle-attente-mercredi-1730
+};
+
+async function kit(path, key, body) {
+  const r = await fetch(KIT + path, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'X-Kit-Api-Key': key },
+    body: JSON.stringify(body),
+  });
+  /* 422 is Kit's "already exists" on subscribe and on tagging. That is the
+   * normal case for someone who signs up twice, so it is not an error. */
+  if (!r.ok && r.status !== 422) {
+    throw new Error('kit ' + path + ' ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  }
+  return r.status;
+}
+
+async function addToKit(lead, key) {
+  const email = String(lead.email || '').trim();
+  if (!email) throw new Error('no email');
+
+  await kit('/subscribers', key, {
+    email_address: email,
+    first_name: String(lead.prenom || '').trim() || undefined,
+    fields: {
+      telefono: String(lead.telephone || '').trim() || undefined,
+      creneau:  String(lead.creneau || '').trim() || undefined,
+    },
+  });
+
+  await kit('/sequences/' + KIT_SEQUENCE + '/subscribers', key, { email_address: email });
+
+  const tags = KIT_TAGS_ALWAYS.slice();
+  const byCohort = KIT_TAG_BY_COHORT[lead.cohorte];
+  if (byCohort) tags.push(byCohort);
+  for (const t of tags) {
+    await kit('/tags/' + t + '/subscribers', key, { email_address: email });
+  }
+  return tags;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, '') || '/';
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+    if (path === '/waitlist' && request.method === 'POST') {
+      if (!env.KIT_API_KEY) return json({ error: 'not configured' }, 500);
+      let lead;
+      try {
+        lead = await request.json();
+      } catch (e) {
+        return json({ error: 'bad json' }, 400);
+      }
+      /* Reject anything that is not an address before spending a Kit call on
+       * it. Deliberately loose — the browser already required type=email, and
+       * a stricter rule here would only lose real people with odd domains. */
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(lead.email || '').trim())) {
+        return json({ error: 'bad email' }, 400);
+      }
+      try {
+        const tags = await addToKit(lead, env.KIT_API_KEY);
+        return json({ ok: true, tags });
+      } catch (e) {
+        /* The lead is already safe in Formspree, so never fail the visitor
+         * over this. Log it and let the page show its success panel. */
+        console.error('waitlist ' + String(e && e.message).slice(0, 300));
+        return json({ ok: false, queued: false }, 202);
+      }
+    }
+
     if (path !== '/counts' || request.method !== 'GET') {
       return json({ error: 'not found' }, 404);
     }
