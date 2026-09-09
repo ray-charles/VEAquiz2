@@ -55,7 +55,7 @@ fakeStripe([
   charge({ description: 'Cercle de Voix — Mercredi', customer: 'cus_C' }),
 ]);
 let r = await call();
-assert.deepStrictEqual(r.body, { mardi: 2, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0 }, 'instalments must not each buy a seat');
+assert.deepStrictEqual(r.body, { mardi: 2, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'instalments must not each buy a seat');
 
 /* --- refunded and failed charges hold no seat --- */
 fakeStripe([
@@ -64,12 +64,12 @@ fakeStripe([
   charge({ description: 'Mardi', customer: 'cus_C', status: 'failed' }),
 ]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0 }, 'refunds and failures free the seat');
+assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'refunds and failures free the seat');
 
 /* --- the cohort word can arrive in metadata instead of the description --- */
 fakeStripe([charge({ description: 'Voz Esencia', metadata: { paywall: 'cercle-mercredi' }, customer: 'cus_D' })]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0 }, 'metadata is searched too');
+assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'metadata is searched too');
 
 /* --- never advertise more seats sold than exist --- */
 fakeStripe(Array.from({ length: 30 }, (_, i) => charge({ description: 'Mardi', customer: 'cus_' + i })));
@@ -79,7 +79,7 @@ assert.strictEqual(r.body.mardi, 12, 'count is clamped to the cohort cap');
 /* --- unmatched charges are ignored, not guessed at --- */
 fakeStripe([charge({ description: 'Cours privé', customer: 'cus_Z' })]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0 }, 'other products do not fill the cercle');
+assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'other products do not fill the cercle');
 
 /* --- explain=1 exposes what it matched, so the mapping can be checked --- */
 fakeStripe([charge({ description: 'Cercle de Voix — Mardi', customer: 'cus_A' })]);
@@ -124,7 +124,7 @@ fakeStripe([
   charge({ description: 'Mardi', customer: 'cus_B', amount: 39600, amount_refunded: 35100 }), // kept 45 $
 ]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0 }, 'a part refund releases the seat');
+assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'a part refund releases the seat');
 
 /* --- and it frees the seat even when their other instalments were clean --- */
 fakeStripe([
@@ -186,7 +186,7 @@ fakeStripe([
 ]);
 r = await call();
 assert.deepStrictEqual(r.body,
-  { mardi: 0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1 },
+  { mardi: 0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1, 'mardi-0900': 0, 'mardi-1045': 0 },
   'both slug spellings route to the afternoon cohorts, and nothing leaks into the evening');
 
 /* --- the evening paywalls were renamed on 2026-08-03 to match the afternoon
@@ -201,8 +201,47 @@ fakeStripe([
 ]);
 r = await call();
 assert.deepStrictEqual(r.body,
-  { mardi: 2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0 },
+  { mardi: 2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 },
   'old and new paywall names count into the same evening cohorts');
+
+/* --- the autumn morning cohorts. Four paywalls now say "mardi", and the
+       evening one is the only Tuesday defined as "no time on it at all", so a
+       morning sale that fails to match its own rule silently lands there and
+       stamps a sold-out evening cohort full on seats it never sold. --- */
+fakeStripe([
+  charge({ description: 'cercle-de-voix-mardi-9h00',  customer: 'cus_m9' }),
+  charge({ description: 'cercle-de-voix-mardi-10h45', customer: 'cus_m10' }),
+]);
+r = await call();
+assert.deepStrictEqual(r.body,
+  { mardi: 0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0,
+    'mardi-0900': 1, 'mardi-1045': 1 },
+  'the morning paywalls route to their own cohorts and leak nowhere');
+
+/* --- the hour guard. "19h15" contains a 9 and "29.09" contains an 09; either
+       one read as a 9 h charge would move an evening seat, or a date in a
+       description would invent one. --- */
+fakeStripe([
+  charge({ description: 'cercle-de-voix-mardi-19h15',                 customer: 'cus_ev' }),
+  charge({ description: 'Cercle de Voix mardi, début 29.09.2026',      customer: 'cus_dt' }),
+]);
+r = await call();
+assert.strictEqual(r.body['mardi-0900'], 0, 'neither 19h15 nor a date reads as 9 h');
+assert.strictEqual(r.body.mardi, 2, 'both stay on the evening cohort');
+
+/* --- the spellings Circle might use for the same two cohorts --- */
+for (const [desc, slot] of Object.entries({
+  'cercle-de-voix-mardi-9h':     'mardi-0900',
+  'Cercle de Voix — mardi 9 h 00': 'mardi-0900',
+  'Cercle de Voix — mardi 9:00':   'mardi-0900',
+  'Cercle de Voix — mardi 10 h 45': 'mardi-1045',
+  'Cercle de Voix — mardi 10:45':   'mardi-1045',
+})) {
+  fakeStripe([charge({ description: desc, customer: 'cus_x' })]);
+  r = await call();
+  assert.strictEqual(r.body[slot], 1, `"${desc}" must land in ${slot}`);
+  assert.strictEqual(r.body.mardi, 0, `"${desc}" must not land on the evening bar`);
+}
 
 /* --- a seat paid by e-transfer is invisible to Stripe, so MANUAL adds it --- */
 MANUAL.mardi = 1;
@@ -289,6 +328,7 @@ assert.strictEqual(kitCalls[0].body.fields.creneau, 'Mardi 19 h 15 à 20 h 45');
 /* --- each cohort gets its own tag, so spring can invite the right people --- */
 for (const [cohorte, tag] of Object.entries({
   'mercredi': 22821185, 'mardi-1730': 21754675, 'mercredi-1730': 21754676,
+  'mardi-0900': 23250804, 'mardi-1045': 23250805,
 })) {
   fakeKit();
   await postWaitlist({ ...LEAD, cohorte });

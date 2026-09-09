@@ -34,7 +34,10 @@ const CAP = 12;
  *   mercredi      +1  paid on the 17 h 30 paywall, attending 19 h 15
  *   mercredi-1730 -1  the other half of that move
  */
-export const MANUAL = { 'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-1730': -1 };
+export const MANUAL = {
+  'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-1730': -1,
+  'mardi-0900': 0, 'mardi-1045': 0,
+};
 
 /* Circle names each paywall charge after the paywall itself, so "mardi" or
  * "mercredi" shows up in the charge description. Matching on the word rather
@@ -42,19 +45,33 @@ export const MANUAL = { 'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-17
  * If Circle ever changes its wording, /counts?explain=1 shows what it sends. */
 const DAY = { mardi: /mardi/i, mercredi: /mercredi/i };
 
-/* Both Tuesday paywalls say "mardi", so the day alone puts afternoon sales
- * into the evening cohort and can stamp it full on seats it never sold.
- * The afternoon ones are told apart by their start time, spelled however
- * Circle happens to spell it. The evening pair carry no time at all today
- * ("...saison été-automne, mardi."), so they are defined as the day
- * WITHOUT an afternoon marker rather than by a time of their own. */
-const AFTERNOON = /17\s*[h:.]?\s*30|(?:^|\D)5\s*[h:.]\s*30/i;
+/* Four Tuesday paywalls now say "mardi", so the day alone puts a morning or
+ * an afternoon sale into the evening cohort and can stamp it full on seats it
+ * never sold. Every cohort but the evening pair carries its start time in the
+ * paywall name, spelled however Circle happens to spell it, so each one is
+ * matched on that. The evening pair carry no time at all
+ * ("...saison été-automne, mardi."), so they are defined as the day with NO
+ * time marker on it rather than by a time of their own — which means every
+ * new timed cohort has to be added to TIMES or its sales land on the evening
+ * bar.
+ *
+ * The `(?:^|\D)` guards stop "19h15" from reading as a 9 h charge and
+ * "29.09" from reading as one either: the hour has to be preceded by a
+ * non-digit and followed by h or :, never by a dot. */
+const TIMES = {
+  a1730: /17\s*[h:.]?\s*30|(?:^|\D)5\s*[h:.]\s*30/i,
+  a0900: /(?:^|\D)0?9\s*[h:]\s*(?:00)?/i,
+  a1045: /10\s*[h:]\s*45/i,
+};
+const timed = (h) => Object.values(TIMES).some((re) => re.test(h));
 
 const SLOTS = {
-  'mardi':         (h) => DAY.mardi.test(h)    && !AFTERNOON.test(h),
-  'mercredi':      (h) => DAY.mercredi.test(h) && !AFTERNOON.test(h),
-  'mardi-1730':    (h) => DAY.mardi.test(h)    &&  AFTERNOON.test(h),
-  'mercredi-1730': (h) => DAY.mercredi.test(h) &&  AFTERNOON.test(h),
+  'mardi':         (h) => DAY.mardi.test(h)    && !timed(h),
+  'mercredi':      (h) => DAY.mercredi.test(h) && !timed(h),
+  'mardi-1730':    (h) => DAY.mardi.test(h)    && TIMES.a1730.test(h),
+  'mercredi-1730': (h) => DAY.mercredi.test(h) && TIMES.a1730.test(h),
+  'mardi-0900':    (h) => DAY.mardi.test(h)    && TIMES.a0900.test(h),
+  'mardi-1045':    (h) => DAY.mardi.test(h)    && TIMES.a1045.test(h),
 };
 
 /* Charges before the season opened belong to other products.
@@ -201,6 +218,8 @@ const KIT_TAG_BY_COHORT = {
   'mercredi':      22821185,   // cercle-attente-mercredi-1915
   'mardi-1730':    21754675,   // cercle-attente-mardi-1730
   'mercredi-1730': 21754676,   // cercle-attente-mercredi-1730
+  'mardi-0900':    23250804,   // cercle-attente-mardi-0900
+  'mardi-1045':    23250805,   // cercle-attente-mardi-1045
 };
 
 async function kit(path, key, body) {
