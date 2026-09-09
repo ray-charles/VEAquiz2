@@ -333,9 +333,16 @@ export default {
       if (age > FRESH_MS) {
         /* Stale: hand back what we have, go and get the new one after. A
          * failure here leaves the old entry in place, which is correct —
-         * an outage should not blank the bars. */
+         * an outage should not blank the bars.
+         *
+         * It is logged, though. This used to swallow the error, which meant a
+         * refresh that failed every time was indistinguishable from one that
+         * was working: the endpoint kept serving a body from before the last
+         * deploy, and nothing anywhere said so. */
         ctx.waitUntil(
-          countSeats(env.STRIPE_KEY).then(store).catch(() => {}),
+          countSeats(env.STRIPE_KEY)
+            .then(store)
+            .catch((e) => console.error('refresh ' + String((e && e.message) || e).slice(0, 300))),
         );
       }
     } else {
