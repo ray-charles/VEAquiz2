@@ -236,6 +236,9 @@ for (const [desc, slot] of Object.entries({
   'Cercle de Voix — mardi 9:00':   'mardi-0900',
   'Cercle de Voix — mardi 10 h 45': 'mardi-1045',
   'Cercle de Voix — mardi 10:45':   'mardi-1045',
+  /* the URL Circle actually minted for the 10 h 45 paywall */
+  'cercle-de-voix-mardi-10h15':    'mardi-1045',
+  'cercle-de-voix-mardi-9h':       'mardi-0900',
 })) {
   fakeStripe([charge({ description: desc, customer: 'cus_x' })]);
   r = await call();
