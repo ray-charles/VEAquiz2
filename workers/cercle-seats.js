@@ -61,12 +61,7 @@ const DAY = { mardi: /mardi/i, mercredi: /mercredi/i };
 const TIMES = {
   a1730: /17\s*[h:.]?\s*30|(?:^|\D)5\s*[h:.]\s*30/i,
   a0900: /(?:^|\D)0?9\s*[h:]\s*(?:00)?/i,
-  /* 10h15 too: the paywall is named "Cercle de Voix mardi 10h45" but Circle
-   * minted its URL as ...-mardi-10h15. The charge description follows the
-   * name, so 10h45 is what should arrive, but a slug landing there instead
-   * would carry no time marker this file recognises and would count onto the
-   * evening bar without a word. Accepting both costs one alternation. */
-  a1045: /10\s*[h:]\s*(?:45|15)/i,
+  a1045: /10\s*[h:]\s*45/i,
 };
 const timed = (h) => Object.values(TIMES).some((re) => re.test(h));
 
