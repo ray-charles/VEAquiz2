@@ -33,10 +33,12 @@ const CAP = 12;
  *   mardi         +1  Interac e-transfer, 5 Aug 2026
  *   mercredi      +1  paid on the 17 h 30 paywall, attending 19 h 15
  *   mercredi-1730 -1  the other half of that move
+ *   mardi-1045    +1  paid outside the checkout, 15 Sep 2026 (no 10h45 charge
+ *                     in Stripe; if one turns up for this person, drop this)
  */
 export const MANUAL = {
   'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-1730': -1,
-  'mardi-0900': 0, 'mardi-1045': 0,
+  'mardi-0900': 0, 'mardi-1045': 1,
 };
 
 /* Circle names each paywall charge after the paywall itself, so "mardi" or
