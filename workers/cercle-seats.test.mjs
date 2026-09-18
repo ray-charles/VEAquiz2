@@ -360,4 +360,37 @@ assert.strictEqual(kitCalls.length, 0, 'a bad address must not spend a Kit call'
 w = await postWaitlist(LEAD, {});
 assert.strictEqual(w.status, 500);
 
+/* --- a stale cached answer is refreshed in the foreground, so the first
+       visitor after a sale sees it (they used to get the old number) --- */
+{
+  clearManual();
+  const oldBody = { counts: { 'mardi-0900': 0 }, labels: {}, charges: {}, anon: {}, manual: {}, ignored: [] };
+  const saved = globalThis.caches;
+  let stored = null;
+  globalThis.caches = { default: {
+    match: async () => new Response(JSON.stringify(oldBody), {
+      headers: { 'x-fetched-at': String(Date.now() - 60 * 1000) } }),
+    put: async (_k, res) => { stored = await res.json(); },
+  } };
+  fakeStripe([charge({ description: 'Cercle de Voix mardi 9h', customer: 'cus_new' })]);
+  const waits = [];
+  const res = await worker.fetch(new Request('https://x.dev/counts'), { STRIPE_KEY: 'rk_test' },
+    { waitUntil: (p) => waits.push(p) });
+  const got = await res.json();
+  await Promise.all(waits);
+  assert.strictEqual(got['mardi-0900'], 1, 'a stale entry must not hide a new sale from the next visitor');
+  assert.strictEqual(res.headers.get('cache-control'), 'no-store', 'browsers must not keep an old count');
+  assert.strictEqual(stored.counts['mardi-0900'], 1, 'and the fresh count is written back');
+
+  /* Stripe too slow: the visitor gets the cached answer instead of waiting */
+  globalThis.fetch = () => new Promise((r) => setTimeout(() => r(new Response(
+    JSON.stringify({ data: [], has_more: false }))), 4000));
+  const t0 = Date.now();
+  const slow = await worker.fetch(new Request('https://x.dev/counts'), { STRIPE_KEY: 'rk_test' },
+    { waitUntil: () => {} });
+  assert.ok(Date.now() - t0 < 2500, 'a slow Stripe never holds a visitor past the wait cap');
+  assert.strictEqual((await slow.json())['mardi-0900'], 0, 'and they get the cached answer');
+  globalThis.caches = saved;
+}
+
 console.log('cercle-seats: all checks passed');

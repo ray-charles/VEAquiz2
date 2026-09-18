@@ -311,7 +311,14 @@ export default {
      * background refresh keeps it current. The cost is that a number can be
      * up to FRESH_MS old — the page is read thousands of times per seat
      * sold, so a minute of staleness is nothing next to a two-second lie. */
-    const FRESH_MS = 60 * 1000;
+    /* Revised 17 Sep 2026: handing the stale number out and refreshing
+     * behind it meant the FIRST visitor after a sale always saw the old
+     * count, and with ad-level traffic "the next visitor" could be ten
+     * minutes away. Now anything older than FRESH_MS is refreshed in the
+     * foreground, but a visitor waits at most WAIT_MS for it before getting
+     * the cached answer (the refresh still lands for whoever comes next). */
+    const FRESH_MS = 15 * 1000;
+    const WAIT_MS = 1500;
     const cache = caches.default;
     const ck = new Request(new URL('/counts', url).toString(), { method: 'GET' });
 
@@ -333,19 +340,21 @@ export default {
       body = await hit.json();
       const age = Date.now() - Number(hit.headers.get('x-fetched-at') || 0);
       if (age > FRESH_MS) {
-        /* Stale: hand back what we have, go and get the new one after. A
-         * failure here leaves the old entry in place, which is correct —
-         * an outage should not blank the bars.
-         *
-         * It is logged, though. This used to swallow the error, which meant a
-         * refresh that failed every time was indistinguishable from one that
-         * was working: the endpoint kept serving a body from before the last
-         * deploy, and nothing anywhere said so. */
+        /* A failed refresh leaves the old entry in place, which is correct:
+         * an outage should not blank the bars. It is logged, though, so a
+         * refresh that fails every time does not pass for one that works. */
+        const stale = body;
+        const fresh = countSeats(env.STRIPE_KEY).then((b) => {
+          ctx.waitUntil(store(b));
+          return b;
+        });
         ctx.waitUntil(
-          countSeats(env.STRIPE_KEY)
-            .then(store)
-            .catch((e) => console.error('refresh ' + String((e && e.message) || e).slice(0, 300))),
+          fresh.catch((e) => console.error('refresh ' + String((e && e.message) || e).slice(0, 300))),
         );
+        body = await Promise.race([
+          fresh,
+          new Promise((r) => setTimeout(() => r(stale), WAIT_MS)),
+        ]).catch(() => stale);
       }
     } else {
       try {
@@ -368,8 +377,8 @@ export default {
           ignored: body.ignored,
         }
       : body.counts;
-    /* 30 s at the browser: the visitor's own reload should show a sale
-     * that landed a moment ago, and the edge absorbs the traffic anyway. */
-    return json(out, 200, { 'cache-control': 'public, max-age=30' });
+    /* No browser caching: someone reloading to check a sale should get the
+     * current answer, and the worker's own cache already absorbs traffic. */
+    return json(out, 200, { 'cache-control': 'no-store' });
   },
 };
