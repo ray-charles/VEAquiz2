@@ -30,22 +30,24 @@ const CAP = 12;
  * Also used to move someone between cohorts after they have paid: subtract
  * from the one Stripe recorded, add to the one they are actually attending.
  *
- *   mardi         +1  Interac e-transfer, 5 Aug 2026
- *   mercredi      +1  paid on the 17 h 30 paywall, attending 19 h 15
- *   mercredi-1730 -1  the other half of that move
- *   mardi-1045    +1  paid outside the checkout, 15 Sep 2026 (no 10h45 charge
- *                     in Stripe; if one turns up for this person, drop this)
+ * Spring 2027 starts from zero. The autumn 2026 entries (an Interac mardi
+ * seat, a 17 h 30 -> 19 h 15 mercredi move, a mardi 10 h 45 seat) belonged
+ * to charges that now sit before SINCE, so they went with them.
  */
 export const MANUAL = {
-  'mardi': 1, 'mercredi': 1, 'mardi-1730': 0, 'mercredi-1730': -1,
-  'mardi-0900': 0, 'mardi-1045': 1,
+  'mardi': 0, 'mercredi': 0, 'mardi-1730': 0, 'mercredi-1730': 0,
+  'mardi-0900': 0, 'mardi-1045': 0, 'jeudi': 0, 'jeudi-1730': 0,
 };
 
 /* Circle names each paywall charge after the paywall itself, so "mardi" or
  * "mercredi" shows up in the charge description. Matching on the word rather
  * than on a product id means a rebuilt paywall doesn't silently zero the page.
  * If Circle ever changes its wording, /counts?explain=1 shows what it sends. */
-const DAY = { mardi: /mardi/i, mercredi: /mercredi/i };
+const DAY = { mardi: /mardi/i, mercredi: /mercredi/i, jeudi: /jeudi/i };
+
+/* Thursday is new (spring 2027) and Mamselle sells other things on a
+ * Thursday, so a jeudi charge only counts when it also says "cercle". */
+const CERCLE = /cercle/i;
 
 /* Four Tuesday paywalls now say "mardi", so the day alone puts a morning or
  * an afternoon sale into the evening cohort and can stamp it full on seats it
@@ -74,17 +76,24 @@ const SLOTS = {
   'mercredi-1730': (h) => DAY.mercredi.test(h) && TIMES.a1730.test(h),
   'mardi-0900':    (h) => DAY.mardi.test(h)    && TIMES.a0900.test(h),
   'mardi-1045':    (h) => DAY.mardi.test(h)    && TIMES.a1045.test(h),
+  'jeudi':         (h) => DAY.jeudi.test(h)    && CERCLE.test(h) && !timed(h),
+  'jeudi-1730':    (h) => DAY.jeudi.test(h)    && CERCLE.test(h) && TIMES.a1730.test(h),
 };
 
-/* Charges before the season opened belong to other products.
+/* Charges before the season opened belong to other products or other seasons.
  *
- * This was 2026-06-01 and it was wrong: the first seat sold on 16 May 2026, so
- * that buyer sat outside the window and the page advertised their seat as free
- * for months. The cutoff is only here to keep older "mardi"/"mercredi" charges
- * from the regular classes out of the count, so it needs to sit just before the
- * season's first sale, not after it. If an earlier sale ever turns up, move
- * this back and check /counts?explain=1 for anything it drags in. */
-const SINCE = Date.parse('2026-05-01T00:00:00Z') / 1000;
+ * The cutoff has to sit just before the season's first sale, not after it: in
+ * 2026 it sat at 1 June while the first seat sold on 16 May, and the page
+ * advertised that seat as free for months.
+ *
+ * Spring 2027 (mercredis and jeudis from 3 and 4 March) reuses the two
+ * mercredi paywalls of autumn 2026, whose charges say "mercredi" too. The
+ * spring prices went on sale on 10 Nov 2026 around 01:40 UTC, so the window
+ * opens just before and the autumn buyers stay out. (It opened 9 Nov 00:00 at
+ * first and caught a 152 $ autumn instalment retried at 06:40 that day.) A late
+ * autumn instalment after it would add one seat: /counts?explain=1 lists each
+ * counted charge as "amount $ date", 152 $ is autumn; MANUAL takes it off. */
+const SINCE = Date.parse('2026-11-10T01:00:00Z') / 1000;
 
 const cors = {
   'access-control-allow-origin': '*',
@@ -129,6 +138,7 @@ async function countSeats(key) {
    * a runaway loop if the account is busier than expected. */
   let starting_after = null;
   const labels = {};   // slot -> the descriptions that landed in it
+  const detail = {};   // slot -> "amount $ date" of each charge it counted
   /* Everything succeeded, in-window and NOT claimed by a cohort. A seat that
    * goes missing looks identical to a seat that was never sold, so the only way
    * to tell them apart is to see what got thrown away. The 16 May buyer was
@@ -159,6 +169,10 @@ async function countSeats(key) {
         const id = who || c.id;
         paid[slot].add(id);
         if (c.description) (labels[slot] = labels[slot] || new Set()).add(c.description);
+        /* Amount and date only (no customer): tells a late autumn instalment
+         * (152 $) from a spring seat (538 $ / 179.33 $) without opening Stripe. */
+        (detail[slot] = detail[slot] || []).push(
+          (c.amount / 100) + ' $ ' + new Date((c.created || 0) * 1000).toISOString().slice(0, 16));
 
         /* `refunded` is only true when the whole charge went back, but the
          * guarantee is a PART refund — first session kept, balance returned.
@@ -185,7 +199,7 @@ async function countSeats(key) {
   }
   const matched = {};
   for (const k of Object.keys(labels)) matched[k] = [...labels[k]];
-  return { counts, labels: matched, charges, anon, manual: MANUAL, ignored: [...ignored] };
+  return { counts, labels: matched, charges, anon, manual: MANUAL, ignored: [...ignored], detail };
 }
 
 
@@ -375,6 +389,7 @@ export default {
           unidentified: body.anon,
           manual: body.manual,
           ignored: body.ignored,
+          detail: body.detail,
         }
       : body.counts;
     /* No browser caching: someone reloading to check a sale should get the

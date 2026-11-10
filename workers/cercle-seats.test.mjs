@@ -13,6 +13,10 @@ import worker, { MANUAL } from './cercle-seats.js';
 const clearManual = () => Object.keys(MANUAL).forEach((k) => { MANUAL[k] = 0; });
 clearManual();
 
+/* The two Thursday cohorts (spring 2027) sit at zero in every case written
+   before they existed. */
+const NOJEUDI = { jeudi: 0, 'jeudi-1730': 0 };
+
 const charge = (o) => ({
   id: 'ch_' + Math.random().toString(36).slice(2),
   status: 'succeeded',
@@ -55,7 +59,7 @@ fakeStripe([
   charge({ description: 'Cercle de Voix — Mercredi', customer: 'cus_C' }),
 ]);
 let r = await call();
-assert.deepStrictEqual(r.body, { mardi: 2, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'instalments must not each buy a seat');
+assert.deepStrictEqual(r.body, { ...NOJEUDI, mardi:2, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'instalments must not each buy a seat');
 
 /* --- refunded and failed charges hold no seat --- */
 fakeStripe([
@@ -64,12 +68,12 @@ fakeStripe([
   charge({ description: 'Mardi', customer: 'cus_C', status: 'failed' }),
 ]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'refunds and failures free the seat');
+assert.deepStrictEqual(r.body, { ...NOJEUDI, mardi:1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'refunds and failures free the seat');
 
 /* --- the cohort word can arrive in metadata instead of the description --- */
 fakeStripe([charge({ description: 'Voz Esencia', metadata: { paywall: 'cercle-mercredi' }, customer: 'cus_D' })]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'metadata is searched too');
+assert.deepStrictEqual(r.body, { ...NOJEUDI, mardi:0, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'metadata is searched too');
 
 /* --- never advertise more seats sold than exist --- */
 fakeStripe(Array.from({ length: 30 }, (_, i) => charge({ description: 'Mardi', customer: 'cus_' + i })));
@@ -79,7 +83,7 @@ assert.strictEqual(r.body.mardi, 12, 'count is clamped to the cohort cap');
 /* --- unmatched charges are ignored, not guessed at --- */
 fakeStripe([charge({ description: 'Cours privé', customer: 'cus_Z' })]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'other products do not fill the cercle');
+assert.deepStrictEqual(r.body, { ...NOJEUDI, mardi:0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'other products do not fill the cercle');
 
 /* --- explain=1 exposes what it matched, so the mapping can be checked --- */
 fakeStripe([charge({ description: 'Cercle de Voix — Mardi', customer: 'cus_A' })]);
@@ -124,7 +128,7 @@ fakeStripe([
   charge({ description: 'Mardi', customer: 'cus_B', amount: 39600, amount_refunded: 35100 }), // kept 45 $
 ]);
 r = await call();
-assert.deepStrictEqual(r.body, { mardi: 1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'a part refund releases the seat');
+assert.deepStrictEqual(r.body, { ...NOJEUDI, mardi:1, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 }, 'a part refund releases the seat');
 
 /* --- and it frees the seat even when their other instalments were clean --- */
 fakeStripe([
@@ -135,20 +139,34 @@ fakeStripe([
 r = await call();
 assert.strictEqual(r.body.mardi, 0, 'one refunded instalment means they left');
 
-/* --- the lookback must reach the season's first sale --------------------
- * The real one was 16 May 2026 and the window started 1 June, so Stripe was
- * never asked for that charge: five people had paid, four were counted, and
- * the page sold the same Tuesday seat twice over. The window is the only
- * thing standing between a real buyer and a seat advertised as free, so it
- * gets asserted rather than trusted. */
+/* --- the lookback must reach the season's first sale, and no further ------
+ * In 2026 the first sale (16 May) sat before the window, and the page sold the
+ * same Tuesday seat twice. Spring 2027 reuses the autumn mercredi paywalls, so
+ * the window must also stop short of the autumn sales (last one 15 Sep 2026)
+ * or those buyers fill the spring Wednesdays. Spring went on sale 10 Nov 2026
+ * around 01:40 UTC; a 152 $ autumn instalment was retried 9 Nov 06:40 UTC. */
 fakeStripe([]);
 await call();
-const FIRST_SALE = Date.parse('2026-05-16T00:00:00Z') / 1000;
-assert.ok(
-  Number(lastQuery.get('created[gte]')) <= FIRST_SALE,
-  'lookback window must include the 16 May 2026 sale, asked from ' +
-    new Date(Number(lastQuery.get('created[gte]')) * 1000).toISOString(),
-);
+const since = Number(lastQuery.get('created[gte]'));
+const asked = new Date(since * 1000).toISOString();
+assert.ok(since <= Date.parse('2026-11-10T01:40:00Z') / 1000,
+  'lookback must include the first spring sale, asked from ' + asked);
+assert.ok(since > Date.parse('2026-11-09T06:40:00Z') / 1000,
+  'lookback must leave out the autumn 2026 instalments, asked from ' + asked);
+
+/* --- spring 2027: the four paywalls exactly as named in Circle --- */
+fakeStripe([
+  charge({ description: 'Cercle de Voix mercredi 17h30', customer: 'cus_w1' }),
+  charge({ description: 'Cercle de Voix mercredi 19h15', customer: 'cus_w2' }),
+  charge({ description: 'Cercle de Voix jeudi 17h30',    customer: 'cus_t1' }),
+  charge({ description: 'Cercle de Voix jeudi 19h15',    customer: 'cus_t2' }),
+  charge({ description: 'Cercle de Voix jeudi 19h15',    customer: 'cus_t3' }),
+]);
+r = await call();
+assert.deepStrictEqual(r.body,
+  { mardi: 0, mercredi: 1, 'mardi-1730': 0, 'mercredi-1730': 1, 'mardi-0900': 0, 'mardi-1045': 0,
+    jeudi: 2, 'jeudi-1730': 1 },
+  'each spring paywall fills its own cohort and nothing else');
 
 /* --- a real, in-window charge that no cohort claims must be reported ----
  * Silently discarding it is what let the May buyer vanish; explain has to
@@ -186,7 +204,7 @@ fakeStripe([
 ]);
 r = await call();
 assert.deepStrictEqual(r.body,
-  { mardi: 0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1, 'mardi-0900': 0, 'mardi-1045': 0 },
+  { ...NOJEUDI, mardi:0, mercredi: 0, 'mardi-1730': 1, 'mercredi-1730': 1, 'mardi-0900': 0, 'mardi-1045': 0 },
   'both slug spellings route to the afternoon cohorts, and nothing leaks into the evening');
 
 /* --- the evening paywalls were renamed on 2026-08-03 to match the afternoon
@@ -201,7 +219,7 @@ fakeStripe([
 ]);
 r = await call();
 assert.deepStrictEqual(r.body,
-  { mardi: 2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 },
+  { ...NOJEUDI, mardi:2, mercredi: 2, 'mardi-1730': 0, 'mercredi-1730': 0, 'mardi-0900': 0, 'mardi-1045': 0 },
   'old and new paywall names count into the same evening cohorts');
 
 /* --- the autumn morning cohorts. Four paywalls now say "mardi", and the
@@ -214,7 +232,7 @@ fakeStripe([
 ]);
 r = await call();
 assert.deepStrictEqual(r.body,
-  { mardi: 0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0,
+  { ...NOJEUDI, mardi:0, mercredi: 0, 'mardi-1730': 0, 'mercredi-1730': 0,
     'mardi-0900': 1, 'mardi-1045': 1 },
   'the morning paywalls route to their own cohorts and leak nowhere');
 
